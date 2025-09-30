@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/src/components/ui/button"
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar"
-import { QrCode, Building2, LogOut, Settings } from "lucide-react"
+import { Building2, LogOut, User } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
 
 export function ManufacturerHeader() {
   const handleLogout = () => {
-    // Here would be the actual logout logic
+    // Logout logikasi
     window.location.href = "/"
   }
 
@@ -22,12 +22,19 @@ export function ManufacturerHeader() {
     <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/manufacturer/dashboard" className="flex items-center gap-2 text-2xl font-bold text-primary">
-            <QrCode className="h-8 w-8" />
+          {/* Logo */}
+          <Link
+            href="/manufacturer/dashboard"
+            className="flex items-center gap-2 text-2xl font-bold text-primary"
+          >
+            <Building2 className="h-8 w-8" />
             ScanMe
-            <span className="text-sm font-normal text-muted-foreground">Ishlab Chiqaruvchi</span>
+            <span className="text-sm font-normal text-muted-foreground">
+              Ishlab Chiqaruvchi
+            </span>
           </Link>
 
+          {/* Navbar */}
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/manufacturer/dashboard"
@@ -49,10 +56,14 @@ export function ManufacturerHeader() {
             </Link>
           </nav>
 
+          {/* User Menu */}
           <div className="flex items-center gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-10 w-10 rounded-full"
+                >
                   <Avatar className="h-10 w-10">
                     <AvatarFallback className="bg-primary/20 text-primary">
                       <Building2 className="h-5 w-5" />
@@ -60,17 +71,24 @@ export function ManufacturerHeader() {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
+
+              <DropdownMenuContent
+                className="w-56 z-[9999]"
+                align="end"
+                forceMount
+              >
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
                     <p className="font-medium">Demo Tashkilot</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">STIR: 123456789</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">
+                      STIR: 123456789
+                    </p>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Sozlamalar</span>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profil</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />

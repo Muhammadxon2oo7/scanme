@@ -9,49 +9,49 @@ import Link from "next/link"
 export function ManufacturerDashboard() {
   const stats = [
     {
-      title: "Jami Mahsulotlar",
-      value: "24",
-      change: "+3 bu oy",
+      title: "Jami mahsulotlar",
+      value: "0",
+      change: "+0 bu oy",
       icon: Package,
       color: "text-blue-500",
       trend: "up",
     },
     {
-      title: "Faol Mahsulotlar",
-      value: "21",
-      change: "87.5% faol",
+      title: "Faol mahsulotlar",
+      value: "0",
+      change: "0% faol",
       icon: Eye,
       color: "text-green-500",
       trend: "up",
     },
     {
-      title: "Jami Skanlar",
-      value: "1,247",
-      change: "+12% o'tgan oyga nisbatan",
+      title: "Jami skanlar",
+      value: "0",
+      change: "0% o'tgan oyga nisbatan",
       icon: QrCode,
       color: "text-orange-500",
       trend: "up",
     },
     {
-      title: "O'rtacha Baho",
-      value: "4.8",
+      title: "O'rtacha baho",
+      value: "0",
       change: "5 dan",
       icon: Star,
       color: "text-yellow-500",
       trend: "stable",
     },
     {
-      title: "Faol Hamkorlar",
-      value: "8",
-      change: "+2 yangi",
+      title: "Faol hamkorlar",
+      value: "0",
+      change: "+0 yangi",
       icon: Users,
       color: "text-purple-500",
       trend: "up",
     },
     {
-      title: "Oylik Skanlar",
-      value: "342",
-      change: "+18% bu oy",
+      title: "Oylik skanlar",
+      value: "0",
+      change: "+0% bu oy",
       icon: BarChart3,
       color: "text-cyan-500",
       trend: "up",
@@ -96,7 +96,7 @@ export function ManufacturerDashboard() {
         <Button className="scan-button" asChild>
           <Link href="/manufacturer/products/add">
             <Plus className="mr-2 h-4 w-4" />
-            Yangi Mahsulot
+            Yangi mahsulot
           </Link>
         </Button>
       </div>
@@ -134,11 +134,11 @@ export function ManufacturerDashboard() {
         <div className="lg:col-span-2">
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">So'nggi Mahsulotlar</h2>
+              <h2 className="text-xl font-semibold">So'nggi mahsulotlar</h2>
               <Button variant="outline" size="sm" asChild>
                 <Link href="/manufacturer/products">
                   <Eye className="mr-2 h-4 w-4" />
-                  Barchasini Ko'rish
+                  Barchasini ko'rish
                 </Link>
               </Button>
             </div>
@@ -180,24 +180,24 @@ export function ManufacturerDashboard() {
         {/* Quick Actions */}
         <div className="space-y-6">
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
-            <h2 className="text-xl font-semibold mb-4">Tezkor Amallar</h2>
+            <h2 className="text-xl font-semibold mb-4">Tezkor amallar</h2>
             <div className="space-y-3">
               <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
                 <Link href="/manufacturer/products/add">
                   <Plus className="mr-2 h-4 w-4" />
-                  Mahsulot Qo'shish
+                  Mahsulot qo'shish
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
                 <Link href="/manufacturer/qr-generator">
                   <QrCode className="mr-2 h-4 w-4" />
-                  QR Kod Yaratish
+                  QR kod yaratish
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
                 <Link href="/manufacturer/analytics">
                   <BarChart3 className="mr-2 h-4 w-4" />
-                  Statistika Ko'rish
+                  Statistika ko'rish
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
@@ -210,11 +210,11 @@ export function ManufacturerDashboard() {
           </Card>
 
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
-            <h2 className="text-xl font-semibold mb-4">Tashkilot Ma'lumotlari</h2>
+            <h2 className="text-xl font-semibold mb-4">Tashkilot ma'lumotlari</h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Nomi:</span>
-                <span className="font-medium">Demo Tashkilot</span>
+                <span className="font-medium">Demo tashkilot</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">STIR:</span>

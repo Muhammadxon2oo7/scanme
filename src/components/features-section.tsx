@@ -7,22 +7,22 @@ export function FeaturesSection() {
   const features = [
     {
       icon: Shield,
-      title: "Xavfsiz va Ishonchli",
+      title: "Xavfsiz va ishonchli",
       description: "Barcha ma'lumotlar shifrlangan va xavfsiz saqlanadi",
     },
     {
       icon: Zap,
-      title: "Tez va Oson",
+      title: "Tez va oson",
       description: "Bir marta skanerlash orqali barcha ma'lumotlarni oling",
     },
     {
       icon: Users,
-      title: "Ishlab Chiqaruvchilar Uchun",
-      description: "Professional Boshqaruv paneli va mahsulot statistikalari",
+      title: "Ishlab chiqaruvchilar uchun",
+      description: "Professional boshqaruv paneli va mahsulot statistikalari",
     },
     {
-      image: Blockchain, // 🔥 endi rasmni alohida field sifatida
-      title: "Blockchain bilan Tasdiqlangan",
+      image: Blockchain, 
+      title: "Blockchain bilan tasdiqlangan",
       description:
         "Kompaniyalar joylagan mahsulotlar blockchain'da saqlanib, bir marta qo‘shilgach o‘zgarmaydi — shaffof va ishonchli.",
     },

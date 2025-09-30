@@ -26,7 +26,7 @@ export function ProductsManagement() {
       scans: 1247,
       rating: 4.9,
       status: "active",
-      image: "/samsung-smartphone.png",
+      image: "/product/samsung.png",
       createdAt: "2025-01-15",
     },
     {
@@ -39,7 +39,7 @@ export function ProductsManagement() {
       scans: 856,
       rating: 4.7,
       status: "active",
-      image: "/athletic-shoes.png",
+      image: "/product/nike.png",
       createdAt: "2025-01-12",
     },
     {
@@ -52,7 +52,7 @@ export function ProductsManagement() {
       scans: 2341,
       rating: 4.5,
       status: "pending",
-      image: "/classic-coca-cola.png",
+      image: "/product/cola.png",
       createdAt: "2025-01-10",
     },
     {
@@ -65,7 +65,7 @@ export function ProductsManagement() {
       scans: 567,
       rating: 4.8,
       status: "active",
-      image: "/silver-macbook-on-desk.png",
+      image: "/product/macbook.jpg",
       createdAt: "2025-01-08",
     },
   ]
