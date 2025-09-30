@@ -5,7 +5,7 @@ import { Card } from "@/src/components/ui/card"
 import { QrCode, Scan, Smartphone, Info, Building2, Sparkles, ShirtIcon } from "lucide-react"
 import { useState } from "react"
 import { QRScanner } from "./qr-scanner"
-import Healthy from '../public/icons/healthy-drink.png'
+
 import Image from "next/image"
 import Shuffle from "./react-bits/Shuffle"
 export function HeroSection() {
@@ -111,12 +111,7 @@ export function HeroSection() {
   >
     <div className="flex items-center gap-3 mb-3 sm:mb-4">
       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-accent/30 to-accent/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-
-        <Image
-        src={Healthy}
-        alt="Healthy"
-          className="h-5 w-5 sm:h-6 sm:w-6 text-accent group-hover:rotate-12 transition-transform duration-300"
-        />
+        <Image src="/icons/healthy-drink.png" alt="Healthy Drink" width={64} height={64} className="h-5 w-5 sm:h-6 sm:w-6 text-accent group-hover:rotate-12 transition-transform duration-300" />
       </div>
       <div>
         <h3 className="font-semibold text-foreground text-sm sm:text-base">Oziq-ovqat</h3>

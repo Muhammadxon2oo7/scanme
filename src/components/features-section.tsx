@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Card } from "@/src/components/ui/card"
 import { Shield, Users, Zap, Globe, Heart, MessageSquare } from "lucide-react"
-import Blockchain from "../public/icons/blockchain.png"
+import Blockchain from "@/public/icons/blockchain.png";
 
 export function FeaturesSection() {
   const features = [
