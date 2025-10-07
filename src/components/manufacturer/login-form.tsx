@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/src/components/ui/alert"
 import { AlertCircle, CheckCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { manufacturerLogin, ManufacturerLoginData } from "@/lib/api"
 
 export function ManufacturerLoginForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -17,13 +18,30 @@ export function ManufacturerLoginForm() {
     setIsLoading(true)
     setError("")
 
-    try {
-      // IMZO tekshirish jarayonini simulyatsiya qilamiz
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+    const loginData: ManufacturerLoginData = {
+      password: "06092022",
+      name: "E-Investment",
+      description: "E-Investment MChJ startuplar bilan ishlaydi",
+      stir: "123456789",
+      ceo: "Jamshidxon Imomov",
+      bank_number: "123456",
+      mfo: "12345",
+      email: "jamshidkhon@gmail.com",
+      phone: "+998971971283",
+      ifut: "nimadir",
+      region: "Toshkent",
+      district: "Chilonzor",
+      address: "Islom Karimov 49",
+    }
 
-      // Agar kalit topilsa muvaffaqiyatli bo‘ladi
-      setSuccess(true)
-      setTimeout(() => router.push("/manufacturer/dashboard"), 1500)
+    try {
+      const response = await manufacturerLogin(loginData)
+      if (response.tokens?.access) {
+        setSuccess(true)
+        setTimeout(() => router.push("/manufacturer/dashboard"), 1500)
+      } else {
+        setError(response.message || "Kirishda xatolik yuz berdi")
+      }
     } catch (err) {
       setError("Tizimda xatolik yuz berdi. Qaytadan urinib ko‘ring.")
     } finally {
