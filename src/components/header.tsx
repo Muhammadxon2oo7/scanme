@@ -45,7 +45,7 @@ export function Header() {
               asChild
               className="modern-card border-primary/30 hover:border-primary/60 light-trail group bg-transparent"
             >
-              <Link href="/manufacturer/login" className="flex items-center gap-2">
+              <Link href="/login" className="flex items-center gap-2">
                 <Building2 className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
                 Ishlab chiqaruvchimisiz?
               </Link>

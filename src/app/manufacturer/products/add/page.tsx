@@ -11,7 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Menu, Building2, CheckCircle, Upload, ChevronDown } from "lucide-react"
 import { ProfileImageUploader } from "@/src/components/manufacturer/dashboard/profile/ProfileImageUploader"
 
-// Type definitions
 interface Question {
   id: string;
   label: string;
@@ -445,7 +444,7 @@ export default function AddProductPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [openSections, setOpenSections] = useState<Set<string>>(new Set())
-  const [suppliers, setSuppliers] = useState<Record<string, string>>({}) // Savol ID lar uchun taminotchi
+  const [suppliers, setSuppliers] = useState<Record<string, string>>({}) 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {

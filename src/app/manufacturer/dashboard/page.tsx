@@ -66,24 +66,10 @@ export default function ManufacturerDashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/90 flex">
-      {isSidebarOpen && <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} />}
-      
-      <div className="flex-1 flex flex-col">
-        <header className="md:hidden bg-gradient-to-r from-card to-card/90 backdrop-blur-md border-b border-border/40 p-4 flex items-center justify-between">
-          <Link href="/manufacturer/dashboard" className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-primary transition-transform duration-200 hover:scale-110" />
-            <span className="text-xl font-bold text-primary">ScanMe</span>
-          </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsSidebarOpen(true)}
-            className="hover:bg-primary/10"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </header>
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/90 ">
+      {/* {isSidebarOpen && <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} />}
+       */}
+
 
         <main className="flex-1 p-4 md:p-8">
           <div className="container mx-auto space-y-6">
@@ -227,7 +213,7 @@ export default function ManufacturerDashboardPage() {
             </div>
           </div>
         </main>
-      </div>
+      
     </div>
   )
 }
