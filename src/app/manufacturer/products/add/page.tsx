@@ -519,10 +519,10 @@ export default function AddProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 flex">
+    <div className=" bg-gradient-to-br  flex">
  
         <main className="w-full md:p-8">
-          <div className="container mx-auto space-y-6 h-screen overflow-y-auto">
+          <div className="container mx-auto space-y-6  overflow-y-auto">
             <div>
               <h1 className="text-4xl font-semibold text-balance tracking-tight text-gray-800">
                 Yangi Mahsulot Qo‘shish

@@ -377,14 +377,14 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
   const typeDisplayMap: Record<string, string> = {
     own: "Xususiy",
     state: "Davlat",
-    public: "Jamoat",
+   
   }
 
   // O'zbekchadan API formatiga qaytarish
   const reverseTypeMap: Record<string, string> = {
     Xususiy: "own",
     Davlat: "state",
-    Jamoat: "public",
+    
   }
 
   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
@@ -543,7 +543,6 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                       <SelectContent>
                         <SelectItem value="Xususiy">Xususiy</SelectItem>
                         <SelectItem value="Davlat">Davlat</SelectItem>
-                        <SelectItem value="Jamoat">Jamoat</SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (

@@ -154,7 +154,7 @@ export default function ManufacturerProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/90 flex">
+    <div className="bg-gradient-to-b from-background to-background/90 flex">
         <main className="w-full  md:p-8">
           <div className="container mx-auto space-y-6">
             <div className="flex items-center justify-between">

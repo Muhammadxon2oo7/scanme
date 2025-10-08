@@ -66,7 +66,7 @@ export default function ManufacturerDashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/90 ">
+    <div className=" bg-gradient-to-b from-background to-background/90 ">
       {/* {isSidebarOpen && <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} />}
        */}
 
