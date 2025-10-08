@@ -521,7 +521,7 @@ export default function AddProductPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 flex">
  
-        <main className="flex-1 p-4 md:p-8">
+        <main className="w-full md:p-8">
           <div className="container mx-auto space-y-6 h-screen overflow-y-auto">
             <div>
               <h1 className="text-4xl font-semibold text-balance tracking-tight text-gray-800">
