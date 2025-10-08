@@ -19,15 +19,15 @@ export function ManufacturerLoginForm() {
     setError("")
 
     const loginData: ManufacturerLoginData = {
-      password: "07092007",
-      name: "MTL",
-      description: "MTL MChJ startuplar bilan ishlaydi",
-      stir: "123456719",
-      ceo: "Muhammadxon Toshpo'latov",
+      password: "06092022",
+      name: "E-Investment",
+      description: "E-Investment MChJ startuplar bilan ishlaydi",
+      stir: "123456789",
+      ceo: "Jamshidxon Imomov",
       bank_number: "123456",
       mfo: "12345",
-      email: "muhammadxon0709@gmail.com",
-      phone: "+998886888207",
+      email: "jamshidkhon@gmail.com",
+      phone: "+998971971283",
       ifut: "nimadir",
       region: "Toshkent",
       district: "Chilonzor",

@@ -399,6 +399,7 @@ export interface Employee {
   email: string;
   is_active: boolean;
   date_joined: string;
+  is_staff: boolean;
 }
 
 export interface EmployeeData {

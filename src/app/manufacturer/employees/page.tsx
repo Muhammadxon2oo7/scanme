@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/src/components/ui/dialog"
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
-import { AlertCircle, Plus, Edit, Trash2 } from "lucide-react"
+import { AlertCircle, Plus, Edit, Trash2, Users } from "lucide-react"
 import { Employee, EmployeeData, getEmployees, addEmployee, updateEmployee, deleteEmployee } from "@/lib/api"
 
 export default function EmployeesPage() {
@@ -56,14 +56,16 @@ export default function EmployeesPage() {
     }
   }
 
-  // Hodimlar ro'yxatini olish
+  // Hodimlar ro'yxatini olish (is_staff: false bo'lganlar)
   const fetchEmployees = async () => {
     setIsLoading(true)
     setAddError(null)
     setEditError(null)
     try {
       const data = await getEmployees()
-      setEmployees(data)
+      // is_staff: true bo'lgan hodimlarni filtrlaymiz
+      const filteredData = data.filter(employee => !employee.is_staff)
+      setEmployees(filteredData)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
       setAddError(errorMessage)
@@ -164,13 +166,19 @@ export default function EmployeesPage() {
   }, [])
 
   if (isLoading && employees.length === 0) {
-    return <p className="text-center">Yuklanmoqda...</p>
+    return (
+      <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+        <p>Yuklanmoqda...</p>
+      </Card>
+    )
   }
 
   return (
     <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Hodimlar</h2>
+        <h2 className="text-2xl font-semibold flex items-center">
+          <Users className="mr-2 h-6 w-6" /> Hodimlar
+        </h2>
         <Dialog open={isAddModalOpen} onOpenChange={(open) => {
           setIsAddModalOpen(open)
           if (!open) {
@@ -263,55 +271,62 @@ export default function EmployeesPage() {
         </Alert>
       )}
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Foydalanuvchi nomi</TableHead>
-            <TableHead>Parol</TableHead>
-            <TableHead>Ism</TableHead>
-            <TableHead>Familiya</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Faol</TableHead>
-            <TableHead>Qo‘shilgan vaqti</TableHead>
-            <TableHead>Amallar</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {employees.map((employee) => (
-            <TableRow key={employee.id}>
-              <TableCell>{employee.id}</TableCell>
-              <TableCell>{employee.username}</TableCell>
-              <TableCell>{employee.password || "N/A"}</TableCell>
-              <TableCell>{employee.first_name || "N/A"}</TableCell>
-              <TableCell>{employee.last_name || "N/A"}</TableCell>
-              <TableCell>{employee.email || "N/A"}</TableCell>
-              <TableCell>{employee.is_active ? "Ha" : "Yo‘q"}</TableCell>
-              <TableCell>{formatDateTime(employee.date_joined)}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => openEditModal(employee)}
-                    className="hover:bg-primary/10"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDeleteEmployee(employee.id)}
-                    className="hover:bg-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
+      {employees.length === 0 ? (
+        <div className="text-center py-8">
+          <Users className="mx-auto h-12 w-12 text-gray-400" />
+          <p className="mt-2 text-gray-500">Hodimlar mavjud emas</p>
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>Foydalanuvchi nomi</TableHead>
+              <TableHead>Parol</TableHead>
+              <TableHead>Ism</TableHead>
+              <TableHead>Familiya</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Faol</TableHead>
+              <TableHead>Qo‘shilgan vaqti</TableHead>
+              <TableHead>Amallar</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {employees.map((employee) => (
+              <TableRow key={employee.id}>
+                <TableCell>{employee.id}</TableCell>
+                <TableCell>{employee.username}</TableCell>
+                <TableCell>{employee.password || "N/A"}</TableCell>
+                <TableCell>{employee.first_name || "N/A"}</TableCell>
+                <TableCell>{employee.last_name || "N/A"}</TableCell>
+                <TableCell>{employee.email || "N/A"}</TableCell>
+                <TableCell>{employee.is_active ? "Ha" : "Yo‘q"}</TableCell>
+                <TableCell>{formatDateTime(employee.date_joined)}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => openEditModal(employee)}
+                      className="hover:bg-primary/10"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteEmployee(employee.id)}
+                      className="hover:bg-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       <Dialog open={isEditModalOpen} onOpenChange={(open) => {
         setIsEditModalOpen(open)
