@@ -1,26 +1,30 @@
 // "use client"
 
+// import { useState, useEffect } from "react"
 // import { Card } from "@/src/components/ui/card"
 // import { Input } from "@/src/components/ui/input"
 // import { Label } from "@/src/components/ui/label"
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 // import { ProfileImageUploader } from "./ProfileImageUploader"
-// import { useEffect, useState } from "react"
+// import { Alert, AlertDescription } from "@/src/components/ui/alert"
+// import { AlertCircle } from "lucide-react"
+// import { getProfile, ProfileData, partialUpdateProfile } from "@/lib/api"
 
 // interface ProfileFormProps {
 //   isEditing: boolean
-//   onSave: () => void
+//   onSave: (data: Partial<ProfileData>) => Promise<void>
 // }
 
 // export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
 //   const [profileImage, setProfileImage] = useState<string | null>(null)
-//   const [formData, setFormData] = useState({
+//   const [formData, setFormData] = useState<ProfileData>({
+//     id: "",
 //     name: "",
 //     description: "",
 //     type: "",
 //     stir: "",
-//     director: "",
-//     bankAccount: "",
+//     ceo: "",
+//     bank_number: "",
 //     mfo: "",
 //     email: "",
 //     ifut: "",
@@ -28,19 +32,59 @@
 //     region: "",
 //     district: "",
 //     address: "",
+//     created_at: "",
+//     updated_at: "",
 //   })
+//   const [error, setError] = useState<string | null>(null)
+//   const [isLoading, setIsLoading] = useState(false)
+
+//   // Tashkilot turini o'zbekchaga aylantirish
+//   const typeDisplayMap: Record<string, string> = {
+//     own: "Xususiy",
+//     state: "Davlat",
+   
+//   }
+
+//   // O'zbekchadan API formatiga qaytarish
+//   const reverseTypeMap: Record<string, string> = {
+//     Xususiy: "own",
+//     Davlat: "state",
+    
+//   }
+
+//   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
+//   const formatDateTime = (dateTime: string): string => {
+//     if (!dateTime) return "N/A"
+//     try {
+//       const date = new Date(dateTime)
+//       const day = String(date.getDate()).padStart(2, "0")
+//       const month = String(date.getMonth() + 1).padStart(2, "0")
+//       const year = date.getFullYear()
+//       const hours = String(date.getHours()).padStart(2, "0")
+//       const minutes = String(date.getMinutes()).padStart(2, "0")
+//       return `${day}.${month}.${year} ${hours}:${minutes}`
+//     } catch {
+//       return "N/A"
+//     }
+//   }
 
 //   useEffect(() => {
-//     const savedData = localStorage.getItem("profileData")
-//     if (savedData) {
-//       setFormData(JSON.parse(savedData))
+//     const fetchProfile = async () => {
+//       setIsLoading(true)
+//       try {
+//         const profile = await getProfile()
+//         setFormData({
+//           ...profile,
+//           type: typeDisplayMap[profile.type] || profile.type, // API dan kelgan type ni o'zbekchaga aylantirish
+//         })
+//         setProfileImage(localStorage.getItem("profileImage") || "/default-avatar.png")
+//       } catch (err) {
+//         setError("Profil ma'lumotlarini olishda xatolik yuz berdi")
+//       } finally {
+//         setIsLoading(false)
+//       }
 //     }
-//     const savedImage = localStorage.getItem("profileImage")
-//     if (savedImage) {
-//       setProfileImage(savedImage)
-//     } else {
-//       setProfileImage("/default-avatar.png") // Default rasm agar yo'q bo'lsa
-//     }
+//     fetchProfile()
 //   }, [])
 
 //   const handleChange = (name: string, value: string) => {
@@ -49,23 +93,58 @@
 
 //   const handleImageChange = (_file: File | null, base64: string | null) => {
 //     setProfileImage(base64)
-//   }
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault()
-//     localStorage.setItem("profileData", JSON.stringify(formData))
-//     if (profileImage && profileImage !== "/default-avatar.png") {
-//       localStorage.setItem("profileImage", profileImage)
+//     if (base64 && base64 !== "/default-avatar.png") {
+//       localStorage.setItem("profileImage", base64)
 //     } else {
 //       localStorage.removeItem("profileImage")
 //     }
-//     console.log("Saqlangan ma'lumotlar:", formData, "Rasm:", profileImage)
-//     onSave()
+//   }
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault()
+//     setError(null)
+//     setIsLoading(true)
+
+//     try {
+//       // Faqat bo'sh bo'lmagan va o'zgartirilgan maydonlarni yuborish
+//       const processedData: Partial<ProfileData> = {}
+//       Object.entries(formData).forEach(([key, value]) => {
+//         if (
+//           value &&
+//           key !== "id" &&
+//           key !== "created_at" &&
+//           key !== "updated_at" &&
+//           formData[key as keyof ProfileData] !== "" // Bo'sh maydonlarni o'tkazib yuborish
+//         ) {
+//           processedData[key as keyof ProfileData] = key === "type" ? reverseTypeMap[value] || value : value
+//         }
+//       })
+
+//       console.log("Yuborilayotgan ma'lumotlar:", processedData) // Debug uchun
+
+//       await onSave(processedData)
+//     } catch (err) {
+//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+//       console.error("Saqlashda xato:", errorMessage, err)
+//       setError(`Ma'lumotlarni saqlashda xatolik yuz berdi: ${errorMessage}`)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }
+
+//   if (isLoading) {
+//     return <p className="text-center">Yuklanmoqda...</p>
 //   }
 
 //   return (
 //     <form onSubmit={handleSubmit}>
 //       <div className="space-y-6">
+//         {error && (
+//           <Alert variant="destructive" className="mb-4">
+//             <AlertCircle className="h-4 w-4" />
+//             <AlertDescription>{error}</AlertDescription>
+//           </Alert>
+//         )}
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 //           {/* Asosiy Card: Rasm, Nom, Tavsif */}
 //           <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 col-span-1 md:col-span-1 max-h-96 overflow-y-auto">
@@ -90,7 +169,7 @@
 //                         className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                       />
 //                     ) : (
-//                       <p className="text-base text-foreground">{formData.name}</p>
+//                       <p className="text-base text-foreground">{formData.name || "N/A"}</p>
 //                     )}
 //                   </div>
 //                 </div>
@@ -106,7 +185,7 @@
 //                         className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                       />
 //                     ) : (
-//                       <p className="text-sm text-foreground">{formData.description}</p>
+//                       <p className="text-sm text-foreground">{formData.description || "N/A"}</p>
 //                     )}
 //                   </div>
 //                 </div>
@@ -116,24 +195,23 @@
 
 //           {/* Tashkilot Ma'lumotlari */}
 //           <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
-//             <h3 className="text-lg font-medium mb-4 border-b  pb-2 border-primary pl-6">Tashkilot Ma'lumotlari</h3>
+//             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Tashkilot Ma'lumotlari</h3>
 //             <div className="space-y-6 px-6">
 //               <div className="space-y-2">
 //                 <Label htmlFor="type" className="text-lg font-medium">Tashkilot turi</Label>
 //                 <div className="mt-1">
 //                   {isEditing ? (
-//                     <Select value={formData.type} onValueChange={(value) => handleChange("type", value)} >
+//                     <Select value={formData.type} onValueChange={(value) => handleChange("type", value)}>
 //                       <SelectTrigger className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full">
 //                         <SelectValue placeholder="Tashkilot turini tanlang" />
 //                       </SelectTrigger>
 //                       <SelectContent>
 //                         <SelectItem value="Xususiy">Xususiy</SelectItem>
 //                         <SelectItem value="Davlat">Davlat</SelectItem>
-//                         <SelectItem value="Jamoat">Jamoat</SelectItem>
 //                       </SelectContent>
 //                     </Select>
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.type}</p>
+//                     <p className="text-sm text-foreground">{formData.type || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -149,7 +227,7 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.stir}</p>
+//                     <p className="text-sm text-foreground">{formData.stir || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -158,37 +236,37 @@
 
 //           {/* Direktor va Moliyaviy Ma'lumotlar */}
 //           <Card className="py-6 px-0 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
-//             <h3 className="text-lg font-medium mb-4 border-b  pb-2 border-primary pl-6">Direktor va Moliyaviy Ma'lumotlar</h3>
+//             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Direktor va Moliyaviy Ma'lumotlar</h3>
 //             <div className="space-y-6 px-6">
 //               <div className="space-y-0">
-//                 <Label htmlFor="director" className="text-lg font-medium">Direktor</Label>
+//                 <Label htmlFor="ceo" className="text-lg font-medium">Direktor</Label>
 //                 <div className="mt-1">
 //                   {isEditing ? (
 //                     <Input
-//                       id="director"
-//                       value={formData.director}
-//                       onChange={(e) => handleChange("director", e.target.value)}
+//                       id="ceo"
+//                       value={formData.ceo}
+//                       onChange={(e) => handleChange("ceo", e.target.value)}
 //                       placeholder="Direktorning ism-familiyasini kiriting"
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.director}</p>
+//                     <p className="text-sm text-foreground">{formData.ceo || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
 //               <div className="space-y-2">
-//                 <Label htmlFor="bankAccount" className="text-lg font-medium">Bank hisob raqami</Label>
+//                 <Label htmlFor="bank_number" className="text-lg font-medium">Bank hisob raqami</Label>
 //                 <div className="mt-1">
 //                   {isEditing ? (
 //                     <Input
-//                       id="bankAccount"
-//                       value={formData.bankAccount}
-//                       onChange={(e) => handleChange("bankAccount", e.target.value)}
+//                       id="bank_number"
+//                       value={formData.bank_number}
+//                       onChange={(e) => handleChange("bank_number", e.target.value)}
 //                       placeholder="Bank hisob raqamini kiriting"
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.bankAccount}</p>
+//                     <p className="text-sm text-foreground">{formData.bank_number || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -204,7 +282,7 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.mfo}</p>
+//                     <p className="text-sm text-foreground">{formData.mfo || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -227,7 +305,7 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.email}</p>
+//                     <p className="text-sm text-foreground">{formData.email || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -243,7 +321,7 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.phone}</p>
+//                     <p className="text-sm text-foreground">{formData.phone || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -259,7 +337,7 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.ifut}</p>
+//                     <p className="text-sm text-foreground">{formData.ifut || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -267,14 +345,14 @@
 //           </Card>
 
 //           {/* Manzil Ma'lumotlari */}
-//           <Card className="py-6  to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto hover:bg-transparent">
-//             <h3 className="text-lg font-medium mb-4 border-b   pb-2 border-primary pl-6">Manzil Ma'lumotlari</h3>
+//           <Card className="py-6 to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto hover:bg-transparent">
+//             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Manzil Ma'lumotlari</h3>
 //             <div className="space-y-6 px-6">
 //               <div className="space-y-2">
 //                 <Label htmlFor="region" className="text-lg font-medium">Hudud</Label>
 //                 <div className="mt-1">
 //                   {isEditing ? (
-//                     <Select value={formData.region} onValueChange={(value) => handleChange("region", value)} >
+//                     <Select value={formData.region} onValueChange={(value) => handleChange("region", value)}>
 //                       <SelectTrigger className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full">
 //                         <SelectValue placeholder="Hududni tanlang" />
 //                       </SelectTrigger>
@@ -286,7 +364,7 @@
 //                       </SelectContent>
 //                     </Select>
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.region}</p>
+//                     <p className="text-sm text-foreground">{formData.region || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -294,7 +372,7 @@
 //                 <Label htmlFor="district" className="text-lg font-medium">Tuman</Label>
 //                 <div className="mt-1">
 //                   {isEditing ? (
-//                     <Select value={formData.district} onValueChange={(value) => handleChange("district", value)} >
+//                     <Select value={formData.district} onValueChange={(value) => handleChange("district", value)}>
 //                       <SelectTrigger className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full">
 //                         <SelectValue placeholder="Tumanni tanlang" />
 //                       </SelectTrigger>
@@ -306,7 +384,7 @@
 //                       </SelectContent>
 //                     </Select>
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.district}</p>
+//                     <p className="text-sm text-foreground">{formData.district || "N/A"}</p>
 //                   )}
 //                 </div>
 //               </div>
@@ -322,8 +400,33 @@
 //                       className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
 //                     />
 //                   ) : (
-//                     <p className="text-sm text-foreground">{formData.address}</p>
+//                     <p className="text-sm text-foreground">{formData.address || "N/A"}</p>
 //                   )}
+//                 </div>
+//               </div>
+//             </div>
+//           </Card>
+
+//           {/* Qo'shimcha Ma'lumotlar */}
+//           <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
+//             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Qo‘shimcha Ma'lumotlar</h3>
+//             <div className="space-y-6 px-6">
+//               <div className="space-y-2">
+//                 <Label htmlFor="id" className="text-lg font-medium">ID</Label>
+//                 <div className="mt-1">
+//                   <p className="text-sm text-foreground">{formData.id || "N/A"}</p>
+//                 </div>
+//               </div>
+//               <div className="space-y-2">
+//                 <Label htmlFor="created_at" className="text-lg font-medium">Qo‘shilgan vaqti</Label>
+//                 <div className="mt-1">
+//                   <p className="text-sm text-foreground">{formatDateTime(formData.created_at)}</p>
+//                 </div>
+//               </div>
+//               <div className="space-y-2">
+//                 <Label htmlFor="updated_at" className="text-lg font-medium">Profil ma'lumotlari o‘zgargan vaqti</Label>
+//                 <div className="mt-1">
+//                   <p className="text-sm text-foreground">{formatDateTime(formData.updated_at)}</p>
 //                 </div>
 //               </div>
 //             </div>
@@ -333,6 +436,7 @@
 //     </form>
 //   )
 // }
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -342,8 +446,9 @@ import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { ProfileImageUploader } from "./ProfileImageUploader"
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, Copy } from "lucide-react"
 import { getProfile, ProfileData, partialUpdateProfile } from "@/lib/api"
+import { Button } from "@/src/components/ui/button"
 
 interface ProfileFormProps {
   isEditing: boolean
@@ -372,19 +477,220 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
   })
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [copySuccess, setCopySuccess] = useState<string | null>(null)
 
   // Tashkilot turini o'zbekchaga aylantirish
   const typeDisplayMap: Record<string, string> = {
     own: "Xususiy",
     state: "Davlat",
-   
   }
 
   // O'zbekchadan API formatiga qaytarish
   const reverseTypeMap: Record<string, string> = {
     Xususiy: "own",
     Davlat: "state",
-    
+  }
+
+  // O'zbekiston viloyatlari
+  const regions = [
+    "Qoraqalpog‘iston Respublikasi",
+    "Toshkent shahri",
+    "Andijon",
+    "Buxoro",
+    "Farg‘ona",
+    "Jizzax",
+    "Xorazm",
+    "Namangan",
+    "Navoiy",
+    "Qashqadaryo",
+    "Samarqand",
+    "Sirdaryo",
+    "Surxondaryo",
+    "Toshkent viloyati",
+  ]
+
+  // Viloyatlarga mos tumanlar ro'yxati
+  const districtsByRegion: Record<string, string[]> = {
+    "Toshkent shahri": [
+      "Chilonzor",
+      "Yunusobod",
+      "Mirzo Ulug‘bek",
+      "Olmazor",
+      "Shayxontohur",
+      "Yakkasaroy",
+      "Chirchiq",
+      "Sergeli",
+      "Uchtepa",
+      "Bektemir",
+      "Mirobod",
+    ],
+     "Qoraqalpog‘iston Respublikasi": [
+    "Nukus shahri",
+    "Amudaryo",
+    "Beruniy",
+    "Chimboy",
+    "Ellikqala",
+    "Kegeyli",
+    "Mo‘ynoq",
+    "Nukus tumani",
+    "Qanliko‘l",
+    "Qo‘ng‘irot",
+    "Qorao‘zak",
+    "Shumanay",
+    "Taxtako‘pir",
+    "To‘rtko‘l",
+    "Xo‘jayli",
+  ],
+    Andijon: [
+      "Andijon shahri",
+      "Asaka",
+      "Baliqchi",
+      "Bo‘z",
+      "Buloqboshi",
+      "Izboskan",
+      "Jalaquduq",
+      "Marhamat",
+      "Oltinko‘l",
+      "Paxtaobod",
+      "Ulug‘nor",
+      "Xo‘jaobod",
+    ],
+    Buxoro: [
+      "Buxoro shahri",
+      "G‘ijduvon",
+      "Jondor",
+      "Kogon",
+      "Olot",
+      "Peshku",
+      "Qorako‘l",
+      "Qorovulbozor",
+      "Romitan",
+      "Shofirkon",
+      "Vobkent",
+    ],
+    "Farg‘ona": [
+      "Farg‘ona shahri",
+      "Altiariq",
+      "Bag‘dod",
+      "Beshariq",
+      "Dang‘ara",
+      "Farg‘ona tumani",
+      "Furqat",
+      "Qo‘shtepa",
+      "Rishton",
+      "So‘x",
+      "Uchko‘prik",
+      "Yozyovon",
+    ],
+    Jizzax: [
+      "Jizzax shahri",
+      "Arnasoy",
+      "Baxmal",
+      "Do‘stlik",
+      "Forish",
+      "G‘allaorol",
+      "Mirzacho‘l",
+      "Paxtakor",
+      "Yangiobod",
+      "Zafarobod",
+      "Zarbdor",
+    ],
+    Xorazm: [
+      "Urganch shahri",
+      "Bog‘ot",
+      "Gurlan",
+      "Qoshko‘pir",
+      "Shovot",
+      "Urganch tumani",
+      "Xazorasp",
+      "Xiva",
+      "Yangiariq",
+      "Yangibozor",
+    ],
+    Namangan: [
+      "Namangan shahri",
+      "Chortoq",
+      "Chust",
+      "Kosonsoy",
+      "Mingbuloq",
+      "Namangan tumani",
+      "Norin",
+      "Pop",
+      "To‘raqo‘rg‘on",
+      "Uchqo‘rg‘on",
+      "Yangiqo‘rg‘on",
+    ],
+    Navoiy: [
+      "Navoiy shahri",
+      "Karmana",
+      "Konimex",
+      "Navbahor",
+      "Nurota",
+      "Qiziltepa",
+      "Tomdi",
+      "Uchquduq",
+      "Xatirchi",
+    ],
+    Qashqadaryo: [
+      "Qarshi shahri",
+      "Chiroqchi",
+      "Dehqonobod",
+      "G‘uzor",
+      "Qamashi",
+      "Qarshi tumani",
+      "Koson",
+      "Muborak",
+      "Nishon",
+      "Yakkabog‘",
+    ],
+    Samarqand: [
+      "Samarqand shahri",
+      "Bulung‘ur",
+      "Ishtixon",
+      "Jomboy",
+      "Kattaqo‘rg‘on",
+      "Narpay",
+      "Nurobod",
+      "Oqdaryo",
+      "Paxtachi",
+      "Payariq",
+      "Urgut",
+    ],
+    Sirdaryo: [
+      "Guliston shahri",
+      "Boyovut",
+      "Guliston tumani",
+      "Mirzaobod",
+      "Oqoltin",
+      "Sardoba",
+      "Sayxunobod",
+      "Sirdaryo tumani",
+    ],
+    Surxondaryo: [
+      "Termiz shahri",
+      "Angor",
+      "Boysun",
+      "Denov",
+      "Jarqo‘rg‘on",
+      "Muzrabod",
+      "Oltinsoy",
+      "Qiziriq",
+      "Sherobod",
+      "Sho‘rchi",
+    ],
+    "Toshkent viloyati": [
+      "Nurafshon shahri",
+      "Angren",
+      "Bekobod",
+      "Bo‘ka",
+      "Bo‘stonliq",
+      "Chirchiq shahri",
+      "Oqqo‘rg‘on",
+      "Parkent",
+      "Piskent",
+      "Quyi Chirchiq",
+      "Yuqori Chirchiq",
+    ],
   }
 
   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
@@ -400,6 +706,17 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
       return `${day}.${month}.${year} ${hours}:${minutes}`
     } catch {
       return "N/A"
+    }
+  }
+
+  // ID nusxalash funksiyasi
+  const handleCopyId = async () => {
+    try {
+      await navigator.clipboard.writeText(formData.id)
+      setCopySuccess("ID nusxalandi")
+      setTimeout(() => setCopySuccess(null), 3000) // 3 sekunddan keyin xabar yo'qoladi
+    } catch (err) {
+      setError("ID nusxalashda xatolik yuz berdi")
     }
   }
 
@@ -423,7 +740,14 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
   }, [])
 
   const handleChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value }
+      // Agar viloyat o'zgartirilsa, tuman maydonini tozalash
+      if (name === "region") {
+        newData.district = ""
+      }
+      return newData
+    })
   }
 
   const handleImageChange = (_file: File | null, base64: string | null) => {
@@ -478,6 +802,11 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        {copySuccess && (
+          <Alert variant="default" className="mb-4 bg-green-100 text-green-800 border-green-300">
+            <AlertDescription>{copySuccess}</AlertDescription>
           </Alert>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -559,7 +888,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                       value={formData.stir}
                       onChange={(e) => handleChange("stir", e.target.value)}
                       placeholder="STIR raqamini kiriting"
-                      className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full"
+                      className="border-primary/30 focus:ring-primary/50 transition-all duration-300 p-3 text-base w-full"
                     />
                   ) : (
                     <p className="text-sm text-foreground">{formData.stir || "N/A"}</p>
@@ -680,7 +1009,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
           </Card>
 
           {/* Manzil Ma'lumotlari */}
-          <Card className="py-6 to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto hover:bg-transparent">
+          <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Manzil Ma'lumotlari</h3>
             <div className="space-y-6 px-6">
               <div className="space-y-2">
@@ -692,10 +1021,11 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                         <SelectValue placeholder="Hududni tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Toshkent">Toshkent</SelectItem>
-                        <SelectItem value="Samarqand">Samarqand</SelectItem>
-                        <SelectItem value="Buxoro">Buxoro</SelectItem>
-                        <SelectItem value="Farg‘ona">Farg‘ona</SelectItem>
+                        {regions.map((region) => (
+                          <SelectItem key={region} value={region}>
+                            {region}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   ) : (
@@ -707,15 +1037,21 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                 <Label htmlFor="district" className="text-lg font-medium">Tuman</Label>
                 <div className="mt-1">
                   {isEditing ? (
-                    <Select value={formData.district} onValueChange={(value) => handleChange("district", value)}>
+                    <Select
+                      value={formData.district}
+                      onValueChange={(value) => handleChange("district", value)}
+                      disabled={!formData.region}
+                    >
                       <SelectTrigger className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 text-base w-full">
-                        <SelectValue placeholder="Tumanni tanlang" />
+                        <SelectValue placeholder={formData.region ? "Tumanni tanlang" : "Avval hududni tanlang"} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Chilonzor">Chilonzor</SelectItem>
-                        <SelectItem value="Yunusobod">Yunusobod</SelectItem>
-                        <SelectItem value="Mirzo Ulug‘bek">Mirzo Ulug‘bek</SelectItem>
-                        <SelectItem value="Olmazor">Olmazor</SelectItem>
+                        {formData.region &&
+                          districtsByRegion[formData.region]?.map((district) => (
+                            <SelectItem key={district} value={district}>
+                              {district}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                   ) : (
@@ -741,15 +1077,24 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
               </div>
             </div>
           </Card>
-
-          {/* Qo'shimcha Ma'lumotlar */}
           <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
             <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Qo‘shimcha Ma'lumotlar</h3>
             <div className="space-y-6 px-6">
               <div className="space-y-2">
                 <Label htmlFor="id" className="text-lg font-medium">ID</Label>
-                <div className="mt-1">
+                <div className="mt-1 flex items-center gap-2">
                   <p className="text-sm text-foreground">{formData.id || "N/A"}</p>
+                  {formData.id && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleCopyId}
+                      className="hover:bg-primary"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="space-y-2">

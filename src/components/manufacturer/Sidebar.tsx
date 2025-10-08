@@ -159,7 +159,9 @@ export function Sidebar({ isMobile, setIsSidebarOpen }: { isMobile: boolean; set
     { name: "Mahsulotlar", path: "/manufacturer/products", icon: Package },
     { name: "Statistika", path: "/manufacturer/analytics", icon: BarChart3 },
     { name: "Hamkorlar", path: "/manufacturer/collaborators", icon: Users },
+     { name: "Hodimlar", path: "/manufacturer/employees", icon: Users }, // Yangi menyus
     { name: "Profil", path: "/manufacturer/profile", icon: User },
+    
   ]
 
   return (
