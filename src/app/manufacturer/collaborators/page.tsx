@@ -22,7 +22,7 @@ import {
 } from "@/src/components/ui/dialog"
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
 import { AlertCircle, Plus, Check, X, Users, MessageSquare, Edit, Trash2 } from "lucide-react"
-import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest } from "@/lib/api"
+import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner } from "@/lib/api"
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([])
@@ -96,6 +96,22 @@ export default function PartnersPage() {
 
     try {
       await acceptPartnerRequest(id)
+      await fetchData()
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+      setAcceptError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Hamkorni o'chirish
+  const handleDeletePartner = async (id: number) => {
+    setAcceptError(null)
+    setIsLoading(true)
+
+    try {
+      await deletePartner(id)
       await fetchData()
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
@@ -204,13 +220,19 @@ export default function PartnersPage() {
                 <TableRow key={partner.id}>
                   <TableCell>{partner.id}</TableCell>
                   <TableCell>{partner.partner}</TableCell>
-                  <TableCell>{formatDateTime(partner.accepted_at)}</TableCell>
+                  <TableCell>{formatDateTime(partner.created_at)}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button variant="ghost" size="sm" className="hover:bg-primary/10">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="hover:bg-red-600">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeletePartner(partner.id)}
+                        className="hover:bg-red-600"
+                        disabled={isLoading}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

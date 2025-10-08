@@ -737,6 +737,33 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
   }
 };
 
+export const deletePartner = async (id: number): Promise<void> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (errorData.message) {
+        throw new Error(errorData.message);
+      }
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Hamkorni o\'chirishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
 export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
   const token = Cookies.get('token');
   if (!token) {
@@ -777,7 +804,7 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ contract: `auto-generated-${id}` }),
+      body: JSON.stringify({ contract: `${id}` }),
     });
 
     if (!response.ok) {
