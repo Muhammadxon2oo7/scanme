@@ -520,24 +520,7 @@ export default function AddProductPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 flex">
-      {isSidebarOpen && <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} />}
-      
-      <div className="flex-1 flex flex-col">
-        <header className="md:hidden bg-gradient-to-r from-blue-800 to-blue-600 backdrop-blur-md border-b border-blue-300/40 p-4 flex items-center justify-between">
-          <Link href="/manufacturer/dashboard" className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-white transition-transform duration-200 hover:scale-110" />
-            <span className="text-xl font-bold text-white">ScanMe</span>
-          </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsSidebarOpen(true)}
-            className="hover:bg-white/20 text-white"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </header>
-
+ 
         <main className="flex-1 p-4 md:p-8">
           <div className="container mx-auto space-y-6 h-screen overflow-y-auto">
             <div>
@@ -691,7 +674,7 @@ export default function AddProductPage() {
             </Card>
           </div>
         </main>
-      </div>
+      
     </div>
   )
 }
