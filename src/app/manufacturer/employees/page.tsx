@@ -19,26 +19,26 @@
 //   DialogHeader,
 //   DialogTitle,
 //   DialogTrigger,
+//   DialogFooter,
 // } from "@/src/components/ui/dialog"
 // import { Alert, AlertDescription } from "@/src/components/ui/alert"
-// import { AlertCircle, Plus, Edit, Trash2, Users } from "lucide-react"
-// import { Employee, EmployeeData, getEmployees, addEmployee, updateEmployee, deleteEmployee } from "@/lib/api"
+// import { AlertCircle, Plus, Trash2, Users } from "lucide-react"
+// import { Employee, EmployeeData, getEmployees, addEmployee, deleteEmployee } from "@/lib/api"
 
 // export default function EmployeesPage() {
 //   const [employees, setEmployees] = useState<Employee[]>([])
 //   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-//   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+//   const [deleteEmployeeId, setDeleteEmployeeId] = useState<number | null>(null)
 //   const [addError, setAddError] = useState<string | null>(null)
-//   const [editError, setEditError] = useState<string | null>(null)
 //   const [isLoading, setIsLoading] = useState(false)
 //   const [formData, setFormData] = useState({
 //     password: "",
 //     username: "",
 //     first_name: "",
 //     last_name: "",
-//     email: "",
+//     jshshir: "",
 //   })
-//   const [editEmployeeId, setEditEmployeeId] = useState<number | null>(null)
 
 //   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
 //   const formatDateTime = (dateTime: string): string => {
@@ -60,7 +60,6 @@
 //   const fetchEmployees = async () => {
 //     setIsLoading(true)
 //     setAddError(null)
-//     setEditError(null)
 //     try {
 //       const data = await getEmployees()
 //       // is_staff: true bo'lgan hodimlarni filtrlaymiz
@@ -86,79 +85,38 @@
 //         username: formData.username,
 //         ...(formData.first_name && { first_name: formData.first_name }),
 //         ...(formData.last_name && { last_name: formData.last_name }),
-//         ...(formData.email && { email: formData.email }),
+//         ...(formData.jshshir && { jshshir: formData.jshshir }),
 //       }
 
 //       await addEmployee(processedData)
 //       setIsAddModalOpen(false)
-//       setFormData({ password: "", username: "", first_name: "", last_name: "", email: "" })
+//       setFormData({ password: "", username: "", first_name: "", last_name: "", jshshir: "" })
 //       await fetchEmployees()
 //     } catch (err) {
 //       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
 //       setAddError(errorMessage)
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }
-
-//   // Hodimni tahrirlash
-//   const handleEditEmployee = async (e: React.FormEvent) => {
-//     e.preventDefault()
-//     if (!editEmployeeId) return
-//     setEditError(null)
-//     setIsLoading(true)
-
-//     try {
-//       const processedData: Partial<EmployeeData> = {
-//         ...(formData.password && { password: formData.password }),
-//         ...(formData.username && { username: formData.username }),
-//         ...(formData.first_name && { first_name: formData.first_name }),
-//         ...(formData.last_name && { last_name: formData.last_name }),
-//         ...(formData.email && { email: formData.email }),
-//       }
-
-//       await updateEmployee(editEmployeeId, processedData)
-//       setIsEditModalOpen(false)
-//       setFormData({ password: "", username: "", first_name: "", last_name: "", email: "" })
-//       setEditEmployeeId(null)
-//       await fetchEmployees()
-//     } catch (err) {
-//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
-//       setEditError(errorMessage)
 //     } finally {
 //       setIsLoading(false)
 //     }
 //   }
 
 //   // Hodimni o'chirish
-//   const handleDeleteEmployee = async (id: number) => {
+//   const handleDeleteEmployee = async () => {
+//     if (!deleteEmployeeId) return
 //     setAddError(null)
-//     setEditError(null)
 //     setIsLoading(true)
 
 //     try {
-//       await deleteEmployee(id)
+//       await deleteEmployee(deleteEmployeeId)
 //       await fetchEmployees()
+//       setIsDeleteModalOpen(false)
+//       setDeleteEmployeeId(null)
 //     } catch (err) {
 //       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
 //       setAddError(errorMessage)
 //     } finally {
 //       setIsLoading(false)
 //     }
-//   }
-
-//   // Modal uchun ma'lumotlarni to'ldirish (tahrirlash uchun)
-//   const openEditModal = (employee: Employee) => {
-//     setFormData({
-//       password: "", // Parol bo'sh bo'ladi
-//       username: employee.username,
-//       first_name: employee.first_name || "",
-//       last_name: employee.last_name || "",
-//       email: employee.email || "",
-//     })
-//     setEditEmployeeId(employee.id)
-//     setEditError(null)
-//     setIsEditModalOpen(true)
 //   }
 
 //   useEffect(() => {
@@ -182,7 +140,7 @@
 //         <Dialog open={isAddModalOpen} onOpenChange={(open) => {
 //           setIsAddModalOpen(open)
 //           if (!open) {
-//             setFormData({ password: "", username: "", first_name: "", last_name: "", email: "" })
+//             setFormData({ password: "", username: "", first_name: "", last_name: "", jshshir: "" })
 //             setAddError(null)
 //           }
 //         }}>
@@ -246,13 +204,12 @@
 //                 />
 //               </div>
 //               <div className="space-y-2">
-//                 <Label htmlFor="email">Email</Label>
+//                 <Label htmlFor="jshshir">JSHSHIR</Label>
 //                 <Input
-//                   id="email"
-//                   type="email"
-//                   value={formData.email}
-//                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//                   placeholder="Email manzilini kiriting"
+//                   id="jshshir"
+//                   value={formData.jshshir}
+//                   onChange={(e) => setFormData({ ...formData, jshshir: e.target.value })}
+//                   placeholder="JSHSHIR ni kiriting"
 //                   className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
 //                 />
 //               </div>
@@ -264,7 +221,7 @@
 //         </Dialog>
 //       </div>
 
-//       {addError && !isAddModalOpen && !isEditModalOpen && (
+//       {addError && !isAddModalOpen && !isDeleteModalOpen && (
 //         <Alert variant="destructive" className="mb-4">
 //           <AlertCircle className="h-4 w-4" />
 //           <AlertDescription>{addError}</AlertDescription>
@@ -282,10 +239,9 @@
 //             <TableRow>
 //               <TableHead>ID</TableHead>
 //               <TableHead>Foydalanuvchi nomi</TableHead>
-//               <TableHead>Parol</TableHead>
 //               <TableHead>Ism</TableHead>
 //               <TableHead>Familiya</TableHead>
-//               <TableHead>Email</TableHead>
+//               <TableHead>JSHSHIR</TableHead>
 //               <TableHead>Faol</TableHead>
 //               <TableHead>Qo‘shilgan vaqti</TableHead>
 //               <TableHead>Amallar</TableHead>
@@ -296,31 +252,24 @@
 //               <TableRow key={employee.id}>
 //                 <TableCell>{employee.id}</TableCell>
 //                 <TableCell>{employee.username}</TableCell>
-//                 <TableCell>{employee.password || "N/A"}</TableCell>
 //                 <TableCell>{employee.first_name || "N/A"}</TableCell>
 //                 <TableCell>{employee.last_name || "N/A"}</TableCell>
-//                 <TableCell>{employee.email || "N/A"}</TableCell>
+//                 <TableCell>{employee.jshshir || "N/A"}</TableCell>
 //                 <TableCell>{employee.is_active ? "Ha" : "Yo‘q"}</TableCell>
 //                 <TableCell>{formatDateTime(employee.date_joined)}</TableCell>
+                
 //                 <TableCell>
-//                   <div className="flex gap-2">
-//                     <Button
-//                       variant="ghost"
-//                       size="sm"
-//                       onClick={() => openEditModal(employee)}
-//                       className="hover:bg-primary/10"
-//                     >
-//                       <Edit className="h-4 w-4" />
-//                     </Button>
-//                     <Button
-//                       variant="ghost"
-//                       size="sm"
-//                       onClick={() => handleDeleteEmployee(employee.id)}
-//                       className="hover:bg-red-600"
-//                     >
-//                       <Trash2 className="h-4 w-4" />
-//                     </Button>
-//                   </div>
+//                   <Button
+//                     variant="ghost"
+//                     size="sm"
+//                     onClick={() => {
+//                       setDeleteEmployeeId(employee.id)
+//                       setIsDeleteModalOpen(true)
+//                     }}
+//                     className="hover:bg-red-600"
+//                   >
+//                     <Trash2 className="h-4 w-4" />
+//                   </Button>
 //                 </TableCell>
 //               </TableRow>
 //             ))}
@@ -328,87 +277,37 @@
 //         </Table>
 //       )}
 
-//       <Dialog open={isEditModalOpen} onOpenChange={(open) => {
-//         setIsEditModalOpen(open)
+//       <Dialog open={isDeleteModalOpen} onOpenChange={(open) => {
+//         setIsDeleteModalOpen(open)
 //         if (!open) {
-//           setFormData({ password: "", username: "", first_name: "", last_name: "", email: "" })
-//           setEditEmployeeId(null)
-//           setEditError(null)
+//           setDeleteEmployeeId(null)
 //         }
 //       }}>
 //         <DialogContent className="bg-card/90 backdrop-blur-md">
 //           <DialogHeader>
-//             <DialogTitle>Hodimni tahrirlash</DialogTitle>
+//             <DialogTitle>Hodimni o'chirishni tasdiqlash</DialogTitle>
 //           </DialogHeader>
-//           <form onSubmit={handleEditEmployee} className="space-y-4">
-//             {editError && (
-//               <Alert variant="destructive">
-//                 <AlertCircle className="h-4 w-4" />
-//                 <AlertDescription>{editError}</AlertDescription>
-//               </Alert>
-//             )}
-//             <div className="space-y-2">
-//               <Label htmlFor="username">Foydalanuvchi nomi</Label>
-//               <Input
-//                 id="username"
-//                 value={formData.username}
-//                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-//                 placeholder="Foydalanuvchi nomini kiriting"
-//                 className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <Label htmlFor="password">Yangi parol (ixtiyoriy)</Label>
-//               <Input
-//                 id="password"
-//                 type="password"
-//                 value={formData.password}
-//                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-//                 placeholder="Yangi parolni kiriting"
-//                 className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <Label htmlFor="first_name">Ism</Label>
-//               <Input
-//                 id="first_name"
-//                 value={formData.first_name}
-//                 onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-//                 placeholder="Ismni kiriting"
-//                 className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <Label htmlFor="last_name">Familiya</Label>
-//               <Input
-//                 id="last_name"
-//                 value={formData.last_name}
-//                 onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-//                 placeholder="Familiyani kiriting"
-//                 className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-//               />
-//             </div>
-//             <div className="space-y-2">
-//               <Label htmlFor="email">Email</Label>
-//               <Input
-//                 id="email"
-//                 type="email"
-//                 value={formData.email}
-//                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//                 placeholder="Email manzilini kiriting"
-//                 className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-//               />
-//             </div>
-//             <Button type="submit" className="w-full" disabled={isLoading}>
-//               {isLoading ? "Yuklanmoqda..." : "Saqlash"}
+//           <p>Haqiqatdan ham ushbu hodimni o'chirmoqchimisiz?</p>
+//           <DialogFooter>
+//             <Button
+//               variant="outline"
+//               onClick={() => setIsDeleteModalOpen(false)}
+//             >
+//               Bekor qilish
 //             </Button>
-//           </form>
+//             <Button
+//               variant="destructive"
+//               onClick={handleDeleteEmployee}
+//               disabled={isLoading}
+//             >
+//               {isLoading ? "Yuklanmoqda..." : "O'chirish"}
+//             </Button>
+//           </DialogFooter>
 //         </DialogContent>
 //       </Dialog>
 //     </Card>
 //   )
 // }
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -443,6 +342,7 @@ export default function EmployeesPage() {
   const [deleteEmployeeId, setDeleteEmployeeId] = useState<number | null>(null)
   const [addError, setAddError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [formData, setFormData] = useState({
     password: "",
     username: "",
@@ -451,7 +351,15 @@ export default function EmployeesPage() {
     jshshir: "",
   })
 
-  // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const formatDateTime = (dateTime: string): string => {
     if (!dateTime) return "N/A"
     try {
@@ -467,13 +375,11 @@ export default function EmployeesPage() {
     }
   }
 
-  // Hodimlar ro'yxatini olish (is_staff: false bo'lganlar)
   const fetchEmployees = async () => {
     setIsLoading(true)
     setAddError(null)
     try {
       const data = await getEmployees()
-      // is_staff: true bo'lgan hodimlarni filtrlaymiz
       const filteredData = data.filter(employee => !employee.is_staff)
       setEmployees(filteredData)
     } catch (err) {
@@ -484,12 +390,10 @@ export default function EmployeesPage() {
     }
   }
 
-  // Yangi hodim qo'shish
   const handleAddEmployee = async (e: React.FormEvent) => {
     e.preventDefault()
     setAddError(null)
     setIsLoading(true)
-
     try {
       const processedData: EmployeeData = {
         password: formData.password,
@@ -498,7 +402,6 @@ export default function EmployeesPage() {
         ...(formData.last_name && { last_name: formData.last_name }),
         ...(formData.jshshir && { jshshir: formData.jshshir }),
       }
-
       await addEmployee(processedData)
       setIsAddModalOpen(false)
       setFormData({ password: "", username: "", first_name: "", last_name: "", jshshir: "" })
@@ -511,12 +414,10 @@ export default function EmployeesPage() {
     }
   }
 
-  // Hodimni o'chirish
   const handleDeleteEmployee = async () => {
     if (!deleteEmployeeId) return
     setAddError(null)
     setIsLoading(true)
-
     try {
       await deleteEmployee(deleteEmployeeId)
       await fetchEmployees()
@@ -543,10 +444,10 @@ export default function EmployeesPage() {
   }
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold flex items-center">
-          <Users className="mr-2 h-6 w-6" /> Hodimlar
+    <Card className="p-4 sm:p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold flex items-center">
+          <Users className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Hodimlar
         </h2>
         <Dialog open={isAddModalOpen} onOpenChange={(open) => {
           setIsAddModalOpen(open)
@@ -556,11 +457,11 @@ export default function EmployeesPage() {
           }
         }}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
               <Plus className="mr-2 h-4 w-4" /> Yangi hodim qo‘shish
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-card/90 backdrop-blur-md">
+          <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-lg rounded-lg">
             <DialogHeader>
               <DialogTitle>Yangi hodim qo‘shish</DialogTitle>
             </DialogHeader>
@@ -644,32 +545,19 @@ export default function EmployeesPage() {
           <Users className="mx-auto h-12 w-12 text-gray-400" />
           <p className="mt-2 text-gray-500">Hodimlar mavjud emas</p>
         </div>
-      ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Foydalanuvchi nomi</TableHead>
-              <TableHead>Ism</TableHead>
-              <TableHead>Familiya</TableHead>
-              <TableHead>JSHSHIR</TableHead>
-              <TableHead>Faol</TableHead>
-              <TableHead>Qo‘shilgan vaqti</TableHead>
-              <TableHead>Amallar</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {employees.map((employee) => (
-              <TableRow key={employee.id}>
-                <TableCell>{employee.id}</TableCell>
-                <TableCell>{employee.username}</TableCell>
-                <TableCell>{employee.first_name || "N/A"}</TableCell>
-                <TableCell>{employee.last_name || "N/A"}</TableCell>
-                <TableCell>{employee.jshshir || "N/A"}</TableCell>
-                <TableCell>{employee.is_active ? "Ha" : "Yo‘q"}</TableCell>
-                <TableCell>{formatDateTime(employee.date_joined)}</TableCell>
-                
-                <TableCell>
+      ) : isMobile ? (
+        <div className="space-y-4">
+          {employees.map((employee) => (
+            <Card key={employee.id} className="p-4 bg-card/90 backdrop-blur-md border-border/50">
+              <div className="space-y-2">
+                <div><strong>ID:</strong> {employee.id}</div>
+                <div><strong>Foydalanuvchi nomi:</strong> {employee.username}</div>
+                <div><strong>Ism:</strong> {employee.first_name || "N/A"}</div>
+                <div><strong>Familiya:</strong> {employee.last_name || "N/A"}</div>
+                <div><strong>JSHSHIR:</strong> {employee.jshshir || "N/A"}</div>
+                <div><strong>Faol:</strong> {employee.is_active ? "Ha" : "Yo‘q"}</div>
+                <div><strong>Qo‘shilgan vaqti:</strong> {formatDateTime(employee.date_joined)}</div>
+                <div className="pt-2">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -677,32 +565,74 @@ export default function EmployeesPage() {
                       setDeleteEmployeeId(employee.id)
                       setIsDeleteModalOpen(true)
                     }}
-                    className="hover:bg-red-600"
+                    className="hover:bg-red-600 w-full"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4 mr-2" /> O‘chirish
                   </Button>
-                </TableCell>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Foydalanuvchi nomi</TableHead>
+                <TableHead>Ism</TableHead>
+                <TableHead>Familiya</TableHead>
+                <TableHead>JSHSHIR</TableHead>
+                <TableHead>Faol</TableHead>
+                <TableHead>Qo‘shilgan vaqti</TableHead>
+                <TableHead>Amallar</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {employees.map((employee) => (
+                <TableRow key={employee.id}>
+                  <TableCell>{employee.id}</TableCell>
+                  <TableCell>{employee.username}</TableCell>
+                  <TableCell>{employee.first_name || "N/A"}</TableCell>
+                  <TableCell>{employee.last_name || "N/A"}</TableCell>
+                  <TableCell>{employee.jshshir || "N/A"}</TableCell>
+                  <TableCell>{employee.is_active ? "Ha" : "Yo‘q"}</TableCell>
+                  <TableCell>{formatDateTime(employee.date_joined)}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setDeleteEmployeeId(employee.id)
+                        setIsDeleteModalOpen(true)
+                      }}
+                      className="hover:bg-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
 
       <Dialog open={isDeleteModalOpen} onOpenChange={(open) => {
         setIsDeleteModalOpen(open)
-        if (!open) {
-          setDeleteEmployeeId(null)
-        }
+        if (!open) setDeleteEmployeeId(null)
       }}>
-        <DialogContent className="bg-card/90 backdrop-blur-md">
+        <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-md rounded-lg">
           <DialogHeader>
             <DialogTitle>Hodimni o'chirishni tasdiqlash</DialogTitle>
           </DialogHeader>
           <p>Haqiqatdan ham ushbu hodimni o'chirmoqchimisiz?</p>
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"
               onClick={() => setIsDeleteModalOpen(false)}
+              className="w-full sm:w-auto"
             >
               Bekor qilish
             </Button>
@@ -710,6 +640,7 @@ export default function EmployeesPage() {
               variant="destructive"
               onClick={handleDeleteEmployee}
               disabled={isLoading}
+              className="w-full sm:w-auto"
             >
               {isLoading ? "Yuklanmoqda..." : "O'chirish"}
             </Button>
