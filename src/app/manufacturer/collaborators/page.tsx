@@ -1,3 +1,304 @@
+// "use client"
+
+// import { useState, useEffect } from "react"
+// import { Card } from "@/src/components/ui/card"
+// import { Button } from "@/src/components/ui/button"
+// import { Input } from "@/src/components/ui/input"
+// import { Label } from "@/src/components/ui/label"
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/src/components/ui/table"
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/src/components/ui/dialog"
+// import { Alert, AlertDescription } from "@/src/components/ui/alert"
+// import { AlertCircle, Plus, Check, X, Users, MessageSquare, Edit, Trash2 } from "lucide-react"
+// import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner } from "@/lib/api"
+
+// export default function PartnersPage() {
+//   const [partners, setPartners] = useState<Partner[]>([])
+//   const [partnerRequests, setPartnerRequests] = useState<PartnerRequest[]>([])
+//   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+//   const [addError, setAddError] = useState<string | null>(null)
+//   const [acceptError, setAcceptError] = useState<string | null>(null)
+//   const [isLoading, setIsLoading] = useState(false)
+//   const [formData, setFormData] = useState({ partner: "" })
+
+//   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
+//   const formatDateTime = (dateTime: string): string => {
+//     if (!dateTime) return "N/A"
+//     try {
+//       const date = new Date(dateTime)
+//       const day = String(date.getDate()).padStart(2, "0")
+//       const month = String(date.getMonth() + 1).padStart(2, "0")
+//       const year = date.getFullYear()
+//       const hours = String(date.getHours()).padStart(2, "0")
+//       const minutes = String(date.getMinutes()).padStart(2, "0")
+//       return `${day}.${month}.${year} ${hours}:${minutes}`
+//     } catch {
+//       return "N/A"
+//     }
+//   }
+
+//   // Hamkorlar va so'rovlar ro'yxatini olish
+//   const fetchData = async () => {
+//     setIsLoading(true)
+//     setAddError(null)
+//     setAcceptError(null)
+//     try {
+//       const [partnersData, requestsData] = await Promise.all([
+//         getPartners(),
+//         getPartnerRequests(),
+//       ])
+//       setPartners(partnersData)
+//       setPartnerRequests(requestsData)
+//     } catch (err) {
+//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+//       setAddError(errorMessage)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }
+
+//   // Yangi hamkor qo'shish
+//   const handleAddPartner = async (e: React.FormEvent) => {
+//     e.preventDefault()
+//     setAddError(null)
+//     setIsLoading(true)
+
+//     try {
+//       const processedData: PartnerData = { partner: formData.partner }
+//       await addPartner(processedData)
+//       setIsAddModalOpen(false)
+//       setFormData({ partner: "" })
+//       await fetchData()
+//     } catch (err) {
+//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+//       setAddError(errorMessage)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }
+
+//   // Hamkorlik so'rovini qabul qilish
+//   const handleAcceptRequest = async (id: number) => {
+//     setAcceptError(null)
+//     setIsLoading(true)
+
+//     try {
+//       await acceptPartnerRequest(id)
+//       await fetchData()
+//     } catch (err) {
+//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+//       setAcceptError(errorMessage)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }
+
+//   // Hamkorni o'chirish
+//   const handleDeletePartner = async (id: number) => {
+//     setAcceptError(null)
+//     setIsLoading(true)
+
+//     try {
+//       await deletePartner(id)
+//       await fetchData()
+//     } catch (err) {
+//       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+//       setAcceptError(errorMessage)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }
+
+//   // Rad etish tugmasi (hozircha faqat UI)
+//   const handleRejectRequest = () => {
+//     setAcceptError("Rad etish funksiyasi hali tayyor emas.")
+//   }
+
+//   useEffect(() => {
+//     fetchData()
+//   }, [])
+
+//   if (isLoading && partners.length === 0 && partnerRequests.length === 0) {
+//     return (
+//       <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+//         <p>Yuklanmoqda...</p>
+//       </Card>
+//     )
+//   }
+
+//   return (
+//     <div className="space-y-6">
+//       {addError && (
+//         <Alert variant="destructive" className="mb-4">
+//           <AlertCircle className="h-4 w-4" />
+//           <AlertDescription>{addError}</AlertDescription>
+//         </Alert>
+//       )}
+//       {acceptError && (
+//         <Alert variant="destructive" className="mb-4">
+//           <AlertCircle className="h-4 w-4" />
+//           <AlertDescription>{acceptError}</AlertDescription>
+//         </Alert>
+//       )}
+
+//       <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+//         <div className="flex justify-between items-center mb-6">
+//           <h2 className="text-2xl font-semibold flex items-center">
+//             <Users className="mr-2 h-6 w-6" /> Mavjud hamkorlar
+//           </h2>
+//           <Dialog open={isAddModalOpen} onOpenChange={(open) => {
+//             setIsAddModalOpen(open)
+//             if (!open) {
+//               setFormData({ partner: "" })
+//               setAddError(null)
+//             }
+//           }}>
+//             <DialogTrigger asChild>
+//               <Button className="bg-primary hover:bg-primary/90">
+//                 <Plus className="mr-2 h-4 w-4" /> Yangi hamkor qo‘shish
+//               </Button>
+//             </DialogTrigger>
+//             <DialogContent className="bg-card/90 backdrop-blur-md">
+//               <DialogHeader>
+//                 <DialogTitle>Yangi hamkor qo‘shish</DialogTitle>
+//               </DialogHeader>
+//               <form onSubmit={handleAddPartner} className="space-y-4">
+//                 {addError && (
+//                   <Alert variant="destructive">
+//                     <AlertCircle className="h-4 w-4" />
+//                     <AlertDescription>{addError}</AlertDescription>
+//                   </Alert>
+//                 )}
+//                 <div className="space-y-2">
+//                   <Label htmlFor="partner">Hamkor nomi</Label>
+//                   <Input
+//                     id="partner"
+//                     value={formData.partner}
+//                     onChange={(e) => setFormData({ ...formData, partner: e.target.value })}
+//                     placeholder="Hamkor nomini kiriting"
+//                     required
+//                     className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
+//                   />
+//                 </div>
+//                 <Button type="submit" className="w-full" disabled={isLoading}>
+//                   {isLoading ? "Yuklanmoqda..." : "Qo‘shish"}
+//                 </Button>
+//               </form>
+//             </DialogContent>
+//           </Dialog>
+//         </div>
+
+//         {partners.length === 0 ? (
+//           <div className="text-center py-8">
+//             <Users className="mx-auto h-12 w-12 text-gray-400" />
+//             <p className="mt-2 text-gray-500">Hamkorlar mavjud emas</p>
+//           </div>
+//         ) : (
+//           <Table>
+//             <TableHeader>
+//               <TableRow>
+//                 <TableHead>ID</TableHead>
+//                 <TableHead>Hamkor nomi</TableHead>
+//                 <TableHead>Qo‘shilgan vaqti</TableHead>
+//                 <TableHead>Amallar</TableHead>
+//               </TableRow>
+//             </TableHeader>
+//             <TableBody>
+//               {partners.map((partner) => (
+//                 <TableRow key={partner.id}>
+//                   <TableCell>{partner.id}</TableCell>
+//                   <TableCell>{partner.partner}</TableCell>
+//                   <TableCell>{formatDateTime(partner.created_at)}</TableCell>
+//                   <TableCell>
+//                     <div className="flex gap-2">
+//                       <Button variant="ghost" size="sm" className="hover:bg-primary/10">
+//                         <Edit className="h-4 w-4" />
+//                       </Button>
+//                       <Button
+//                         variant="ghost"
+//                         size="sm"
+//                         onClick={() => handleDeletePartner(partner.id)}
+//                         className="hover:bg-red-600"
+//                         disabled={isLoading}
+//                       >
+//                         <Trash2 className="h-4 w-4" />
+//                       </Button>
+//                     </div>
+//                   </TableCell>
+//                 </TableRow>
+//               ))}
+//             </TableBody>
+//           </Table>
+//         )}
+//       </Card>
+
+//       <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+//         <h3 className="text-xl font-semibold mb-4 flex items-center">
+//           <MessageSquare className="mr-2 h-6 w-6" /> Hamkorlik so‘rovlari
+//         </h3>
+//         {partnerRequests.length === 0 ? (
+//           <div className="text-center py-8">
+//             <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
+//             <p className="mt-2 text-gray-500">Hamkorlik so‘rovlari mavjud emas</p>
+//           </div>
+//         ) : (
+//           <Table>
+//             <TableHeader>
+//               <TableRow>
+//                 <TableHead>ID</TableHead>
+//                 <TableHead>Hamkor</TableHead>
+//                 <TableHead>So‘rov vaqti</TableHead>
+//                 <TableHead>Amallar</TableHead>
+//               </TableRow>
+//             </TableHeader>
+//             <TableBody>
+//               {partnerRequests.map((request) => (
+//                 <TableRow key={request.id}>
+//                   <TableCell>{request.id}</TableCell>
+//                   <TableCell>{request.partner}</TableCell>
+//                   <TableCell>{formatDateTime(request.created_at)}</TableCell>
+//                   <TableCell>
+//                     <div className="flex gap-2">
+//                       <Button
+//                         variant="ghost"
+//                         size="sm"
+//                         onClick={() => handleAcceptRequest(request.id)}
+//                         className="hover:bg-green-600"
+//                         disabled={isLoading}
+//                       >
+//                         <Check className="h-4 w-4" />
+//                       </Button>
+//                       <Button
+//                         variant="ghost"
+//                         size="sm"
+//                         onClick={handleRejectRequest}
+//                         className="hover:bg-red-600"
+//                       >
+//                         <X className="h-4 w-4" />
+//                       </Button>
+//                     </div>
+//                   </TableCell>
+//                 </TableRow>
+//               ))}
+//             </TableBody>
+//           </Table>
+//         )}
+//       </Card>
+//     </div>
+//   )
+// }
 "use client"
 
 import { useState, useEffect } from "react"
@@ -19,19 +320,47 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@/src/components/ui/dialog"
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
-import { AlertCircle, Plus, Check, X, Users, MessageSquare, Edit, Trash2 } from "lucide-react"
-import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner } from "@/lib/api"
+import { AlertCircle, Plus, Check, X, Users, MessageSquare, Info, Trash2 } from "lucide-react"
+import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner, getPartnerById, getMyPartnerRequests, deleteMyPartnerRequest } from "@/lib/api"
+import Cookies from "js-cookie"
+import { Sidebar } from "@/src/components/manufacturer/Sidebar"
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([])
   const [partnerRequests, setPartnerRequests] = useState<PartnerRequest[]>([])
+  const [myPartnerRequests, setMyPartnerRequests] = useState<PartnerRequest[]>([])
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isMyDeleteModalOpen, setIsMyDeleteModalOpen] = useState(false)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null)
+  const [deletePartnerId, setDeletePartnerId] = useState<string | null>(null)
+  const [deleteMyRequestId, setDeleteMyRequestId] = useState<number | null>(null)
   const [addError, setAddError] = useState<string | null>(null)
   const [acceptError, setAcceptError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({ partner: "" })
+  const [formData, setFormData] = useState({ name: "", description: "", partner: "" })
+  const [isMobile, setIsMobile] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const isStaff = Cookies.get('is_staff') !== 'false'
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true)
+      } else {
+        setIsSidebarOpen(false)
+      }
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
   const formatDateTime = (dateTime: string): string => {
@@ -49,18 +378,20 @@ export default function PartnersPage() {
     }
   }
 
-  // Hamkorlar va so'rovlar ro'yxatini olish
+  // Hamkorlar, so'rovlar va mening so'rovlarimni olish
   const fetchData = async () => {
     setIsLoading(true)
     setAddError(null)
     setAcceptError(null)
     try {
-      const [partnersData, requestsData] = await Promise.all([
+      const [partnersData, requestsData, myRequestsData] = await Promise.all([
         getPartners(),
         getPartnerRequests(),
+        getMyPartnerRequests(),
       ])
       setPartners(partnersData)
       setPartnerRequests(requestsData)
+      setMyPartnerRequests(myRequestsData)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
       setAddError(errorMessage)
@@ -76,10 +407,14 @@ export default function PartnersPage() {
     setIsLoading(true)
 
     try {
-      const processedData: PartnerData = { partner: formData.partner }
+      const processedData: PartnerData = { 
+        name: formData.name,
+        description: formData.description,
+        partner: formData.partner
+      }
       await addPartner(processedData)
       setIsAddModalOpen(false)
-      setFormData({ partner: "" })
+      setFormData({ name: "", description: "", partner: "" })
       await fetchData()
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
@@ -106,13 +441,50 @@ export default function PartnersPage() {
   }
 
   // Hamkorni o'chirish
-  const handleDeletePartner = async (id: number) => {
+  const handleDeletePartner = async () => {
+    if (!deletePartnerId) return
     setAcceptError(null)
     setIsLoading(true)
 
     try {
-      await deletePartner(id)
+      await deletePartner(deletePartnerId)
       await fetchData()
+      setIsDeleteModalOpen(false)
+      setDeletePartnerId(null)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+      setAcceptError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Mening so'rovimni o'chirish
+  const handleDeleteMyRequest = async () => {
+    if (!deleteMyRequestId) return
+    setAcceptError(null)
+    setIsLoading(true)
+
+    try {
+      await deleteMyPartnerRequest(deleteMyRequestId)
+      await fetchData()
+      setIsMyDeleteModalOpen(false)
+      setDeleteMyRequestId(null)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+      setAcceptError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Hamkor ma'lumotlarini ko'rish
+  const handleViewPartner = async (id: string) => {
+    setIsLoading(true)
+    try {
+      const partner = await getPartnerById(id)
+      setSelectedPartner(partner)
+      setIsDetailsModalOpen(true)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
       setAcceptError(errorMessage)
@@ -130,7 +502,7 @@ export default function PartnersPage() {
     fetchData()
   }, [])
 
-  if (isLoading && partners.length === 0 && partnerRequests.length === 0) {
+  if (isLoading && partners.length === 0 && partnerRequests.length === 0 && myPartnerRequests.length === 0) {
     return (
       <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
         <p>Yuklanmoqda...</p>
@@ -139,163 +511,357 @@ export default function PartnersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {addError && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{addError}</AlertDescription>
-        </Alert>
-      )}
-      {acceptError && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{acceptError}</AlertDescription>
-        </Alert>
-      )}
+    <div className="bg-gradient-to-b from-background to-background/90 flex">
+      {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
+      <main className="w-full md:p-8">
+        <div className="container mx-auto space-y-6">
+          {addError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{addError}</AlertDescription>
+            </Alert>
+          )}
+          {acceptError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{acceptError}</AlertDescription>
+            </Alert>
+          )}
 
-      <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold flex items-center">
-            <Users className="mr-2 h-6 w-6" /> Mavjud hamkorlar
-          </h2>
-          <Dialog open={isAddModalOpen} onOpenChange={(open) => {
-            setIsAddModalOpen(open)
-            if (!open) {
-              setFormData({ partner: "" })
-              setAddError(null)
-            }
+          <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold flex items-center">
+                <Users className="mr-2 h-6 w-6" /> Mavjud hamkorlar
+              </h2>
+              {isStaff && (
+                <Dialog open={isAddModalOpen} onOpenChange={(open) => {
+                  setIsAddModalOpen(open)
+                  if (!open) {
+                    setFormData({ name: "", description: "", partner: "" })
+                    setAddError(null)
+                  }
+                }}>
+                  <DialogTrigger asChild>
+                    <Button className="bg-primary hover:bg-primary/90">
+                      <Plus className="mr-2 h-4 w-4" /> Yangi hamkor qo‘shish
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-card/90 backdrop-blur-md">
+                    <DialogHeader>
+                      <DialogTitle>Yangi hamkor qo‘shish</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleAddPartner} className="space-y-4">
+                      {addError && (
+                        <Alert variant="destructive">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>{addError}</AlertDescription>
+                        </Alert>
+                      )}
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Hamkor nomi</Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="Hamkor nomini kiriting"
+                          required
+                          className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="description">Tavsif</Label>
+                        <Input
+                          id="description"
+                          value={formData.description}
+                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                          placeholder="Tavsifni kiriting"
+                          className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="partner">Taminotchi ID'si</Label>
+                        <Input
+                          id="partner"
+                          value={formData.partner}
+                          onChange={(e) => setFormData({ ...formData, partner: e.target.value })}
+                          placeholder="Taminotchi ID'sini kiriting"
+                          className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? "Yuklanmoqda..." : "Qo‘shish"}
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
+
+            {partners.length === 0 ? (
+              <div className="text-center py-8">
+                <Users className="mx-auto h-12 w-12 text-gray-400" />
+                <p className="mt-2 text-gray-500">Hamkorlar mavjud emas</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Hamkor nomi</TableHead>
+                    <TableHead>Tavsif</TableHead>
+                    <TableHead>Qo‘shilgan vaqti</TableHead>
+                    <TableHead>Amallar</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {partners.map((partner) => (
+                    <TableRow key={partner.id}>
+                      <TableCell>{partner.id}</TableCell>
+                      <TableCell>{partner.name}</TableCell>
+                      <TableCell>{partner.description || "N/A"}</TableCell>
+                      <TableCell>{formatDateTime(partner.invited_at)}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleViewPartner(partner.id)}
+                            className="hover:bg-blue-600"
+                          >
+                            <Info className="h-4 w-4" />
+                          </Button>
+                          {isStaff && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setDeletePartnerId(partner.id)
+                                setIsDeleteModalOpen(true)
+                              }}
+                              className="hover:bg-red-600"
+                              disabled={isLoading}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <h3 className="text-xl font-semibold mb-4 flex items-center">
+              <MessageSquare className="mr-2 h-6 w-6" /> Menga kelgan hamkorlik so‘rovlari
+            </h3>
+            {partnerRequests.length === 0 ? (
+              <div className="text-center py-8">
+                <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
+                <p className="mt-2 text-gray-500">Hamkorlik so‘rovlari mavjud emas</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Hamkor</TableHead>
+                    <TableHead>Nomi</TableHead>
+                    <TableHead>Tavsifi</TableHead>
+                    <TableHead>So‘rov vaqti</TableHead>
+                    {isStaff && <TableHead>Amallar</TableHead>}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {partnerRequests.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell>{request.id}</TableCell>
+                      <TableCell>{request.partner}</TableCell>
+                      <TableCell>{request.name || "N/A"}</TableCell>
+                      <TableCell>{request.description || "N/A"}</TableCell>
+                      <TableCell>{formatDateTime(request.invited_at)}</TableCell>
+                      {isStaff && (
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleAcceptRequest(request.id)}
+                              className="hover:bg-green-600"
+                              disabled={isLoading}
+                            >
+                              <Check className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleRejectRequest}
+                              className="hover:bg-red-600"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <h3 className="text-xl font-semibold mb-4 flex items-center">
+              <MessageSquare className="mr-2 h-6 w-6" /> Mening yuborgan so‘rovlarim
+            </h3>
+            {myPartnerRequests.length === 0 ? (
+              <div className="text-center py-8">
+                <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
+                <p className="mt-2 text-gray-500">Yuborilgan so‘rovlar mavjud emas</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Hamkor</TableHead>
+                    <TableHead>Nomi</TableHead>
+                    <TableHead>Tavsifi</TableHead>
+                    <TableHead>So‘rov vaqti</TableHead>
+                    {isStaff && <TableHead>Amallar</TableHead>}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {myPartnerRequests.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell>{request.id}</TableCell>
+                      <TableCell>{request.partner}</TableCell>
+                      <TableCell>{request.name || "N/A"}</TableCell>
+                      <TableCell>{request.description || "N/A"}</TableCell>
+                      <TableCell>{formatDateTime(request.invited_at)}</TableCell>
+                      {isStaff && (
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setDeleteMyRequestId(request.id)
+                              setIsMyDeleteModalOpen(true)
+                            }}
+                            className="hover:bg-red-600"
+                            disabled={isLoading}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </Card>
+
+          <Dialog open={isDeleteModalOpen} onOpenChange={(open) => {
+            setIsDeleteModalOpen(open)
+            if (!open) setDeletePartnerId(null)
           }}>
-            <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="mr-2 h-4 w-4" /> Yangi hamkor qo‘shish
-              </Button>
-            </DialogTrigger>
             <DialogContent className="bg-card/90 backdrop-blur-md">
               <DialogHeader>
-                <DialogTitle>Yangi hamkor qo‘shish</DialogTitle>
+                <DialogTitle>Hamkorni o'chirishni tasdiqlash</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleAddPartner} className="space-y-4">
-                {addError && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{addError}</AlertDescription>
-                  </Alert>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="partner">Hamkor nomi</Label>
-                  <Input
-                    id="partner"
-                    value={formData.partner}
-                    onChange={(e) => setFormData({ ...formData, partner: e.target.value })}
-                    placeholder="Hamkor nomini kiriting"
-                    required
-                    className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Yuklanmoqda..." : "Qo‘shish"}
+              <p>Haqiqatdan ham ushbu hamkorni o'chirmoqchimisiz?</p>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                >
+                  Bekor qilish
                 </Button>
-              </form>
+                <Button
+                  variant="destructive"
+                  onClick={handleDeletePartner}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Yuklanmoqda..." : "O'chirish"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isMyDeleteModalOpen} onOpenChange={(open) => {
+            setIsMyDeleteModalOpen(open)
+            if (!open) setDeleteMyRequestId(null)
+          }}>
+            <DialogContent className="bg-card/90 backdrop-blur-md">
+              <DialogHeader>
+                <DialogTitle>So'rovni o'chirishni tasdiqlash</DialogTitle>
+              </DialogHeader>
+              <p>Haqiqatdan ham ushbu so'rovni o'chirmoqchimisiz?</p>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsMyDeleteModalOpen(false)}
+                >
+                  Bekor qilish
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleDeleteMyRequest}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Yuklanmoqda..." : "O'chirish"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isDetailsModalOpen} onOpenChange={(open) => {
+            setIsDetailsModalOpen(open)
+            if (!open) setSelectedPartner(null)
+          }}>
+            <DialogContent className="bg-card/90 backdrop-blur-md">
+              <DialogHeader>
+                <DialogTitle>Hamkor ma'lumotlari</DialogTitle>
+              </DialogHeader>
+              {selectedPartner && (
+                <div className="space-y-4">
+                  <div>
+                    <Label>ID</Label>
+                    <p>{selectedPartner.id}</p>
+                  </div>
+                  <div>
+                    <Label>Nomi</Label>
+                    <p>{selectedPartner.name}</p>
+                  </div>
+                  <div>
+                    <Label>Tavsif</Label>
+                    <p>{selectedPartner.description || "N/A"}</p>
+                  </div>
+                  <div>
+                    <Label>Faol</Label>
+                    <p>{selectedPartner.is_active ? "Ha" : "Yo'q"}</p>
+                  </div>
+                  <div>
+                    <Label>Taklif qilingan vaqt</Label>
+                    <p>{formatDateTime(selectedPartner.invited_at)}</p>
+                  </div>
+                  <div>
+                    <Label>Qabul qilingan vaqt</Label>
+                    <p>{formatDateTime(selectedPartner.accepted_at) || "N/A"}</p>
+                  </div>
+                  <div>
+                    <Label>Egasi</Label>
+                    <p>{selectedPartner.owner}</p>
+                  </div>
+                </div>
+              )}
             </DialogContent>
           </Dialog>
         </div>
-
-        {partners.length === 0 ? (
-          <div className="text-center py-8">
-            <Users className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-2 text-gray-500">Hamkorlar mavjud emas</p>
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Hamkor nomi</TableHead>
-                <TableHead>Qo‘shilgan vaqti</TableHead>
-                <TableHead>Amallar</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {partners.map((partner) => (
-                <TableRow key={partner.id}>
-                  <TableCell>{partner.id}</TableCell>
-                  <TableCell>{partner.partner}</TableCell>
-                  <TableCell>{formatDateTime(partner.created_at)}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" className="hover:bg-primary/10">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeletePartner(partner.id)}
-                        className="hover:bg-red-600"
-                        disabled={isLoading}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </Card>
-
-      <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-        <h3 className="text-xl font-semibold mb-4 flex items-center">
-          <MessageSquare className="mr-2 h-6 w-6" /> Hamkorlik so‘rovlari
-        </h3>
-        {partnerRequests.length === 0 ? (
-          <div className="text-center py-8">
-            <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-2 text-gray-500">Hamkorlik so‘rovlari mavjud emas</p>
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Hamkor</TableHead>
-                <TableHead>So‘rov vaqti</TableHead>
-                <TableHead>Amallar</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {partnerRequests.map((request) => (
-                <TableRow key={request.id}>
-                  <TableCell>{request.id}</TableCell>
-                  <TableCell>{request.partner}</TableCell>
-                  <TableCell>{formatDateTime(request.created_at)}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleAcceptRequest(request.id)}
-                        className="hover:bg-green-600"
-                        disabled={isLoading}
-                      >
-                        <Check className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleRejectRequest}
-                        className="hover:bg-red-600"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </Card>
+      </main>
     </div>
   )
 }

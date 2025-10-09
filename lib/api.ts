@@ -63,6 +63,7 @@
 // }
 
 // export interface Employee {
+//   jshshir: string;
 //   id: number;
 //   username: string;
 //   password: string;
@@ -71,6 +72,7 @@
 //   email: string;
 //   is_active: boolean;
 //   date_joined: string;
+//   is_staff: boolean;
 // }
 
 // export interface EmployeeData {
@@ -79,6 +81,28 @@
 //   first_name?: string;
 //   last_name?: string;
 //   email?: string;
+// }
+
+// export interface Partner {
+//   id: number;
+//   partner: string;
+//   created_at: string;
+//   accepted_at:string
+// }
+
+
+// export interface PartnerRequest {
+//   id: number;
+//   partner: string;
+//   created_at: string;
+// }
+
+// export interface PartnerData {
+//   partner: string;
+// }
+
+// export interface AcceptPartnerRequestData {
+//   contract: string;
 // }
 
 // export const manufacturerLogin = async (data: ManufacturerLoginData): Promise<AuthResponse> => {
@@ -326,6 +350,148 @@
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
+
+// export const getPartners = async (): Promise<Partner[]> => {
+//   const token = Cookies.get('token');
+//   if (!token) {
+//     throw new Error('Access token topilmadi');
+//   }
+
+//   try {
+//     const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/', {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP xato! Status: ${response.status}`);
+//     }
+
+//     const result = await response.json();
+//     return result;
+//   } catch (error) {
+//     console.error('Hamkorlar ro\'yxatini olishda xato:', error);
+//     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+//   }
+// };
+
+// export const addPartner = async (data: PartnerData): Promise<Partner> => {
+//   const token = Cookies.get('token');
+//   if (!token) {
+//     throw new Error('Access token topilmadi');
+//   }
+
+//   try {
+//     const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       if (errorData.partner) {
+//         throw new Error('Bu hamkor nomi allaqachon mavjud.');
+//       }
+//       throw new Error(`HTTP xato! Status: ${response.status}`);
+//     }
+
+//     const result = await response.json();
+//     return result;
+//   } catch (error) {
+//     console.error('Hamkor qo\'shishda xato:', error);
+//     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+//   }
+// };
+
+// export const deletePartner = async (id: number): Promise<void> => {
+//   const token = Cookies.get('token');
+//   if (!token) {
+//     throw new Error('Access token topilmadi');
+//   }
+
+//   try {
+//     const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/${id}/`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       if (errorData.message) {
+//         throw new Error(errorData.message);
+//       }
+//       throw new Error(`HTTP xato! Status: ${response.status}`);
+//     }
+//   } catch (error) {
+//     console.error('Hamkorni o\'chirishda xato:', error);
+//     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+//   }
+// };
+
+// export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
+//   const token = Cookies.get('token');
+//   if (!token) {
+//     throw new Error('Access token topilmadi');
+//   }
+
+//   try {
+//     const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/request/', {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP xato! Status: ${response.status}`);
+//     }
+
+//     const result = await response.json();
+//     return result;
+//   } catch (error) {
+//     console.error('Hamkorlik so\'rovlarini olishda xato:', error);
+//     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+//   }
+// };
+
+// export const acceptPartnerRequest = async (id: number): Promise<void> => {
+//   const token = Cookies.get('token');
+//   if (!token) {
+//     throw new Error('Access token topilmadi');
+//   }
+
+//   try {
+//     const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/request/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({ contract: `${id}` }),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       if (errorData.contract) {
+//         throw new Error('Shartnoma ID si noto\'g\'ri yoki topilmadi.');
+//       }
+//       throw new Error(`HTTP xato! Status: ${response.status}`);
+//     }
+//   } catch (error) {
+//     console.error('Hamkorlik so\'rovini qabul qilishda xato:', error);
+//     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+//   }
+// };
 import Cookies from 'js-cookie'
 
 export interface ManufacturerLoginData {
@@ -346,7 +512,7 @@ export interface ManufacturerLoginData {
 
 export interface AuthResponse {
   message?: string;
-  organization: {
+  organization?: {
     id: string;
     name: string;
     description: string;
@@ -369,6 +535,11 @@ export interface AuthResponse {
     refresh: string;
   };
   [key: string]: any;
+}
+
+export interface EmployeeLoginData {
+  username: string;
+  password: string;
 }
 
 export interface ProfileData {
@@ -396,7 +567,7 @@ export interface Employee {
   password: string;
   first_name: string;
   last_name: string;
-  email: string;
+  jshshir: string;
   is_active: boolean;
   date_joined: string;
   is_staff: boolean;
@@ -407,24 +578,31 @@ export interface EmployeeData {
   username: string;
   first_name?: string;
   last_name?: string;
-  email?: string;
+  jshshir?: string;
 }
 
 export interface Partner {
-  id: number;
+  id: string;
   partner: string;
-  created_at: string;
-  accepted_at:string
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  invited_at: string;
+  accepted_at: string;
+  owner: string;
 }
 
-
 export interface PartnerRequest {
+  description: string;
+  name: string;
   id: number;
   partner: string;
-  created_at: string;
+  invited_at: string;
 }
 
 export interface PartnerData {
+  name: string;
+  description: string;
   partner: string;
 }
 
@@ -450,10 +628,42 @@ export const manufacturerLogin = async (data: ManufacturerLoginData): Promise<Au
     if (result.tokens?.access) {
       Cookies.set('token', result.tokens.access, { expires: 1 });
       Cookies.set('refresh_token', result.tokens.refresh, { expires: 7 });
+      Cookies.set('is_staff', 'true', { expires: 1 }); // Ishlab chiqaruvchi uchun is_staff true
     }
     return result;
   } catch (error) {
     console.error('Tashkilot loginida xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const employeeLogin = async (data: EmployeeLoginData): Promise<AuthResponse> => {
+  try {
+    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (errorData.message) {
+        throw new Error(errorData.message);
+      }
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+
+    const result: AuthResponse = await response.json();
+    if (result.tokens?.access) {
+      Cookies.set('token', result.tokens.access, { expires: 1 });
+      Cookies.set('refresh_token', result.tokens.refresh, { expires: 7 });
+      Cookies.set('is_staff', 'false', { expires: 1 }); // Hodim uchun is_staff false
+    }
+    return result;
+  } catch (error) {
+    console.error('Hodim loginida xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -481,6 +691,61 @@ export const getProfile = async (): Promise<ProfileData> => {
     return result;
   } catch (error) {
     console.error('Profil ma\'lumotlarini olishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const getEmployeeProfile = async (): Promise<Employee> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/employee/me/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Hodim profilini olishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const updateEmployeeProfile = async (id: number, data: Partial<EmployeeData>): Promise<Employee> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/employee/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Hodim profilini yangilashda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -623,38 +888,6 @@ export const addEmployee = async (data: EmployeeData): Promise<Employee> => {
   }
 };
 
-export const updateEmployee = async (id: number, data: Partial<EmployeeData>): Promise<Employee> => {
-  const token = Cookies.get('token');
-  if (!token) {
-    throw new Error('Access token topilmadi');
-  }
-
-  try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/employee/${id}/`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      if (errorData.username) {
-        throw new Error('Bu foydalanuvchi nomi allaqachon mavjud.');
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Hodim ma\'lumotlarini yangilashda xato:', error);
-    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
-  }
-};
-
 export const deleteEmployee = async (id: number): Promise<void> => {
   const token = Cookies.get('token');
   if (!token) {
@@ -705,6 +938,33 @@ export const getPartners = async (): Promise<Partner[]> => {
   }
 };
 
+export const getPartnerById = async (id: string): Promise<Partner> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Hamkor ma\'lumotlarini olishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
 export const addPartner = async (data: PartnerData): Promise<Partner> => {
   const token = Cookies.get('token');
   if (!token) {
@@ -723,7 +983,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.partner) {
+      if (errorData.name) {
         throw new Error('Bu hamkor nomi allaqachon mavjud.');
       }
       throw new Error(`HTTP xato! Status: ${response.status}`);
@@ -737,7 +997,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
   }
 };
 
-export const deletePartner = async (id: number): Promise<void> => {
+export const deletePartner = async (id: string): Promise<void> => {
   const token = Cookies.get('token');
   if (!token) {
     throw new Error('Access token topilmadi');
@@ -787,6 +1047,56 @@ export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
     return result;
   } catch (error) {
     console.error('Hamkorlik so\'rovlarini olishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const getMyPartnerRequests = async (): Promise<PartnerRequest[]> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/my/request/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Mening hamkorlik so\'rovlarimni olishda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const deleteMyPartnerRequest = async (id: number): Promise<void> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/my/request/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP xato! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Hamkorlik so\'rovini o\'chirishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
