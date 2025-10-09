@@ -25,6 +25,18 @@ export default function ManufacturerLayout({ children }: { children: React.React
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Prevent body scrolling when sidebar is open
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.remove("overflow-hidden")
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden") // Cleanup on unmount
+    }
+  }, [isSidebarOpen])
+
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => {
       const newState = !prev
