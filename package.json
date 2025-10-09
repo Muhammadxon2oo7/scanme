@@ -50,6 +50,7 @@
     "input-otp": "latest",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.454.0",
+    "motion": "^12.23.22",
     "next": "14.2.16",
     "next-themes": "latest",
     "react": "^18",
