@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { Upload } from "lucide-react"
+import Cookies from "js-cookie"
 
 interface ProfileImageUploaderProps {
   onImageChange: (file: File | null, base64: string | null) => void
@@ -13,6 +14,7 @@ interface ProfileImageUploaderProps {
 export function ProfileImageUploader({ onImageChange, currentImage, isEditing }: ProfileImageUploaderProps) {
   const [preview, setPreview] = useState<string | null>(currentImage || "/default-avatar.png")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const isStaff = Cookies.get('is_staff') !== 'false'
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -24,12 +26,15 @@ export function ProfileImageUploader({ onImageChange, currentImage, isEditing }:
         onImageChange(file, base64)
       }
       reader.readAsDataURL(file)
+    } else {
+      setPreview(currentImage || "/default-avatar.png")
+      onImageChange(null, null)
     }
   }
 
   return (
     <div className="flex justify-center">
-      {isEditing ? (
+      {isEditing && isStaff ? (
         <Avatar
           className="h-24 w-24 ring-2 ring-primary/20 cursor-pointer hover:bg-primary/20 transition-all duration-200"
           onClick={() => fileInputRef.current?.click()}

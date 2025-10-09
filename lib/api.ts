@@ -559,6 +559,7 @@ export interface ProfileData {
   address: string;
   created_at: string;
   updated_at: string;
+  photo?: string | null; // API dan keladigan rasm URL si yoki null
 }
 
 export interface Employee {

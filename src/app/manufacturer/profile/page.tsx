@@ -137,16 +137,41 @@ export default function ManufacturerProfilePage() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const handleSave = async (data: Partial<ProfileData>) => {
-    try {
-      console.log("Saqlash uchun yuborilgan ma'lumotlar:", data)
-      await partialUpdateProfile(data)
-      setIsEditing(false)
-    } catch (err) {
-      console.error("Profilni saqlashda xato:", err)
-      throw err
+  const handleSave = async (data: Partial<ProfileData> | FormData) => {
+  try {
+    console.log("Saqlash uchun yuborilgan ma'lumotlar:", data);
+
+    if (data instanceof FormData) {
+      // Agar FormData kelsa — fetch bilan bevosita yuboramiz
+      const token = Cookies.get('token');
+      if (!token) throw new Error('Access token topilmadi');
+
+      const response = await fetch('https://api.e-investment.uz/api/v1/accounts/organization/', {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: data, // FormData ni JSON emas, shu holatda yuboramiz
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP xato! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("FormData orqali saqlandi:", result);
+    } else {
+      // Aks holda — oddiy JSON object
+      await partialUpdateProfile(data);
     }
+
+    setIsEditing(false);
+  } catch (err) {
+    console.error("Profilni saqlashda xato:", err);
+    throw err;
   }
+};
+
 
   return (
     <div className="bg-gradient-to-b from-background to-background/90 flex">
