@@ -174,7 +174,7 @@ export default function ManufacturerProfilePage() {
 
 
   return (
-    <div className="bg-gradient-to-b from-background to-background/90 flex">
+    <div className="bg-gradient-to-b from-background to-background/90 flex overflow-y-auto">
       {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
       <main className="w-full md:p-8 ">
         <div className="container mx-auto space-y-6">
