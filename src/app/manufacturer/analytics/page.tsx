@@ -67,7 +67,7 @@ export default function ManufacturerAnalyticsPage() {
       trend: "stable",
     },
     {
-      title: "Faol hamkorlar",
+      title: "Faol Taminotchilar",
       value: "23",
       change: "+3 yangi",
       icon: Users,
@@ -134,7 +134,7 @@ export default function ManufacturerAnalyticsPage() {
                     <TableHead>Oy</TableHead>
                     <TableHead>Skanlar</TableHead>
                     <TableHead>Mahsulotlar</TableHead>
-                    <TableHead>Hamkorlar</TableHead>
+                    <TableHead>Taminotchilar</TableHead>
                     <TableHead>O‘rtacha baho</TableHead>
                   </TableRow>
                 </TableHeader>

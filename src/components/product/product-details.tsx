@@ -183,7 +183,7 @@ export function ProductDetails({ productId }: ProductDetailsProps) {
             </div>
             {product.collaborators.length > 0 && (
               <div>
-                <h4 className="font-medium mb-2">Hamkor Tashkilotlar:</h4>
+                <h4 className="font-medium mb-2">Taminotchi Tashkilotlar:</h4>
                 <div className="space-y-2">
                   {product.collaborators.map((collaborator, index) => (
                     <div key={index} className="text-sm">

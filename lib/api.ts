@@ -373,7 +373,7 @@
 //     const result = await response.json();
 //     return result;
 //   } catch (error) {
-//     console.error('Hamkorlar ro\'yxatini olishda xato:', error);
+//     console.error('Taminotchilar ro\'yxatini olishda xato:', error);
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
@@ -397,7 +397,7 @@
 //     if (!response.ok) {
 //       const errorData = await response.json();
 //       if (errorData.partner) {
-//         throw new Error('Bu hamkor nomi allaqachon mavjud.');
+//         throw new Error('Bu Taminotchi nomi allaqachon mavjud.');
 //       }
 //       throw new Error(`HTTP xato! Status: ${response.status}`);
 //     }
@@ -405,7 +405,7 @@
 //     const result = await response.json();
 //     return result;
 //   } catch (error) {
-//     console.error('Hamkor qo\'shishda xato:', error);
+//     console.error('Taminotchi qo\'shishda xato:', error);
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
@@ -432,7 +432,7 @@
 //       throw new Error(`HTTP xato! Status: ${response.status}`);
 //     }
 //   } catch (error) {
-//     console.error('Hamkorni o\'chirishda xato:', error);
+//     console.error('Taminotchini o\'chirishda xato:', error);
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
@@ -459,7 +459,7 @@
 //     const result = await response.json();
 //     return result;
 //   } catch (error) {
-//     console.error('Hamkorlik so\'rovlarini olishda xato:', error);
+//     console.error('Taminotchilik so\'rovlarini olishda xato:', error);
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
@@ -488,7 +488,7 @@
 //       throw new Error(`HTTP xato! Status: ${response.status}`);
 //     }
 //   } catch (error) {
-//     console.error('Hamkorlik so\'rovini qabul qilishda xato:', error);
+//     console.error('Taminotchilik so\'rovini qabul qilishda xato:', error);
 //     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
 //   }
 // };
@@ -934,7 +934,7 @@ export const getPartners = async (): Promise<Partner[]> => {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Hamkorlar ro\'yxatini olishda xato:', error);
+    console.error('Taminotchilar ro\'yxatini olishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -961,7 +961,7 @@ export const getPartnerById = async (id: string): Promise<Partner> => {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Hamkor ma\'lumotlarini olishda xato:', error);
+    console.error('Taminotchi ma\'lumotlarini olishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -985,7 +985,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
     if (!response.ok) {
       const errorData = await response.json();
       if (errorData.name) {
-        throw new Error('Bu hamkor nomi allaqachon mavjud.');
+        throw new Error('Bu Taminotchi nomi allaqachon mavjud.');
       }
       throw new Error(`HTTP xato! Status: ${response.status}`);
     }
@@ -993,7 +993,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Hamkor qo\'shishda xato:', error);
+    console.error('Taminotchi qo\'shishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -1020,7 +1020,7 @@ export const deletePartner = async (id: string): Promise<void> => {
       throw new Error(`HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error('Hamkorni o\'chirishda xato:', error);
+    console.error('Taminotchini o\'chirishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -1047,7 +1047,7 @@ export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Hamkorlik so\'rovlarini olishda xato:', error);
+    console.error('Taminotchilik so\'rovlarini olishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -1074,7 +1074,7 @@ export const getMyPartnerRequests = async (): Promise<PartnerRequest[]> => {
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Mening hamkorlik so\'rovlarimni olishda xato:', error);
+    console.error('Mening Taminotchilik so\'rovlarimni olishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -1097,7 +1097,7 @@ export const deleteMyPartnerRequest = async (id: number): Promise<void> => {
       throw new Error(`HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error('Hamkorlik so\'rovini o\'chirishda xato:', error);
+    console.error('Taminotchilik so\'rovini o\'chirishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -1126,7 +1126,7 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
       throw new Error(`HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error('Hamkorlik so\'rovini qabul qilishda xato:', error);
+    console.error('Taminotchilik so\'rovini qabul qilishda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };

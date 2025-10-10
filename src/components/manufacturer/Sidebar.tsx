@@ -35,7 +35,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
         { name: "Dashboard", path: "/manufacturer/dashboard", icon: LayoutDashboard },
         { name: "Mahsulotlar", path: "/manufacturer/products", icon: Package },
         { name: "Statistika", path: "/manufacturer/analytics", icon: BarChart3 },
-        { name: "Hamkorlar", path: "/manufacturer/collaborators", icon: Users },
+        { name: "Taminotchilar", path: "/manufacturer/collaborators", icon: Users },
         { name: "Hodimlar", path: "/manufacturer/employees", icon: Users },
         { name: "Profil", path: "/manufacturer/profile", icon: User },
       ]
@@ -43,7 +43,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
         { name: "Dashboard", path: "/manufacturer/dashboard", icon: LayoutDashboard },
         { name: "Mahsulotlar", path: "/manufacturer/products", icon: Package },
         { name: "Statistika", path: "/manufacturer/analytics", icon: BarChart3 },
-        { name: "Hamkorlar", path: "/manufacturer/collaborators", icon: Users },
+        { name: "Taminotchilar", path: "/manufacturer/collaborators", icon: Users },
         { name: "Ma'lumotlarim", path: "/manufacturer/employee/", icon: User },
         { name: "Profil", path: "/manufacturer/profile", icon: User },
       ]

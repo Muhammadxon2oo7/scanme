@@ -63,13 +63,13 @@ export function CollaborationRequestDialog({ open, onOpenChange }: Collaboration
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Hamkorlik Taklifi Yuborish
+            Taminotchilik Taklifi Yuborish
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="targetTaxId">Hamkor Tashkilot STIR Raqami *</Label>
+            <Label htmlFor="targetTaxId">Taminotchi Tashkilot STIR Raqami *</Label>
             <Input
               id="targetTaxId"
               name="targetTaxId"
@@ -132,7 +132,7 @@ export function CollaborationRequestDialog({ open, onOpenChange }: Collaboration
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Hamkorlik haqida batafsil ma'lumot..."
+              placeholder="Taminotchilik haqida batafsil ma'lumot..."
               rows={4}
               required
               className="bg-background/50"

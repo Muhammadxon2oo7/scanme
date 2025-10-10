@@ -180,7 +180,7 @@ export default function ManufacturerDashboardPage() {
                     >
                       <Link href="/manufacturer/collaborators">
                         <Building2 className="mr-2 h-4 w-4" />
-                        Hamkorlar
+                        Taminotchilar
                       </Link>
                     </Button>
                   </div>

@@ -81,7 +81,7 @@ export function CollaboratorsManagement() {
       fromTaxId: "111222333",
       productName: "Smart Watch Pro",
       componentName: "Ekran moduli",
-      message: "Bizning mahsulotimiz uchun ekran moduli ishlab chiqarishda hamkorlik qilmoqchimiz.",
+      message: "Bizning mahsulotimiz uchun ekran moduli ishlab chiqarishda Taminotchilik qilmoqchimiz.",
       status: "pending",
       createdAt: "2025-01-20",
       type: "incoming",
@@ -135,12 +135,12 @@ export function CollaboratorsManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Hamkorlar</h1>
-          <p className="text-muted-foreground">Hamkor tashkilotlar bilan ishlashni boshqaring</p>
+          <h1 className="text-3xl font-bold">Taminotchilar</h1>
+          <p className="text-muted-foreground">Taminotchi tashkilotlar bilan ishlashni boshqaring</p>
         </div>
         <Button className="scan-button" onClick={() => setIsRequestDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Hamkorlik Taklifi
+          Taminotchilik Taklifi
         </Button>
       </div>
 
@@ -152,7 +152,7 @@ export function CollaboratorsManagement() {
               <Users className="h-5 w-5 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Faol Hamkorlar</p>
+              <p className="text-sm text-muted-foreground">Faol Taminotchilar</p>
               <p className="text-xl font-bold">{collaborators.filter((c) => c.status === "active").length}</p>
             </div>
           </div>
@@ -185,7 +185,7 @@ export function CollaboratorsManagement() {
               <Building2 className="h-5 w-5 text-purple-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Jami Hamkorlar</p>
+              <p className="text-sm text-muted-foreground">Jami Taminotchilar</p>
               <p className="text-xl font-bold">{collaborators.length}</p>
             </div>
           </div>
@@ -195,7 +195,7 @@ export function CollaboratorsManagement() {
       {/* Main Content */}
       <Tabs defaultValue="collaborators" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="collaborators">Hamkorlar</TabsTrigger>
+          <TabsTrigger value="collaborators">Taminotchilar</TabsTrigger>
           <TabsTrigger value="requests">
             Takliflar
             {pendingRequests.length > 0 && (
@@ -213,7 +213,7 @@ export function CollaboratorsManagement() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Hamkor nomi yoki STIR raqami bo'yicha qidiring..."
+                placeholder="Taminotchi nomi yoki STIR raqami bo'yicha qidiring..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-background/50"
@@ -407,7 +407,7 @@ export function CollaboratorsManagement() {
         {/* History Tab */}
         <TabsContent value="history" className="space-y-6">
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
-            <h3 className="text-lg font-semibold mb-4">Hamkorlik Tarixi</h3>
+            <h3 className="text-lg font-semibold mb-4">Taminotchilik Tarixi</h3>
             <div className="space-y-4">
               {collaborationRequests.map((request) => (
                 <div

@@ -38,7 +38,7 @@ export function CollaborationDetailsDialog({ open, onOpenChange, request }: Coll
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
-            Hamkorlik Taklifi Tafsilotlari
+            Taminotchilik Taklifi Tafsilotlari
           </DialogTitle>
         </DialogHeader>
 
