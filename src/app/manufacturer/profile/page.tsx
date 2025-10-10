@@ -174,7 +174,7 @@ export default function ManufacturerProfilePage() {
 
 
   return (
-    <div className="bg-gradient-to-b from-background to-background/90 flex overflow-y-auto">
+    <div className="bg-gradient-to-b h-screen from-background to-background/90 flex overflow-y-auto">
       {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
       <main className="w-full md:p-8 ">
         <div className="container mx-auto space-y-6">
@@ -231,7 +231,7 @@ export default function ManufacturerProfilePage() {
             )}
           </div>
 
-          <div className="space-y-6 overflow-y-auto">
+          <div className="space-y-6">
             <ProfileForm isEditing={isEditing} onSave={handleSave} />
           </div>
         </div>
