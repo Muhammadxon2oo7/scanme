@@ -56,13 +56,13 @@
 //     }
 //   }
 
-//   // Hodimlar ro'yxatini olish (is_staff: false bo'lganlar)
+//   // xodimlar ro'yxatini olish (is_staff: false bo'lganlar)
 //   const fetchEmployees = async () => {
 //     setIsLoading(true)
 //     setAddError(null)
 //     try {
 //       const data = await getEmployees()
-//       // is_staff: true bo'lgan hodimlarni filtrlaymiz
+//       // is_staff: true bo'lgan xodimlarni filtrlaymiz
 //       const filteredData = data.filter(employee => !employee.is_staff)
 //       setEmployees(filteredData)
 //     } catch (err) {
@@ -73,7 +73,7 @@
 //     }
 //   }
 
-//   // Yangi hodim qo'shish
+//   // Yangi xodim qo'shish
 //   const handleAddEmployee = async (e: React.FormEvent) => {
 //     e.preventDefault()
 //     setAddError(null)
@@ -100,7 +100,7 @@
 //     }
 //   }
 
-//   // Hodimni o'chirish
+//   // xodimni o'chirish
 //   const handleDeleteEmployee = async () => {
 //     if (!deleteEmployeeId) return
 //     setAddError(null)
@@ -135,7 +135,7 @@
 //     <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
 //       <div className="flex justify-between items-center mb-6">
 //         <h2 className="text-2xl font-semibold flex items-center">
-//           <Users className="mr-2 h-6 w-6" /> Hodimlar
+//           <Users className="mr-2 h-6 w-6" /> xodimlar
 //         </h2>
 //         <Dialog open={isAddModalOpen} onOpenChange={(open) => {
 //           setIsAddModalOpen(open)
@@ -146,12 +146,12 @@
 //         }}>
 //           <DialogTrigger asChild>
 //             <Button className="bg-primary hover:bg-primary/90">
-//               <Plus className="mr-2 h-4 w-4" /> Yangi hodim qo‘shish
+//               <Plus className="mr-2 h-4 w-4" /> Yangi xodim qo‘shish
 //             </Button>
 //           </DialogTrigger>
 //           <DialogContent className="bg-card/90 backdrop-blur-md">
 //             <DialogHeader>
-//               <DialogTitle>Yangi hodim qo‘shish</DialogTitle>
+//               <DialogTitle>Yangi xodim qo‘shish</DialogTitle>
 //             </DialogHeader>
 //             <form onSubmit={handleAddEmployee} className="space-y-4">
 //               {addError && (
@@ -231,7 +231,7 @@
 //       {employees.length === 0 ? (
 //         <div className="text-center py-8">
 //           <Users className="mx-auto h-12 w-12 text-gray-400" />
-//           <p className="mt-2 text-gray-500">Hodimlar mavjud emas</p>
+//           <p className="mt-2 text-gray-500">xodimlar mavjud emas</p>
 //         </div>
 //       ) : (
 //         <Table>
@@ -285,9 +285,9 @@
 //       }}>
 //         <DialogContent className="bg-card/90 backdrop-blur-md">
 //           <DialogHeader>
-//             <DialogTitle>Hodimni o'chirishni tasdiqlash</DialogTitle>
+//             <DialogTitle>xodimni o'chirishni tasdiqlash</DialogTitle>
 //           </DialogHeader>
-//           <p>Haqiqatdan ham ushbu hodimni o'chirmoqchimisiz?</p>
+//           <p>Haqiqatdan ham ushbu xodimni o'chirmoqchimisiz?</p>
 //           <DialogFooter>
 //             <Button
 //               variant="outline"
@@ -447,7 +447,7 @@ export default function EmployeesPage() {
     <Card className="p-4 sm:p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-xl sm:text-2xl font-semibold flex items-center">
-          <Users className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Hodimlar
+          <Users className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Xodimlar
         </h2>
         <Dialog open={isAddModalOpen} onOpenChange={(open) => {
           setIsAddModalOpen(open)
@@ -458,12 +458,12 @@ export default function EmployeesPage() {
         }}>
           <DialogTrigger asChild>
             <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
-              <Plus className="mr-2 h-4 w-4" /> Yangi hodim qo‘shish
+              <Plus className="mr-2 h-4 w-4" /> Yangi xodim qo‘shish
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-lg rounded-lg">
             <DialogHeader>
-              <DialogTitle>Yangi hodim qo‘shish</DialogTitle>
+              <DialogTitle>Yangi xodim qo‘shish</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleAddEmployee} className="space-y-4">
               {addError && (
@@ -543,7 +543,7 @@ export default function EmployeesPage() {
       {employees.length === 0 ? (
         <div className="text-center py-8">
           <Users className="mx-auto h-12 w-12 text-gray-400" />
-          <p className="mt-2 text-gray-500">Hodimlar mavjud emas</p>
+          <p className="mt-2 text-gray-500">Xodimlar mavjud emas</p>
         </div>
       ) : isMobile ? (
         <div className="space-y-4">
@@ -625,9 +625,9 @@ export default function EmployeesPage() {
       }}>
         <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-md rounded-lg">
           <DialogHeader>
-            <DialogTitle>Hodimni o'chirishni tasdiqlash</DialogTitle>
+            <DialogTitle>Xodimni o'chirishni tasdiqlash</DialogTitle>
           </DialogHeader>
-          <p>Haqiqatdan ham ushbu hodimni o'chirmoqchimisiz?</p>
+          <p>Haqiqatdan ham ushbu xodimni o'chirmoqchimisiz?</p>
           <DialogFooter className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"

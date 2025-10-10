@@ -20,7 +20,7 @@
 //       onSubmit({ login, password })
 //     }
 //     // Bu yerda API chaqiruvi yoki redirect qilishingiz mumkin
-//     console.log("Hodim login:", { login, password })
+//     console.log("xodim login:", { login, password })
 //   }
 
 //   return (
@@ -98,12 +98,7 @@ export function EmployeeLoginForm({ onSubmit }: EmployeeLoginFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Hodim sifatida kirish</CardTitle>
-        <CardDescription>Login va parolingizni kiriting</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="w-full max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <Alert variant="destructive">
@@ -138,7 +133,7 @@ export function EmployeeLoginForm({ onSubmit }: EmployeeLoginFormProps) {
             {isLoading ? "Yuklanmoqda..." : "Kirish"}
           </Button>
         </form>
-      </CardContent>
-    </Card>
+      
+    </div>
   )
 }

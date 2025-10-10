@@ -750,7 +750,7 @@ export default function ManufacturerProductsPage() {
                           <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
                           <span className="text-xs text-gray-500">
                             {supplier && (
-                              <span>{supplier === "Supplier1" ? "O'zim" : `Taminotchi ${supplier.slice(-1)}`}</span>
+                              <span>{supplier === "Supplier1" ? "O'zim" : `ta'minotchi  ${supplier.slice(-1)}`}</span>
                             )}
                           </span>
                         </div>
@@ -777,11 +777,11 @@ export default function ManufacturerProductsPage() {
                               disabled={!isEnabled}
                             />
                             {!isEnabled && (
-                              <p className="text-xs text-gray-500 mt-1">Bu maydonni taminotchi to'ldiradi</p>
+                              <p className="text-xs text-gray-500 mt-1">Bu maydonni ta'minotchi  to'ldiradi</p>
                             )}
                           </div>
                           <div className="w-48 space-y-2">
-                            <Label className="text-gray-700 font-medium text-xs">Taminotchi</Label>
+                            <Label className="text-gray-700 font-medium text-xs">ta'minotchi </Label>
                             <Select
                               onValueChange={(value) => setEditSuppliers((prev) => ({ ...prev, [question.id]: value }))}
                               value={supplier || ""}
@@ -791,9 +791,9 @@ export default function ManufacturerProductsPage() {
                               </SelectTrigger>
                               <SelectContent className="bg-white shadow-md">
                                 <SelectItem value="Supplier1">O'zim</SelectItem>
-                                <SelectItem value="Supplier2">Taminotchi 1</SelectItem>
-                                <SelectItem value="Supplier3">Taminotchi 2</SelectItem>
-                                <SelectItem value="Supplier4">Taminotchi 3</SelectItem>
+                                <SelectItem value="Supplier2">ta'minotchi  1</SelectItem>
+                                <SelectItem value="Supplier3">ta'minotchi  2</SelectItem>
+                                <SelectItem value="Supplier4">ta'minotchi  3</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>

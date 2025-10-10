@@ -306,20 +306,20 @@ export function AddProductForm() {
       <div className="space-y-6">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Building2 className="h-5 w-5" />
-          Taminotchi Tashkilotlar
+          ta'minotchi  Tashkilotlar
         </h2>
 
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Agar mahsulotingiz bir nechta tashkilot tomonidan ishlab chiqarilgan bo'lsa, Taminotchi tashkilotlarni qo'shing.
+            Agar mahsulotingiz bir nechta tashkilot tomonidan ishlab chiqarilgan bo'lsa, ta'minotchi  tashkilotlarni qo'shing.
             Ular o'z qismlariga oid ma'lumotlarni to'ldirishi mumkin.
           </AlertDescription>
         </Alert>
 
         {/* Add Collaborator Form */}
         <Card className="p-4 bg-background/30">
-          <h3 className="font-medium mb-4">Yangi Taminotchi Qo'shish</h3>
+          <h3 className="font-medium mb-4">Yangi ta'minotchi  Qo'shish</h3>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="collaboratorTaxId">STIR Raqam</Label>
@@ -360,14 +360,14 @@ export function AddProductForm() {
             disabled={!newCollaborator.taxId || !newCollaborator.componentName}
           >
             <Plus className="mr-2 h-4 w-4" />
-            Taminotchi Qo'shish
+            ta'minotchi  Qo'shish
           </Button>
         </Card>
 
         {/* Collaborators List */}
         {collaborators.length > 0 && (
           <div className="space-y-3">
-            <h3 className="font-medium">Qo'shilgan Taminotchilar</h3>
+            <h3 className="font-medium">Qo'shilgan ta'minotchi lar</h3>
             {collaborators.map((collaborator) => (
               <Card key={collaborator.id} className="p-4 bg-background/30">
                 <div className="flex items-center justify-between">

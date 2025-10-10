@@ -77,7 +77,7 @@
 //     }
 //   }
 
-//   // Taminotchilar, so'rovlar va mening so'rovlarimni olish
+//   // ta'minotchi lar, so'rovlar va mening so'rovlarimni olish
 //   const fetchData = async () => {
 //     setIsLoading(true)
 //     setAddError(null)
@@ -99,7 +99,7 @@
 //     }
 //   }
 
-//   // Yangi Taminotchi qo'shish
+//   // Yangi ta'minotchi  qo'shish
 //   const handleAddPartner = async (e: React.FormEvent) => {
 //     e.preventDefault()
 //     setAddError(null)
@@ -123,7 +123,7 @@
 //     }
 //   }
 
-//   // Taminotchilik so'rovini qabul qilish
+//   // ta'minotchi lik so'rovini qabul qilish
 //   const handleAcceptRequest = async (id: number) => {
 //     setAcceptError(null)
 //     setIsLoading(true)
@@ -139,7 +139,7 @@
 //     }
 //   }
 
-//   // Taminotchini o'chirish
+//   // ta'minotchi ni o'chirish
 //   const handleDeletePartner = async () => {
 //     if (!deletePartnerId) return
 //     setAcceptError(null)
@@ -177,7 +177,7 @@
 //     }
 //   }
 
-//   // Taminotchi ma'lumotlarini ko'rish
+//   // ta'minotchi  ma'lumotlarini ko'rish
 //   const handleViewPartner = async (id: string) => {
 //     setIsLoading(true)
 //     try {
@@ -230,7 +230,7 @@
 //           <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
 //             <div className="flex justify-between items-center mb-6">
 //               <h2 className="text-2xl font-semibold flex items-center">
-//                 <Users className="mr-2 h-6 w-6" /> Mavjud Taminotchilar
+//                 <Users className="mr-2 h-6 w-6" /> Mavjud ta'minotchi lar
 //               </h2>
 //               {isStaff && (
 //                 <Dialog open={isAddModalOpen} onOpenChange={(open) => {
@@ -242,12 +242,12 @@
 //                 }}>
 //                   <DialogTrigger asChild>
 //                     <Button className="bg-primary hover:bg-primary/90">
-//                       <Plus className="mr-2 h-4 w-4" /> Yangi Taminotchi qo‘shish
+//                       <Plus className="mr-2 h-4 w-4" /> Yangi ta'minotchi  qo‘shish
 //                     </Button>
 //                   </DialogTrigger>
 //                   <DialogContent className="bg-card/90 backdrop-blur-md">
 //                     <DialogHeader>
-//                       <DialogTitle>Yangi Taminotchi qo‘shish</DialogTitle>
+//                       <DialogTitle>Yangi ta'minotchi  qo‘shish</DialogTitle>
 //                     </DialogHeader>
 //                     <form onSubmit={handleAddPartner} className="space-y-4">
 //                       {addError && (
@@ -257,12 +257,12 @@
 //                         </Alert>
 //                       )}
 //                       <div className="space-y-2">
-//                         <Label htmlFor="name">Taminotchi nomi</Label>
+//                         <Label htmlFor="name">ta'minotchi  nomi</Label>
 //                         <Input
 //                           id="name"
 //                           value={formData.name}
 //                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-//                           placeholder="Taminotchi nomini kiriting"
+//                           placeholder="ta'minotchi  nomini kiriting"
 //                           required
 //                           className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
 //                         />
@@ -278,12 +278,12 @@
 //                         />
 //                       </div>
 //                       <div className="space-y-2">
-//                         <Label htmlFor="partner">Taminotchi ID'si</Label>
+//                         <Label htmlFor="partner">ta'minotchi  ID'si</Label>
 //                         <Input
 //                           id="partner"
 //                           value={formData.partner}
 //                           onChange={(e) => setFormData({ ...formData, partner: e.target.value })}
-//                           placeholder="Taminotchi ID'sini kiriting"
+//                           placeholder="ta'minotchi  ID'sini kiriting"
 //                           className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3"
 //                         />
 //                       </div>
@@ -299,14 +299,14 @@
 //             {partners.length === 0 ? (
 //               <div className="text-center py-8">
 //                 <Users className="mx-auto h-12 w-12 text-gray-400" />
-//                 <p className="mt-2 text-gray-500">Taminotchilar mavjud emas</p>
+//                 <p className="mt-2 text-gray-500">ta'minotchi lar mavjud emas</p>
 //               </div>
 //             ) : (
 //               <Table>
 //                 <TableHeader>
 //                   <TableRow>
 //                     <TableHead>ID</TableHead>
-//                     <TableHead>Taminotchi nomi</TableHead>
+//                     <TableHead>ta'minotchi  nomi</TableHead>
 //                     <TableHead>Tavsif</TableHead>
 //                     <TableHead>Qo‘shilgan vaqti</TableHead>
 //                     <TableHead>Amallar</TableHead>
@@ -354,19 +354,19 @@
 
 //           <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
 //             <h3 className="text-xl font-semibold mb-4 flex items-center">
-//               <MessageSquare className="mr-2 h-6 w-6" /> Menga kelgan Taminotchilik so‘rovlari
+//               <MessageSquare className="mr-2 h-6 w-6" /> Menga kelgan ta'minotchi lik so‘rovlari
 //             </h3>
 //             {partnerRequests.length === 0 ? (
 //               <div className="text-center py-8">
 //                 <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
-//                 <p className="mt-2 text-gray-500">Taminotchilik so‘rovlari mavjud emas</p>
+//                 <p className="mt-2 text-gray-500">ta'minotchi lik so‘rovlari mavjud emas</p>
 //               </div>
 //             ) : (
 //               <Table>
 //                 <TableHeader>
 //                   <TableRow>
 //                     <TableHead>ID</TableHead>
-//                     <TableHead>Taminotchi</TableHead>
+//                     <TableHead>ta'minotchi </TableHead>
 //                     <TableHead>Nomi</TableHead>
 //                     <TableHead>Tavsifi</TableHead>
 //                     <TableHead>So‘rov vaqti</TableHead>
@@ -425,7 +425,7 @@
 //                 <TableHeader>
 //                   <TableRow>
 //                     <TableHead>ID</TableHead>
-//                     <TableHead>Taminotchi</TableHead>
+//                     <TableHead>ta'minotchi </TableHead>
 //                     <TableHead>Nomi</TableHead>
 //                     <TableHead>Tavsifi</TableHead>
 //                     <TableHead>So‘rov vaqti</TableHead>
@@ -469,9 +469,9 @@
 //           }}>
 //             <DialogContent className="bg-card/90 backdrop-blur-md">
 //               <DialogHeader>
-//                 <DialogTitle>Taminotchini o'chirishni tasdiqlash</DialogTitle>
+//                 <DialogTitle>ta'minotchi ni o'chirishni tasdiqlash</DialogTitle>
 //               </DialogHeader>
-//               <p>Haqiqatdan ham ushbu Taminotchini o'chirmoqchimisiz?</p>
+//               <p>Haqiqatdan ham ushbu ta'minotchi ni o'chirmoqchimisiz?</p>
 //               <DialogFooter>
 //                 <Button
 //                   variant="outline"
@@ -523,7 +523,7 @@
 //           }}>
 //             <DialogContent className="bg-card/90 backdrop-blur-md">
 //               <DialogHeader>
-//                 <DialogTitle>Taminotchi ma'lumotlari</DialogTitle>
+//                 <DialogTitle>ta'minotchi  ma'lumotlari</DialogTitle>
 //               </DialogHeader>
 //               {selectedPartner && (
 //                 <div className="space-y-4">
@@ -821,7 +821,7 @@ export default function PartnersPage() {
           <Card className="p-4 sm:p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h2 className="text-xl sm:text-2xl font-semibold flex items-center">
-                <Users className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Mavjud Taminotchilar
+                <Users className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Mavjud ta'minotchi lar
               </h2>
               {isStaff && (
                 <Dialog open={isAddModalOpen} onOpenChange={(open) => {
@@ -833,12 +833,12 @@ export default function PartnersPage() {
                 }}>
                   <DialogTrigger asChild>
                     <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
-                      <Plus className="mr-2 h-4 w-4" /> Yangi Taminotchi qo‘shish
+                      <Plus className="mr-2 h-4 w-4" /> Yangi ta'minotchi  qo‘shish
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-lg rounded-lg">
                     <DialogHeader>
-                      <DialogTitle>Yangi Taminotchi qo‘shish</DialogTitle>
+                      <DialogTitle>Yangi ta'minotchi  qo‘shish</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleAddPartner} className="space-y-4">
                       {addError && (
@@ -848,12 +848,12 @@ export default function PartnersPage() {
                         </Alert>
                       )}
                       <div className="space-y-2">
-                        <Label htmlFor="name">Taminotchi nomi</Label>
+                        <Label htmlFor="name">Ta'minotchi  nomi</Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="Taminotchi nomini kiriting"
+                          placeholder="ta'minotchi  nomini kiriting"
                           required
                           className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 w-full"
                         />
@@ -869,12 +869,12 @@ export default function PartnersPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="partner">Taminotchi ID'si</Label>
+                        <Label htmlFor="partner">Ta'minotchi  id'si</Label>
                         <Input
                           id="partner"
                           value={formData.partner}
                           onChange={(e) => setFormData({ ...formData, partner: e.target.value })}
-                          placeholder="Taminotchi ID'sini kiriting"
+                          placeholder="ta'minotchi  ID'sini kiriting"
                           className="border-primary/30 focus:ring-primary/50 transition-all duration-200 p-3 w-full"
                         />
                       </div>
@@ -890,7 +890,7 @@ export default function PartnersPage() {
             {partners.length === 0 ? (
               <div className="text-center py-8">
                 <Users className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-gray-500">Taminotchilar mavjud emas</p>
+                <p className="mt-2 text-gray-500">Ta'minotchilar mavjud emas</p>
               </div>
             ) : isMobile ? (
               <div className="space-y-4">
@@ -898,7 +898,7 @@ export default function PartnersPage() {
                   <Card key={partner.id} className="p-4 bg-card/90 backdrop-blur-md border-border/50">
                     <div className="space-y-2">
                       <div><strong>ID:</strong> {partner.id}</div>
-                      <div><strong>Taminotchi nomi:</strong> {partner.name}</div>
+                      <div><strong>Ta'minotchi  nomi:</strong> {partner.name}</div>
                       <div><strong>Tavsif:</strong> {partner.description || "N/A"}</div>
                       <div><strong>Qo‘shilgan vaqti:</strong> {formatDateTime(partner.invited_at)}</div>
                       <div className="pt-2 flex gap-2">
@@ -935,7 +935,7 @@ export default function PartnersPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>ID</TableHead>
-                      <TableHead>Taminotchi nomi</TableHead>
+                      <TableHead>ta'minotchi  nomi</TableHead>
                       <TableHead>Tavsif</TableHead>
                       <TableHead>Qo‘shilgan vaqti</TableHead>
                       <TableHead>Amallar</TableHead>
@@ -984,12 +984,12 @@ export default function PartnersPage() {
 
           <Card className="p-4 sm:p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
             <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center">
-              <MessageSquare className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Menga kelgan Taminotchilik so‘rovlari
+              <MessageSquare className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Menga kelgan ta'minotchi lik so‘rovlari
             </h3>
             {partnerRequests.length === 0 ? (
               <div className="text-center py-8">
                 <MessageSquare className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-gray-500">Taminotchilik so‘rovlari mavjud emas</p>
+                <p className="mt-2 text-gray-500">Ta'minotchilik so‘rovlari mavjud emas</p>
               </div>
             ) : isMobile ? (
               <div className="space-y-4">
@@ -997,7 +997,7 @@ export default function PartnersPage() {
                   <Card key={request.id} className="p-4 bg-card/90 backdrop-blur-md border-border/50">
                     <div className="space-y-2">
                       <div><strong>ID:</strong> {request.id}</div>
-                      <div><strong>Taminotchi:</strong> {request.partner}</div>
+                      <div><strong>Ta'minotchi :</strong> {request.partner}</div>
                       <div><strong>Nomi:</strong> {request.name || "N/A"}</div>
                       <div><strong>Tavsifi:</strong> {request.description || "N/A"}</div>
                       <div><strong>So‘rov vaqti:</strong> {formatDateTime(request.invited_at)}</div>
@@ -1032,7 +1032,7 @@ export default function PartnersPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>ID</TableHead>
-                      <TableHead>Taminotchi</TableHead>
+                      <TableHead>Ta'minotchi </TableHead>
                       <TableHead>Nomi</TableHead>
                       <TableHead>Tavsifi</TableHead>
                       <TableHead>So‘rov vaqti</TableHead>
@@ -1093,7 +1093,7 @@ export default function PartnersPage() {
                   <Card key={request.id} className="p-4 bg-card/90 backdrop-blur-md border-border/50">
                     <div className="space-y-2">
                       <div><strong>ID:</strong> {request.id}</div>
-                      <div><strong>Taminotchi:</strong> {request.partner}</div>
+                      <div><strong>Ta'minotchi :</strong> {request.partner}</div>
                       <div><strong>Nomi:</strong> {request.name || "N/A"}</div>
                       <div><strong>Tavsifi:</strong> {request.description || "N/A"}</div>
                       <div><strong>So‘rov vaqti:</strong> {formatDateTime(request.invited_at)}</div>
@@ -1123,7 +1123,7 @@ export default function PartnersPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>ID</TableHead>
-                      <TableHead>Taminotchi</TableHead>
+                      <TableHead>Ta'minotchi </TableHead>
                       <TableHead>Nomi</TableHead>
                       <TableHead>Tavsifi</TableHead>
                       <TableHead>So‘rov vaqti</TableHead>
@@ -1168,9 +1168,9 @@ export default function PartnersPage() {
           }}>
             <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-md rounded-lg">
               <DialogHeader>
-                <DialogTitle>Taminotchini o'chirishni tasdiqlash</DialogTitle>
+                <DialogTitle>ta'minotchi ni o'chirishni tasdiqlash</DialogTitle>
               </DialogHeader>
-              <p>Haqiqatdan ham ushbu Taminotchini o'chirmoqchimisiz?</p>
+              <p>Haqiqatdan ham ushbu ta'minotchi ni o'chirmoqchimisiz?</p>
               <DialogFooter className="flex flex-col sm:flex-row gap-2">
                 <Button
                   variant="outline"
@@ -1226,7 +1226,7 @@ export default function PartnersPage() {
           }}>
             <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-md rounded-lg">
               <DialogHeader>
-                <DialogTitle>Taminotchi ma'lumotlari</DialogTitle>
+                <DialogTitle>ta'minotchi  ma'lumotlari</DialogTitle>
               </DialogHeader>
               {selectedPartner && (
                 <div className="space-y-4">

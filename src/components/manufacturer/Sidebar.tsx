@@ -35,15 +35,15 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
         { name: "Dashboard", path: "/manufacturer/dashboard", icon: LayoutDashboard },
         { name: "Mahsulotlar", path: "/manufacturer/products", icon: Package },
         { name: "Statistika", path: "/manufacturer/analytics", icon: BarChart3 },
-        { name: "Taminotchilar", path: "/manufacturer/collaborators", icon: Users },
-        { name: "Hodimlar", path: "/manufacturer/employees", icon: Users },
+        { name: "Ta'minotchilar", path: "/manufacturer/collaborators", icon: Users },
+        { name: "Xodimlar", path: "/manufacturer/employees", icon: Users },
         { name: "Profil", path: "/manufacturer/profile", icon: User },
       ]
     : [
         { name: "Dashboard", path: "/manufacturer/dashboard", icon: LayoutDashboard },
         { name: "Mahsulotlar", path: "/manufacturer/products", icon: Package },
         { name: "Statistika", path: "/manufacturer/analytics", icon: BarChart3 },
-        { name: "Taminotchilar", path: "/manufacturer/collaborators", icon: Users },
+        { name: "Ta'minotchilar", path: "/manufacturer/collaborators", icon: Users },
         { name: "Ma'lumotlarim", path: "/manufacturer/employee/", icon: User },
         { name: "Profil", path: "/manufacturer/profile", icon: User },
       ]
@@ -63,7 +63,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
             <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />
             <div>
               <span className="text-2xl font-bold text-primary">ScanMe</span>
-              <p className="text-sm text-muted-foreground">{isStaff ? "Ishlab Chiqaruvchi" : "Hodim sahifasi"}</p>
+              <p className="text-sm text-muted-foreground">{isStaff ? "Ishlab Chiqaruvchi" : "xodim sahifasi"}</p>
             </div>
           </Link>
           {isMobile && (

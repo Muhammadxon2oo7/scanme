@@ -777,7 +777,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isStaff) {
-      setError("Hodimlar profilni tahrirlash huquqiga ega emas")
+      setError("xodimlar profilni tahrirlash huquqiga ega emas")
       return
     }
     setError(null)

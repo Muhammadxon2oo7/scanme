@@ -35,7 +35,7 @@ export default function ManufacturerLoginPage() {
               }`}
             >
               <User className="h-4 w-4" />
-              <span className="text-sm font-medium">Hodim</span>
+              <span className="text-sm font-medium">Xodim</span>
             </button>
           </div>
  
@@ -49,7 +49,7 @@ export default function ManufacturerLoginPage() {
             </div>
             <div>
               <h2 className="font-semibold">
-                {selectedRole === "manufacturer" ? "Tashkilot Kirishi" : "Hodim Kirishi"}
+                {selectedRole === "manufacturer" ? "Tashkilot Kirishi" : "Xodim Kirishi"}
               </h2>
               <p className="text-sm text-muted-foreground">
                 {selectedRole === "manufacturer"

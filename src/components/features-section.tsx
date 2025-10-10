@@ -34,7 +34,7 @@ export function FeaturesSection() {
     },
     {
       icon: MessageSquare,
-      title: "Taminotchilik",
+      title: "ta'minotchi lik",
       description: "Bir nechta ishlab chiqaruvchi birgalikda ishlashi mumkin",
     },
   ]

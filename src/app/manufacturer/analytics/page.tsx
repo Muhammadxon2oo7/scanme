@@ -67,7 +67,7 @@ export default function ManufacturerAnalyticsPage() {
       trend: "stable",
     },
     {
-      title: "Faol Taminotchilar",
+      title: "Faol ta'minotchi lar",
       value: "23",
       change: "+3 yangi",
       icon: Users,
@@ -134,7 +134,7 @@ export default function ManufacturerAnalyticsPage() {
                     <TableHead>Oy</TableHead>
                     <TableHead>Skanlar</TableHead>
                     <TableHead>Mahsulotlar</TableHead>
-                    <TableHead>Taminotchilar</TableHead>
+                    <TableHead>ta'minotchi lar</TableHead>
                     <TableHead>O‘rtacha baho</TableHead>
                   </TableRow>
                 </TableHeader>

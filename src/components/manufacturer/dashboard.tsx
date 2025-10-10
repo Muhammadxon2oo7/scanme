@@ -41,7 +41,7 @@ export function ManufacturerDashboard() {
       trend: "stable",
     },
     {
-      title: "Faol Taminotchilar",
+      title: "Faol ta'minotchi lar",
       value: "0",
       change: "+0 yangi",
       icon: Users,
@@ -203,7 +203,7 @@ export function ManufacturerDashboard() {
               <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
                 <Link href="/manufacturer/collaborators">
                   <Building2 className="mr-2 h-4 w-4" />
-                  Taminotchilar
+                  ta'minotchi lar
                 </Link>
               </Button>
             </div>
