@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/src/components/ui/dialog"
-import { getEmployeeProfile, updateEmployeeProfile, Employee, EmployeeData } from "@/lib/api"
+import { getEmployeeProfile, updatePassword, Employee, EmployeeData } from "@/lib/api"
 import Cookies from "js-cookie"
 import { motion, AnimatePresence } from "framer-motion"
 import { DialogTrigger } from "@radix-ui/react-dialog"
@@ -76,17 +76,9 @@ export default function EmployeeProfilePage() {
     setError(null)
     setIsLoading(true)
     try {
-      if (profile) {
-        await updateEmployeeProfile(profile.id, {
-          password: newPassword,
-          username: profile.username,
-          first_name: profile.first_name,
-          last_name: profile.last_name,
-          jshshir: profile.jshshir,
-        })
-        setIsPasswordModalOpen(false)
-        setNewPassword("")
-      }
+      await updatePassword(newPassword)
+      setIsPasswordModalOpen(false)
+      setNewPassword("")
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
       setError(errorMessage)

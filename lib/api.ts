@@ -559,7 +559,7 @@ export interface ProfileData {
   address: string;
   created_at: string;
   updated_at: string;
-  photo?: string | null; // API dan keladigan rasm URL si yoki null
+  photo?: string | null;
 }
 
 export interface Employee {
@@ -622,14 +622,15 @@ export const manufacturerLogin = async (data: ManufacturerLoginData): Promise<Au
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result: AuthResponse = await response.json();
     if (result.tokens?.access) {
       Cookies.set('token', result.tokens.access, { expires: 1 });
       Cookies.set('refresh_token', result.tokens.refresh, { expires: 7 });
-      Cookies.set('is_staff', 'true', { expires: 1 }); // Ishlab chiqaruvchi uchun is_staff true
+      Cookies.set('is_staff', 'true', { expires: 1 });
     }
     return result;
   } catch (error) {
@@ -650,17 +651,14 @@ export const employeeLogin = async (data: EmployeeLoginData): Promise<AuthRespon
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.message) {
-        throw new Error(errorData.message);
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result: AuthResponse = await response.json();
     if (result.tokens?.access) {
       Cookies.set('token', result.tokens.access, { expires: 1 });
       Cookies.set('refresh_token', result.tokens.refresh, { expires: 7 });
-      Cookies.set('is_staff', 'false', { expires: 1 }); // xodim uchun is_staff false
+      Cookies.set('is_staff', 'false', { expires: 1 });
     }
     return result;
   } catch (error) {
@@ -685,7 +683,8 @@ export const getProfile = async (): Promise<ProfileData> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -712,7 +711,8 @@ export const getEmployeeProfile = async (): Promise<Employee> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -740,13 +740,40 @@ export const updateEmployeeProfile = async (id: number, data: Partial<EmployeeDa
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
     return result;
   } catch (error) {
     console.error('xodim profilini yangilashda xato:', error);
+    throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
+  }
+};
+
+export const updatePassword = async (password: string): Promise<void> => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Access token topilmadi');
+  }
+
+  try {
+    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/update/password/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ password }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Parolni yangilashda xato:', error);
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
@@ -768,7 +795,8 @@ export const updateProfile = async (data: Partial<ProfileData>): Promise<Profile
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -796,7 +824,8 @@ export const partialUpdateProfile = async (data: Partial<ProfileData>): Promise<
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -822,7 +851,8 @@ export const deleteProfile = async (): Promise<void> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
     console.error('Profilni o\'chirishda xato:', error);
@@ -846,7 +876,8 @@ export const getEmployees = async (): Promise<Employee[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -875,10 +906,7 @@ export const addEmployee = async (data: EmployeeData): Promise<Employee> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.username) {
-        throw new Error('Bu foydalanuvchi nomi allaqachon mavjud.');
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      throw new Error(errorData.detail || errorData.username || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -904,7 +932,8 @@ export const deleteEmployee = async (id: number): Promise<void> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
     console.error('xodimni o\'chirishda xato:', error);
@@ -928,7 +957,8 @@ export const getPartners = async (): Promise<Partner[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -955,7 +985,8 @@ export const getPartnerById = async (id: string): Promise<Partner> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -984,10 +1015,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.name) {
-        throw new Error('Bu ta\'minotchi  nomi allaqachon mavjud.');
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      throw new Error(errorData.detail || errorData.name || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -1014,10 +1042,7 @@ export const deletePartner = async (id: string): Promise<void> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.message) {
-        throw new Error(errorData.message);
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
     console.error('ta\'minotchi ni o\'chirishda xato:', error);
@@ -1041,7 +1066,8 @@ export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -1068,7 +1094,8 @@ export const getMyPartnerRequests = async (): Promise<PartnerRequest[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
 
     const result = await response.json();
@@ -1094,7 +1121,8 @@ export const deleteMyPartnerRequest = async (id: number): Promise<void> => {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
     console.error('ta\'minotchi lik so\'rovini o\'chirishda xato:', error);
@@ -1120,10 +1148,7 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      if (errorData.contract) {
-        throw new Error('Shartnoma ID si noto\'g\'ri yoki topilmadi.');
-      }
-      throw new Error(`HTTP xato! Status: ${response.status}`);
+      throw new Error(errorData.detail || errorData.contract || `HTTP xato! Status: ${response.status}`);
     }
   } catch (error) {
     console.error('ta\'minotchi lik so\'rovini qabul qilishda xato:', error);
