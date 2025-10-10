@@ -176,7 +176,7 @@ export default function ManufacturerProfilePage() {
   return (
     <div className="bg-gradient-to-b from-background to-background/90 flex">
       {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
-      <main className="w-full md:p-8">
+      <main className="w-full md:p-8 ">
         <div className="container mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -231,7 +231,7 @@ export default function ManufacturerProfilePage() {
             )}
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 overflow-y-auto">
             <ProfileForm isEditing={isEditing} onSave={handleSave} />
           </div>
         </div>
