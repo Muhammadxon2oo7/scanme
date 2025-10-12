@@ -150,9 +150,8 @@ const productData: ProductData = {
 export default function ProductDetailsPage(): JSX.Element {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
-  const [openSections, setOpenSections] = useState<Set<string>>(
-    () => new Set(Object.keys(categories["1"].sections))
-  )
+const [openSections, setOpenSections] = useState<Set<string>>(() => new Set())
+
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const router = useRouter()
 
