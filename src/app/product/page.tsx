@@ -54,7 +54,7 @@ const categories: CategoriesMap = {
         title: "Umumiy ma’lumotlar",
         questions: [
           { id: "1.1.1", label: "Mahsulot nomi va modeli", type: "text", placeholder: "iPhone 17 Pro Max" },
-          { id: "1.1.2", label: "Mahsulot turi (telefon, noutbuk, planshet va h.k.)", type: "text", placeholder: "Smartfon" },
+          { id: "1.1.2", label: "Mahsulot turi ", type: "text", placeholder: "Smartfon" },
           { id: "1.1.3", label: "Ishlab chiqarilgan mamlakat", type: "text", placeholder: "Xitoy" },
           { id: "1.1.4", label: "Ishlab chiqaruvchi korxona nomi", type: "text", placeholder: "Apple Inc." },
           { id: "1.1.5", label: "Kafolat muddati", type: "text", placeholder: "1 yil" },
@@ -66,9 +66,9 @@ const categories: CategoriesMap = {
         questions: [
           { id: "1.2.1", label: "O‘lchamlari (uzunlik, kenglik, qalinlik)", type: "text", placeholder: "163.7 x 78.5 x 7.9 mm" },
           { id: "1.2.2", label: "Og‘irligi", type: "text", placeholder: "228 g" },
-          { id: "1.2.3", label: "Batareya sig‘imi (mA/h)", type: "text", placeholder: "4500 mAh" },
-          { id: "1.2.4", label: "Quvvati (Watt)", type: "text", placeholder: "30 W" },
-          { id: "1.2.5", label: "Energiya sarfi (kWh/soat)", type: "text", placeholder: "0.025 kWh" },
+          { id: "1.2.3", label: "Batareya sig‘imi ", type: "text", placeholder: "4500 mAh" },
+          { id: "1.2.4", label: "Quvvati ", type: "text", placeholder: "30 W" },
+          { id: "1.2.5", label: "Energiya sarfi ", type: "text", placeholder: "0.025 kWh" },
           { id: "1.2.6", label: "Ekran o‘lchami va texnologiyasi", type: "text", placeholder: "6.9 dyuym, OLED ProMotion" },
           { id: "1.2.7", label: "Protsessor turi va chastotasi", type: "text", placeholder: "A19 Pro, 3.5 GHz" },
           { id: "1.2.8", label: "Operativ xotira (RAM) hajmi", type: "text", placeholder: "8 GB" },
@@ -81,7 +81,7 @@ const categories: CategoriesMap = {
       "1.3": {
         title: "Material va ekologiya",
         questions: [
-          { id: "1.3.1", label: "Materiallar (plastik, alyuminiy va h.k.)", type: "text", placeholder: "Alyuminiy, shisha" },
+          { id: "1.3.1", label: "Materiallar ", type: "text", placeholder: "Alyuminiy, shisha" },
           { id: "1.3.2", label: "Qadoqlash materiali va qayta ishlash imkoniyati", type: "text", placeholder: "Qayta ishlangan karton" },
           { id: "1.3.3", label: "Qayta ishlash imkoniyatlari (batareya, plastmassa)", type: "text", placeholder: "Batareya qayta ishlanadi" },
         ],
@@ -89,7 +89,7 @@ const categories: CategoriesMap = {
       "1.4": {
         title: "Standartlashtirish va sifat nazorati",
         questions: [
-          { id: "1.4.1", label: "Sertifikatlari (ISO, CE, RoHS va b.)", type: "text", placeholder: "CE, RoHS" },
+          { id: "1.4.1", label: "Sertifikatlari", type: "text", placeholder: "CE, RoHS" },
           { id: "1.4.2", label: "Maxsus xavfsizlik sertifikati mavjudmi?", type: "text", placeholder: "Ha, FCC" },
           { id: "1.4.3", label: "Saqlash va ishlatish bo‘yicha yo‘riqnomasi", type: "text", placeholder: "Qo‘llanmada keltirilgan" },
           { id: "1.4.4", label: "Ta’mirlash imkoniyati (zaxira qismlar mavjudligi)", type: "text", placeholder: "Zaxira qismlar mavjud" },
