@@ -6,14 +6,15 @@ export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value
   const pathname = request.nextUrl.pathname
 
-  // Agar token va refresh_token mavjud bo'lsa va foydalanuvchi /login ga kirmoqchi bo'lsa
+  // Agar login sahifasiga token bilan kirsa
   if (token && refreshToken && pathname === "/login") {
     return NextResponse.redirect(new URL("/manufacturer/dashboard", request.url))
   }
 
-  return NextResponse.next()
-}
+  // Agar token yo'q bo'lsa va himoyalangan yo'lga kirsa
+  if (!token && pathname.startsWith("/manufacturer")) {
+    return NextResponse.redirect(new URL("/login", request.url))
+  }
 
-export const config = {
-  matcher: ["/login"],
+  return NextResponse.next()
 }
