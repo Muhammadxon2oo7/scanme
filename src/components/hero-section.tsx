@@ -69,7 +69,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 h-auto modern-card border-primary/30 hover:border-primary/60 light-trail  text-white bg-primary"
-                onClick={handleScanClick}
+                // onClick={handleScanClick}
               >
                 <Scan className="mr-2 h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform duration-300 text-white" />
                 QR Kodni Skanerlash

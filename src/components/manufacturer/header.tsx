@@ -14,7 +14,7 @@ import {
 
 export function ManufacturerHeader() {
   const handleLogout = () => {
-    // Logout logikasi
+   
     window.location.href = "/"
   }
 
@@ -22,7 +22,7 @@ export function ManufacturerHeader() {
     <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+         
           <Link
             href="/manufacturer/dashboard"
             className="flex items-center gap-2 text-2xl font-bold text-primary"
@@ -34,7 +34,6 @@ export function ManufacturerHeader() {
             </span>
           </Link>
 
-          {/* Navbar */}
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/manufacturer/dashboard"

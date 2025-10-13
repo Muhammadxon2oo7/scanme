@@ -485,19 +485,18 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const isStaff = Cookies.get('is_staff') !== 'false'
 
-  // Tashkilot turini o'zbekchaga aylantirish
+  
   const typeDisplayMap: Record<string, string> = {
     own: "Xususiy",
     state: "Davlat",
   }
 
-  // O'zbekchadan API formatiga qaytarish
+  
   const reverseTypeMap: Record<string, string> = {
     Xususiy: "own",
     Davlat: "state",
   }
 
-  // O'zbekiston viloyatlari
   const regions = [
     "Qoraqalpog‘iston Respublikasi",
     "Toshkent shahri",
@@ -515,7 +514,6 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
     "Toshkent viloyati",
   ]
 
-  // Viloyatlarga mos tumanlar ro'yxati
   const districtsByRegion: Record<string, string[]> = {
     "Toshkent shahri": [
       "Chilonzor",
@@ -699,7 +697,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
     ],
   }
 
-  // Sana-vaqtni formatlash: kun.oy.yil 00:00 soat
+  
   const formatDateTime = (dateTime: string): string => {
     if (!dateTime) return "N/A"
     try {
@@ -715,7 +713,6 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
     }
   }
 
-  // ID nusxalash funksiyasi
   const handleCopyId = async () => {
     try {
       await navigator.clipboard.writeText(formData.id)
@@ -802,7 +799,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
         formDataToSend.append("photo", profileFile)
       }
 
-      console.log("Yuborilayotgan ma'lumotlar:", Array.from(formDataToSend.entries())) // Debug uchun
+      console.log("Yuborilayotgan ma'lumotlar:", Array.from(formDataToSend.entries())) 
 
       await onSave(formDataToSend)
     } catch (err) {
@@ -820,7 +817,6 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
 
   return (
     <div className="bg-gradient-to-b from-background to-background/90 flex">
-      {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
       <main className="w-full md:p-8">
         <div className="container mx-auto space-y-6">
           <form onSubmit={handleSubmit}>
@@ -837,7 +833,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                 </Alert>
               )}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-                {/* Asosiy Card: Rasm, Nom, Tavsif */}
+               
                 <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 col-span-1 md:col-span-1 max-h-96 overflow-y-auto">
                   <div className="space-y-6">
                     <div className="flex flex-col items-center space-y-4">
@@ -884,7 +880,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                   </div>
                 </Card>
 
-                {/* Tashkilot Ma'lumotlari */}
+          
                 <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
                   <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Tashkilot Ma'lumotlari</h3>
                   <div className="space-y-6 px-6">
@@ -925,7 +921,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                   </div>
                 </Card>
 
-                {/* Direktor va Moliyaviy Ma'lumotlar */}
+               
                 <Card className="py-6 px-0 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
                   <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Direktor va Moliyaviy Ma'lumotlar</h3>
                   <div className="space-y-6 px-6">
@@ -980,7 +976,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                   </div>
                 </Card>
 
-                {/* Aloqa Ma'lumotlari */}
+               
                 <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
                   <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Aloqa Ma'lumotlari</h3>
                   <div className="space-y-6 px-6">
@@ -1035,7 +1031,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                   </div>
                 </Card>
 
-                {/* Manzil Ma'lumotlari */}
+               
                 <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
                   <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Manzil Ma'lumotlari</h3>
                   <div className="space-y-6 px-6">
@@ -1105,7 +1101,7 @@ export function ProfileForm({ isEditing, onSave }: ProfileFormProps) {
                   </div>
                 </Card>
 
-                {/* Qo‘shimcha Ma'lumotlar */}
+               
                 <Card className="py-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 max-h-96 overflow-y-auto">
                   <h3 className="text-lg font-medium mb-4 border-b pb-2 border-primary pl-6">Qo‘shimcha Ma'lumotlar</h3>
                   <div className="space-y-6 px-6">

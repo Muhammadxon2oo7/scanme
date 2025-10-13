@@ -14,7 +14,7 @@ export function ProductsManagement() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterCategory, setFilterCategory] = useState("all")
 
-  // Mock data for demonstration
+ 
   const products = [
     {
       id: 1,
@@ -82,7 +82,7 @@ export function ProductsManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+     
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Mahsulotlar</h1>
@@ -96,7 +96,7 @@ export function ProductsManagement() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+     
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
           <div className="flex items-center gap-3">
@@ -146,7 +146,7 @@ export function ProductsManagement() {
         </Card>
       </div>
 
-      {/* Filters */}
+   
       <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
@@ -174,7 +174,7 @@ export function ProductsManagement() {
         </div>
       </Card>
 
-      {/* Products Table */}
+ 
       <Card className="bg-card/50 backdrop-blur-sm border-border/50">
         <div className="p-6">
           <div className="space-y-4">

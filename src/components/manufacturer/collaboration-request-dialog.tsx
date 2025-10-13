@@ -31,9 +31,7 @@ export function CollaborationRequestDialog({ open, onOpenChange }: Collaboration
     setIsLoading(true)
 
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500))
-      // Here would be the actual API call to send collaboration request
       console.log("Collaboration request sent:", formData)
       onOpenChange(false)
       setFormData({

@@ -39,7 +39,7 @@ export function CollaboratorsManagement() {
   const [selectedRequest, setSelectedRequest] = useState<CollaborationRequest | null>(null)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false)
 
-  // Mock data for collaborators
+
   const collaborators: Collaborator[] = [
     {
       id: "1",
@@ -73,7 +73,7 @@ export function CollaboratorsManagement() {
     },
   ]
 
-  // Mock data for collaboration requests
+
   const collaborationRequests: CollaborationRequest[] = [
     {
       id: "1",
@@ -121,7 +121,7 @@ export function CollaboratorsManagement() {
   const outgoingRequests = collaborationRequests.filter((req) => req.type === "outgoing")
 
   const handleRequestAction = (requestId: string, action: "accept" | "reject") => {
-    // Here would be the actual API call to handle the request
+
     console.log(`${action} request ${requestId}`)
   }
 
@@ -132,7 +132,7 @@ export function CollaboratorsManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">ta'minotchi lar</h1>
@@ -144,7 +144,7 @@ export function CollaboratorsManagement() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+  
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
           <div className="flex items-center gap-3">
@@ -192,7 +192,6 @@ export function CollaboratorsManagement() {
         </Card>
       </div>
 
-      {/* Main Content */}
       <Tabs defaultValue="collaborators" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="collaborators">ta'minotchi lar</TabsTrigger>
@@ -207,7 +206,7 @@ export function CollaboratorsManagement() {
           <TabsTrigger value="history">Tarix</TabsTrigger>
         </TabsList>
 
-        {/* Collaborators Tab */}
+       
         <TabsContent value="collaborators" className="space-y-6">
           <Card className="p-4 bg-card/50 backdrop-blur-sm border-border/50">
             <div className="relative">
@@ -277,10 +276,10 @@ export function CollaboratorsManagement() {
           </div>
         </TabsContent>
 
-        {/* Requests Tab */}
+    
         <TabsContent value="requests" className="space-y-6">
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Incoming Requests */}
+           
             <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Clock className="h-5 w-5" />
@@ -352,7 +351,7 @@ export function CollaboratorsManagement() {
               </div>
             </Card>
 
-            {/* Outgoing Requests */}
+         
             <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Send className="h-5 w-5" />
@@ -404,7 +403,7 @@ export function CollaboratorsManagement() {
           </div>
         </TabsContent>
 
-        {/* History Tab */}
+       
         <TabsContent value="history" className="space-y-6">
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
             <h3 className="text-lg font-semibold mb-4">ta'minotchi lik Tarixi</h3>
@@ -456,7 +455,7 @@ export function CollaboratorsManagement() {
         </TabsContent>
       </Tabs>
 
-      {/* Dialogs */}
+      
       <CollaborationRequestDialog open={isRequestDialogOpen} onOpenChange={setIsRequestDialogOpen} />
       <CollaborationDetailsDialog
         open={isDetailsDialogOpen}

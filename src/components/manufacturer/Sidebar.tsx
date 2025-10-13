@@ -57,7 +57,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
       }`}
     >
       <div className="flex flex-col h-screen">
-        {/* Logo and Close Button */}
+        
         <div className="flex items-center justify-between p-4 border-b border-border/40">
           <Link href={isStaff ? "/manufacturer/dashboard" : "/employee/dashboard"} className="flex items-center gap-2">
             <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />
@@ -78,7 +78,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
           )}
         </div>
 
-        {/* Menu Items */}
+        
         <nav className="flex-1 p-4 space-y-2">
           {menuItems.map((item) => (
             <Link
@@ -97,7 +97,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
           ))}
         </nav>
 
-        {/* Logout Button */}
+       
         <div className="p-4 border-t border-border/40">
           <Button
             variant="ghost"

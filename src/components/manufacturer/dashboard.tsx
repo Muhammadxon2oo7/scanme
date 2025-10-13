@@ -87,7 +87,7 @@ export function ManufacturerDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
+    
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-balance">Xush kelibsiz!</h1>
@@ -101,7 +101,7 @@ export function ManufacturerDashboard() {
         </Button>
       </div>
 
-      {/* Stats Grid */}
+     
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <Card
@@ -128,9 +128,9 @@ export function ManufacturerDashboard() {
         ))}
       </div>
 
-      {/* Main Content Grid */}
+  
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Recent Products */}
+      
         <div className="lg:col-span-2">
           <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
             <div className="flex items-center justify-between mb-6">

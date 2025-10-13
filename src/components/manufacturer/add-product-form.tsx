@@ -80,7 +80,7 @@ export function AddProductForm() {
       const collaborator: Collaborator = {
         id: Date.now().toString(),
         taxId: newCollaborator.taxId,
-        organizationName: `Tashkilot ${newCollaborator.taxId}`, // This would be fetched from API
+        organizationName: `Tashkilot ${newCollaborator.taxId}`, 
         componentName: newCollaborator.componentName,
         componentDescription: newCollaborator.componentDescription,
       }
@@ -102,7 +102,7 @@ export function AddProductForm() {
     setIsLoading(true)
 
     try {
-      // Simulate API call
+  
       await new Promise((resolve) => setTimeout(resolve, 2000))
       setSuccess(true)
       setTimeout(() => {
@@ -133,7 +133,6 @@ export function AddProductForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Basic Information */}
       <div className="space-y-6">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Package className="h-5 w-5" />
@@ -210,7 +209,7 @@ export function AddProductForm() {
         </div>
       </div>
 
-      {/* Technical Specifications */}
+   
       <div className="space-y-6">
         <h2 className="text-xl font-semibold">Texnik Xususiyatlar</h2>
 
@@ -302,7 +301,6 @@ export function AddProductForm() {
         </div>
       </div>
 
-      {/* Collaborators Section */}
       <div className="space-y-6">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Building2 className="h-5 w-5" />
@@ -317,7 +315,7 @@ export function AddProductForm() {
           </AlertDescription>
         </Alert>
 
-        {/* Add Collaborator Form */}
+       
         <Card className="p-4 bg-background/30">
           <h3 className="font-medium mb-4">Yangi ta'minotchi  Qo'shish</h3>
           <div className="grid md:grid-cols-3 gap-4">
@@ -364,7 +362,7 @@ export function AddProductForm() {
           </Button>
         </Card>
 
-        {/* Collaborators List */}
+       
         {collaborators.length > 0 && (
           <div className="space-y-3">
             <h3 className="font-medium">Qo'shilgan ta'minotchi lar</h3>
@@ -396,7 +394,7 @@ export function AddProductForm() {
         )}
       </div>
 
-      {/* Additional Information */}
+     
       <div className="space-y-6">
         <h2 className="text-xl font-semibold">Qo'shimcha Ma'lumotlar</h2>
 
@@ -428,7 +426,7 @@ export function AddProductForm() {
         </div>
       </div>
 
-      {/* Submit Button */}
+      
       <div className="flex justify-end gap-4 pt-6 border-t border-border/50">
         <Button type="button" variant="outline" onClick={() => router.back()}>
           Bekor Qilish

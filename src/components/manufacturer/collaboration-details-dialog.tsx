@@ -1,36 +1,51 @@
-"use client"
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/components/ui/dialog"
-import { Button } from "@/src/components/ui/button"
-import { Badge } from "@/src/components/ui/badge"
-import { Building2, Calendar, Package, MessageSquare, CheckCircle, XCircle } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/src/components/ui/dialog";
+import { Button } from "@/src/components/ui/button";
+import { Badge } from "@/src/components/ui/badge";
+import {
+  Building2,
+  Calendar,
+  Package,
+  MessageSquare,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 interface CollaborationRequest {
-  id: string
-  fromOrganization: string
-  fromTaxId: string
-  productName: string
-  componentName: string
-  message: string
-  status: "pending" | "accepted" | "rejected"
-  createdAt: string
-  type: "incoming" | "outgoing"
+  id: string;
+  fromOrganization: string;
+  fromTaxId: string;
+  productName: string;
+  componentName: string;
+  message: string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+  type: "incoming" | "outgoing";
 }
 
 interface CollaborationDetailsDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  request: CollaborationRequest | null
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  request: CollaborationRequest | null;
 }
 
-export function CollaborationDetailsDialog({ open, onOpenChange, request }: CollaborationDetailsDialogProps) {
-  if (!request) return null
+export function CollaborationDetailsDialog({
+  open,
+  onOpenChange,
+  request,
+}: CollaborationDetailsDialogProps) {
+  if (!request) return null;
 
   const handleAction = (action: "accept" | "reject") => {
-    // Here would be the actual API call
-    console.log(`${action} request ${request.id}`)
-    onOpenChange(false)
-  }
+    console.log(`${action} request ${request.id}`);
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,25 +64,32 @@ export function CollaborationDetailsDialog({ open, onOpenChange, request }: Coll
               <Building2 className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg">{request.fromOrganization}</h3>
-              <p className="text-sm text-muted-foreground">STIR: {request.fromTaxId}</p>
+              <h3 className="font-semibold text-lg">
+                {request.fromOrganization}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                STIR: {request.fromTaxId}
+              </p>
             </div>
             <div className="ml-auto">
               <Badge
                 variant={
-                  request.status === "pending" ? "secondary" : request.status === "accepted" ? "default" : "outline"
+                  request.status === "pending"
+                    ? "secondary"
+                    : request.status === "accepted"
+                    ? "default"
+                    : "outline"
                 }
               >
                 {request.status === "pending"
                   ? "Kutilmoqda"
                   : request.status === "accepted"
-                    ? "Qabul qilingan"
-                    : "Rad etilgan"}
+                  ? "Qabul qilingan"
+                  : "Rad etilgan"}
               </Badge>
             </div>
           </div>
 
-          {/* Request Details */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <Package className="h-5 w-5 text-muted-foreground" />
@@ -94,7 +116,6 @@ export function CollaborationDetailsDialog({ open, onOpenChange, request }: Coll
             </div>
           </div>
 
-          {/* Message */}
           <div className="space-y-2">
             <h4 className="font-medium">Xabar</h4>
             <div className="p-4 rounded-lg bg-background/50 border border-border/50">
@@ -102,7 +123,7 @@ export function CollaborationDetailsDialog({ open, onOpenChange, request }: Coll
             </div>
           </div>
 
-          {/* Actions */}
+          
           {request.status === "pending" && request.type === "incoming" && (
             <div className="flex justify-end gap-3 pt-4 border-t border-border/50">
               <Button
@@ -125,5 +146,5 @@ export function CollaborationDetailsDialog({ open, onOpenChange, request }: Coll
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
