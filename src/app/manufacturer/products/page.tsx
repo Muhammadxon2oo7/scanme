@@ -10,7 +10,7 @@ import { Badge } from "@/src/components/ui/badge"
 import { Input } from "@/src/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/src/components/ui/dialog"
 import { Label } from "@/src/components/ui/label"
-import { Clock, Check, Package, Plus, Star, Menu, ChevronDown, Edit3, Save, X } from "lucide-react"
+import { Clock, Check, Package, Plus, Star, Menu, ChevronDown, Edit3, Save, X, CheckCircle, RotateCcw } from "lucide-react"
 import { categories } from "@/lib/categories"
 
 interface Product {
@@ -296,7 +296,7 @@ export default function ManufacturerProductsPage() {
                         onChange={(e) => handleInputChange(question.id, e.target.value)}
                         placeholder={question.placeholder}
                         className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-                        disabled={!!(isSupplierSection && supplier && supplier !== "Supplier1")}
+                       disabled={!!(isSupplierSection && supplier && supplier !== "Supplier1")}
 
                       />
                       {isSupplierSection && supplier && supplier !== "Supplier1" && (
@@ -438,55 +438,75 @@ export default function ManufacturerProductsPage() {
                             <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
                           </div>
                         </div>
-                        {renderProductDetails(product, isStaff || !isEditing || product.status === "active")}
+                        {renderProductDetails(product, isStaff || (!isEditing && product.status !== "in-progress"))}
                       </div>
                       <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
-                        {!isStaff && (
+                        {isStaff && product.status === "pending" ? (
                           <>
-                            {isEditing ? (
-                              <>
-                                <Button
-                                  variant="outline"
-                                  onClick={() => {
-                                    setIsEditing(false);
-                                    setEditFormData(selectedProduct?.details || {});
-                                    setEditImages(selectedProduct?.images || []);
-                                  }}
-                                  className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
-                                >
-                                  Bekor qilish
-                                </Button>
-                                <Button
-                                  onClick={handleSaveEdit}
-                                  className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                >
-                                  <Save className="mr-2 h-4 w-4" />
-                                  Saqlash
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                {product.status === "in-progress" && (
-                                  <>
-                                    <Button
-                                      variant="outline"
-                                      onClick={() => setIsEditing(true)}
-                                      className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
-                                    >
-                                      <Edit3 className="mr-2 h-4 w-4" />
-                                      Tahrirlash
-                                    </Button>
-                                    <Button
-                                      onClick={() => handleStatusChange(product.id, "pending")}
-                                      className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                    >
-                                      Tasdiqlash uchun yuborish
-                                    </Button>
-                                  </>
-                                )}
-                              </>
-                            )}
+                            <Button
+                              variant="outline"
+                              onClick={() => handleStatusChange(product.id, "in-progress")}
+                              className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                            >
+                              <RotateCcw className="mr-2 h-4 w-4" />
+                              Qaytarib yuborish
+                            </Button>
+                            <Button
+                              onClick={() => handleStatusChange(product.id, "active")}
+                              className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                            >
+                              <CheckCircle className="mr-2 h-4 w-4" />
+                              Tasdiqlash
+                            </Button>
                           </>
+                        ) : (
+                          !isStaff && (
+                            <>
+                              {isEditing ? (
+                                <>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                      setIsEditing(false);
+                                      setEditFormData(selectedProduct?.details || {});
+                                      setEditImages(selectedProduct?.images || []);
+                                    }}
+                                    className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                                  >
+                                    Bekor qilish
+                                  </Button>
+                                  <Button
+                                    onClick={handleSaveEdit}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                  >
+                                    <Save className="mr-2 h-4 w-4" />
+                                    Saqlash
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  {product.status === "in-progress" && (
+                                    <>
+                                      <Button
+                                        variant="outline"
+                                        onClick={() => setIsEditing(true)}
+                                        className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                                      >
+                                        <Edit3 className="mr-2 h-4 w-4" />
+                                        Tahrirlash
+                                      </Button>
+                                      <Button
+                                        onClick={() => handleStatusChange(product.id, "pending")}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                      >
+                                        Tasdiqlash uchun yuborish
+                                      </Button>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )
                         )}
                       </DialogFooter>
                     </DialogContent>
