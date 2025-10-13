@@ -804,7 +804,7 @@ export default function PartnersPage() {
             </AnimatePresence>
           </Button>
         </motion.div> */}
-        <div className="container mx-auto space-y-6">
+        <div className="container mx-auto space-y-6 h-screen overflow-y-scroll mb-[15px]">
           {addError && (
             <Alert variant="destructive" className="mb-4">
               <AlertCircle className="h-4 w-4" />
