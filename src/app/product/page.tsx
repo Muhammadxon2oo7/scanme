@@ -294,7 +294,7 @@ const [openSections, setOpenSections] = useState<Set<string>>(() => new Set())
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            <Card className="bg-gradient-to-br from-white to-blue-50/80 border-blue-200/50 shadow-lg h-[400px] sm:h-[450px] lg:h-[500px]">
+            <Card className="bg-gradient-to-br from-white to-blue-50/80 border-blue-200/50 shadow-lg h-[400px] sm:h-[450px] lg:h-[510px]">
               <CardHeader>
                 <h2 className="text-lg sm:text-xl font-medium text-gray-800">Mahsulot Rasmi</h2>
               </CardHeader>
