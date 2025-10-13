@@ -31,7 +31,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showReviewForm, setShowReviewForm] = useState(false)
 
-  // Mock reviews data
+
   const reviews: Review[] = [
     {
       id: "1",
@@ -87,9 +87,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
 
     setIsSubmitting(true)
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500))
-      // Here would be the actual API call to submit review
       console.log("Review submitted:", newReview)
       setNewReview({ rating: 0, comment: "" })
       setShowReviewForm(false)
@@ -103,16 +101,13 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   }
 
   const handleHelpfulClick = (reviewId: string, type: "helpful" | "notHelpful") => {
-    // Here would be the actual API call to mark review as helpful/not helpful
     console.log(`Marked review ${reviewId} as ${type}`)
   }
 
   return (
     <div className="space-y-6">
-      {/* Review Stats */}
       <ReviewStats reviews={reviews} />
 
-      {/* Write Review Section */}
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -129,7 +124,6 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
 
         {showReviewForm && (
           <div className="space-y-4">
-            {/* Rating Selection */}
             <div>
               <label className="block text-sm font-medium mb-2">Baho bering:</label>
               <div className="flex items-center gap-1">
@@ -153,7 +147,6 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               </div>
             </div>
 
-            {/* Comment */}
             <div>
               <label className="block text-sm font-medium mb-2">Sharhingiz:</label>
               <Textarea
@@ -165,7 +158,6 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               />
             </div>
 
-            {/* Submit Buttons */}
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setShowReviewForm(false)}>
                 Bekor Qilish
@@ -179,7 +171,6 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
         )}
       </Card>
 
-      {/* Reviews List */}
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
         <h2 className="text-xl font-semibold mb-6">Foydalanuvchi Sharhlari</h2>
         <div className="space-y-6">

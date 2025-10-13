@@ -56,8 +56,7 @@ export function Sidebar({ isMobile, setIsSidebarOpen, isSidebarOpen }: { isMobil
         isMobile && isSidebarOpen ? "shadow-2xl" : ""
       }`}
     >
-      <div className="flex flex-col h-screen">
-        
+      <div className="flex flex-col h-screen">     
         <div className="flex items-center justify-between p-4 border-b border-border/40">
           <Link href={isStaff ? "/manufacturer/dashboard" : "/employee/dashboard"} className="flex items-center gap-2">
             <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />

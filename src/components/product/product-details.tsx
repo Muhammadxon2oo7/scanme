@@ -13,7 +13,7 @@ interface ProductDetailsProps {
 export function ProductDetails({ productId }: ProductDetailsProps) {
   const [isLiked, setIsLiked] = useState(false)
 
-  // Mock product data - in real app this would come from API
+ 
   const product = {
     id: productId,
     name: "Samsung Galaxy S24 Ultra",
@@ -70,7 +70,7 @@ export function ProductDetails({ productId }: ProductDetailsProps) {
 
   return (
     <div className="space-y-8">
-      {/* Product Header */}
+     
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
@@ -124,9 +124,8 @@ export function ProductDetails({ productId }: ProductDetailsProps) {
         </div>
       </Card>
 
-      {/* Product Information */}
+      
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Specifications */}
         <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <Package className="h-5 w-5" />
@@ -164,7 +163,6 @@ export function ProductDetails({ productId }: ProductDetailsProps) {
           </div>
         </Card>
 
-        {/* Manufacturer Info */}
         <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <Building2 className="h-5 w-5" />
@@ -199,7 +197,6 @@ export function ProductDetails({ productId }: ProductDetailsProps) {
           </div>
         </Card>
 
-        {/* Components */}
         <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
           <h2 className="text-xl font-semibold mb-4">Quti Tarkibi</h2>
           <div className="space-y-2">

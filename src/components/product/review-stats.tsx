@@ -20,11 +20,9 @@ interface ReviewStatsProps {
 }
 
 export function ReviewStats({ reviews }: ReviewStatsProps) {
-  // Calculate statistics
   const totalReviews = reviews.length
   const averageRating = totalReviews > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews : 0
 
-  // Calculate rating distribution
   const ratingDistribution = [5, 4, 3, 2, 1].map((rating) => {
     const count = reviews.filter((review) => review.rating === rating).length
     const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0
@@ -41,7 +39,6 @@ export function ReviewStats({ reviews }: ReviewStatsProps) {
       </h2>
 
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Overall Rating */}
         <div className="text-center">
           <div className="text-4xl font-bold mb-2">{averageRating.toFixed(1)}</div>
           <div className="flex items-center justify-center gap-1 mb-2">
@@ -58,7 +55,6 @@ export function ReviewStats({ reviews }: ReviewStatsProps) {
           <p className="text-sm text-muted-foreground mt-1">{verifiedReviews} tasdiqlangan xaridor</p>
         </div>
 
-        {/* Rating Distribution */}
         <div className="space-y-3">
           {ratingDistribution.map(({ rating, count, percentage }) => (
             <div key={rating} className="flex items-center gap-3">
@@ -77,7 +73,6 @@ export function ReviewStats({ reviews }: ReviewStatsProps) {
         </div>
       </div>
 
-      {/* Additional Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border/50">
         <div className="text-center">
           <div className="text-2xl font-bold text-green-600">

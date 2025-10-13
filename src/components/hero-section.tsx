@@ -2,18 +2,13 @@
 
 import { Button } from "@/src/components/ui/button"
 import { Card } from "@/src/components/ui/card"
-import { QrCode, Scan, Smartphone, Info, Building2, Sparkles, ShirtIcon } from "lucide-react"
-import { useState } from "react"
-import { QRScanner } from "./qr-scanner"
+import {  Scan, Smartphone, Info, ShirtIcon } from "lucide-react"
 
 import Image from "next/image"
 import Shuffle from "./react-bits/Shuffle"
 export function HeroSection() {
-  const [isScannerOpen, setIsScannerOpen] = useState(false)
 
-  const handleScanClick = () => {
-    setIsScannerOpen(true)
-  }
+
 
   return (
     <>
@@ -69,7 +64,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 h-auto modern-card border-primary/30 hover:border-primary/60 light-trail  text-white bg-primary"
-                // onClick={handleScanClick}
+             
               >
                 <Scan className="mr-2 h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-12 transition-transform duration-300 text-white" />
                 QR Kodni Skanerlash
@@ -87,7 +82,7 @@ export function HeroSection() {
           </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto px-4 sm:px-0">
-  {/* Elektronika */}
+ 
   <Card className="modern-card p-4 sm:p-6 group hover:scale-105 transition-all duration-500 float-animation">
     <div className="flex items-center gap-3 mb-3 sm:mb-4">
       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -104,7 +99,7 @@ export function HeroSection() {
     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
   </Card>
 
-  {/* Oziq-ovqat */}
+
   <Card
     className="modern-card p-4 sm:p-6 group hover:scale-105 transition-all duration-500 float-animation"
     style={{ animationDelay: "1s" }}
@@ -124,7 +119,7 @@ export function HeroSection() {
     <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
   </Card>
 
-  {/* Kiyim */}
+ 
   <Card
     className="modern-card p-4 sm:p-6 group hover:scale-105 transition-all duration-500 float-animation sm:col-span-2 lg:col-span-1"
     style={{ animationDelay: "2s" }}
@@ -149,7 +144,7 @@ export function HeroSection() {
         </div>
       </section>
 
-      <QRScanner isOpen={isScannerOpen} onClose={() => setIsScannerOpen(false)} />
+      
     </>
   )
 }

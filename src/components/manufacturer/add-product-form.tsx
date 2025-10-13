@@ -114,7 +114,6 @@ export function AddProductForm() {
       setIsLoading(false)
     }
   }
-
   if (success) {
     return (
       <div className="text-center py-12">
@@ -432,7 +431,7 @@ export function AddProductForm() {
           Bekor Qilish
         </Button>
         <Button type="submit" className="scan-button" disabled={isLoading}>
-          {isLoading ? "Saqlanmoqda..." : "Mahsulotni Saqlash"}
+          {isLoading ? "Saqlanmoqda..." : "Mahsulotni Saqlash"} 
         </Button>
       </div>
     </form>

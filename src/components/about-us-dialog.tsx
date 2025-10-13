@@ -34,7 +34,7 @@ export function AboutUsDialog({ children }: AboutUsDialogProps) {
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Platform Developer */}
+       
           <Card className="modern-card bg-card/50 border-primary/20">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -47,7 +47,7 @@ export function AboutUsDialog({ children }: AboutUsDialogProps) {
             </CardContent>
           </Card>
 
-          {/* Authors */}
+     
           <Card className="modern-card bg-card/50 border-primary/20">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -73,7 +73,7 @@ export function AboutUsDialog({ children }: AboutUsDialogProps) {
             </CardContent>
           </Card>
 
-          {/* Additional Info */}
+       
           <Card className="modern-card bg-card/50 border-accent/20">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">

@@ -16,7 +16,7 @@ export function HowItWorksSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* For Regular Users */}
+         
           <div>
             <h3 className="text-2xl font-bold mb-8 text-center">Istemolchilar Uchun</h3>
             <div className="space-y-6">
@@ -67,7 +67,7 @@ export function HowItWorksSection() {
             </div>
           </div>
 
-          {/* For Manufacturers */}
+         
           <div>
             <h3 className="text-2xl font-bold mb-8 text-center">Ishlab chiqaruvchilar uchun</h3>
             <div className="space-y-6">

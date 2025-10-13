@@ -180,35 +180,13 @@ export default function ManufacturerDashboardPage() {
                     >
                       <Link href="/manufacturer/collaborators">
                         <Building2 className="mr-2 h-4 w-4" />
-                        ta'minotchi lar
+                        ta'minotchilar
                       </Link>
                     </Button>
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50">
-                  <h2 className="text-2xl font-semibold mb-4">Tashkilot ma'lumotlari</h2>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Nomi:</span>
-                      <span className="font-medium">Demo Tashkilot</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">STIR:</span>
-                      <span className="font-medium">123456789</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Ro'yxatdan o'tgan:</span>
-                      <span className="font-medium">15.01.2025</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status:</span>
-                      <Badge variant="default" className="transition-all duration-200">
-                        Tasdiqlangan
-                      </Badge>
-                    </div>
-                  </div>
-                </Card>
+               
               </div>
             </div>
           </div>
