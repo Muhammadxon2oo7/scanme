@@ -398,7 +398,7 @@ export default function PartnersPage() {
                         <div><strong>No'meri:</strong> {prof.phone || "N/A"}</div>
                         <div><strong>So‘rov vaqti:</strong> {formatDateTime(request.invited_at)}</div>
                         {isStaff && (
-                          <div className="pt-2 flex gap-2">
+                          <div className="pt-2 flex gap-2 flex-wrap">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -412,7 +412,7 @@ export default function PartnersPage() {
                               variant="ghost"
                               size="sm"
                               onClick={handleRejectRequest}
-                              className="hover:bg-red-600 w-full"
+                              className="bg-red-400 text-whitegit hover:bg-red-600 w-full"
                             >
                               <X className="h-4 w-4 mr-2" /> Rad etish
                             </Button>
