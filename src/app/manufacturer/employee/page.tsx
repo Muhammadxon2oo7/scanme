@@ -21,7 +21,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { DialogTrigger } from "@radix-ui/react-dialog"
 
 export default function EmployeeProfilePage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+ 
   const [isMobile, setIsMobile] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
   const [profile, setProfile] = useState<Employee | null>(null)
@@ -35,19 +35,7 @@ export default function EmployeeProfilePage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true)
-      } else {
-        setIsSidebarOpen(false)
-      }
-    }
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -86,17 +74,6 @@ export default function EmployeeProfilePage() {
       setIsLoading(false)
     }
   }
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => {
-      const newState = !prev
-      if (newState && "vibrate" in navigator) {
-        navigator.vibrate(50)
-      }
-      return newState
-    })
-  }
-
   if (isLoading && !profile) {
     return (
       <Card className="p-6 bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 text-center">

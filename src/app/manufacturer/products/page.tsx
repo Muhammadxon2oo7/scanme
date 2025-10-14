@@ -334,7 +334,7 @@ export default function ManufacturerProductsPage() {
   }, [selectedProduct, isEditing]);
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-blue-50/50 flex min-h-screen">
+    <div className=" flex min-h-screen">
       {/* <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} /> */}
       <main className="flex-1 md:p-8 p-4">
         <div className="container mx-auto space-y-6 max-w-5xl">
@@ -350,7 +350,7 @@ export default function ManufacturerProductsPage() {
             <div className="flex items-center gap-4">
               {!isStaff && (
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                  className=" text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                   asChild
                 >
                   <Link href="/manufacturer/products/add">
@@ -396,7 +396,7 @@ export default function ManufacturerProductsPage() {
                       <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center">
-                            <Package className="h-6 w-6 text-blue-600 transition-transform duration-200 hover:scale-110" />
+                            <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
@@ -446,7 +446,7 @@ export default function ManufacturerProductsPage() {
                             <Button
                               variant="outline"
                               onClick={() => handleStatusChange(product.id, "in-progress")}
-                              className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                              className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
                             >
                               <RotateCcw className="mr-2 h-4 w-4" />
                               Qaytarib yuborish
@@ -471,13 +471,13 @@ export default function ManufacturerProductsPage() {
                                       setEditFormData(selectedProduct?.details || {});
                                       setEditImages(selectedProduct?.images || []);
                                     }}
-                                    className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                                    className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
                                   >
                                     Bekor qilish
                                   </Button>
                                   <Button
                                     onClick={handleSaveEdit}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                    className=" hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                                   >
                                     <Save className="mr-2 h-4 w-4" />
                                     Saqlash
@@ -490,14 +490,14 @@ export default function ManufacturerProductsPage() {
                                       <Button
                                         variant="outline"
                                         onClick={() => setIsEditing(true)}
-                                        className="border-blue-300 text-blue-600 hover:bg-blue-100 hover:border-blue-400 transition-all duration-200 rounded-md"
+                                        className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
                                       >
                                         <Edit3 className="mr-2 h-4 w-4" />
                                         Tahrirlash
                                       </Button>
                                       <Button
                                         onClick={() => handleStatusChange(product.id, "pending")}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                        className="  text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                                       >
                                         Tasdiqlash uchun yuborish
                                       </Button>

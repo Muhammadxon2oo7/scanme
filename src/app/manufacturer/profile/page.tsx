@@ -36,7 +36,7 @@ export default function ManufacturerProfilePage() {
     console.log("Saqlash uchun yuborilgan ma'lumotlar:", data);
 
     if (data instanceof FormData) {
-      // Agar FormData kelsa — fetch bilan bevosita yuboramiz
+
       const token = Cookies.get('token');
       if (!token) throw new Error('Access token topilmadi');
 
@@ -45,7 +45,7 @@ export default function ManufacturerProfilePage() {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
-        body: data, // FormData ni JSON emas, shu holatda yuboramiz
+        body: data, 
       });
 
       if (!response.ok) {
@@ -66,10 +66,10 @@ export default function ManufacturerProfilePage() {
   }
 };
 
-
+  
   return (
     <div className="bg-gradient-to-b h-screen from-background to-background/90 flex overflow-y-auto">
-      {/* <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} /> */}
+     
       <main className="w-full md:p-8 ">
         <div className="container mx-auto space-y-6">
           <div className="flex items-center justify-between">

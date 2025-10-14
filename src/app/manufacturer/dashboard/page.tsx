@@ -67,10 +67,7 @@ export default function ManufacturerDashboardPage() {
 
   return (
     <div className=" bg-gradient-to-b from-background to-background/90 ">
-      {/* {isSidebarOpen && <Sidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} />}
-       */}
-
-
+     
         <main className="flex-1 p-4 md:p-8">
           <div className="container mx-auto space-y-6">
             <div className="flex items-center justify-between">
@@ -82,15 +79,7 @@ export default function ManufacturerDashboardPage() {
                   Mahsulotlaringizni boshqaring va statistikalarni kuzating
                 </p>
               </div>
-              {/* <Button
-                className="bg-primary hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg"
-                asChild
-              >
-                <Link href="/manufacturer/products/add">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Yangi mahsulot
-                </Link>
-              </Button> */}
+           
             </div>
 
            
