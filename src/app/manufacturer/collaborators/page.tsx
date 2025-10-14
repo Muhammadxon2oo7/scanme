@@ -23,7 +23,7 @@ import {
 } from "@/src/components/ui/dialog"
 import { Alert, AlertDescription } from "@/src/components/ui/alert"
 import { AlertCircle, Plus, Check, X, Users, MessageSquare, Info, Trash2 } from "lucide-react"
-import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner, getPartnerById, getMyPartnerRequests, deleteMyPartnerRequest } from "@/lib/api"
+import { Partner, PartnerRequest, PartnerData, getPartners, addPartner, getPartnerRequests, acceptPartnerRequest, deletePartner, getPartnerById, getMyPartnerRequests, deleteMyPartnerRequest } from "@/lib/api"  // rejectPartnerRequest qo'shildi
 import Cookies from "js-cookie"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -34,10 +34,12 @@ export default function PartnersPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isMyDeleteModalOpen, setIsMyDeleteModalOpen] = useState(false)
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)  // Yangi modal
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null)
   const [deletePartnerId, setDeletePartnerId] = useState<string | null>(null)
   const [deleteMyRequestId, setDeleteMyRequestId] = useState<number | null>(null)
+  const [rejectRequestId, setRejectRequestId] = useState<number | null>(null)  // Yangi state
   const [addError, setAddError] = useState<string | null>(null)
   const [acceptError, setAcceptError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -147,6 +149,23 @@ export default function PartnersPage() {
     }
   }
 
+  const handleRejectRequest = async () => {  // Yangi handler
+    if (!rejectRequestId) return
+    setAcceptError(null)
+    setIsLoading(true)
+    try {
+      await deletePartner(String(rejectRequestId))
+      await fetchData()
+      setIsRejectModalOpen(false)
+      setRejectRequestId(null)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
+      setAcceptError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleDeleteMyRequest = async () => {
     if (!deleteMyRequestId) return
     setAcceptError(null)
@@ -178,9 +197,7 @@ export default function PartnersPage() {
     }
   }
 
-  const handleRejectRequest = () => {
-    setAcceptError("Rad etish funksiyasi hali tayyor emas.")
-  }
+  // Eski handleRejectRequest o'chirildi, endi modal orqali ishlaydi
 
   useEffect(() => {
     fetchData()
@@ -411,8 +428,12 @@ export default function PartnersPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={handleRejectRequest}
-                              className="bg-red-400 text-whitegit hover:bg-red-600 w-full"
+                              onClick={() => {
+                                setRejectRequestId(request.id)
+                                setIsRejectModalOpen(true)
+                              }}
+                              className="bg-red-400 text-white hover:bg-red-600 w-full"
+                              disabled={isLoading}
                             >
                               <X className="h-4 w-4 mr-2" /> Rad etish
                             </Button>
@@ -459,8 +480,12 @@ export default function PartnersPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={handleRejectRequest}
+                                  onClick={() => {
+                                    setRejectRequestId(request.id)
+                                    setIsRejectModalOpen(true)
+                                  }}
                                   className="hover:bg-red-600"
+                                  disabled={isLoading}
                                 >
                                   <X className="h-4 w-4" />
                                 </Button>
@@ -616,6 +641,36 @@ export default function PartnersPage() {
                   className="w-full sm:w-auto"
                 >
                   {isLoading ? "Yuklanmoqda..." : "O'chirish"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Yangi Reject Modal */}
+          <Dialog open={isRejectModalOpen} onOpenChange={(open) => {
+            setIsRejectModalOpen(open)
+            if (!open) setRejectRequestId(null)
+          }}>
+            <DialogContent className="bg-card/90 backdrop-blur-md max-w-[95vw] sm:max-w-md rounded-lg">
+              <DialogHeader>
+                <DialogTitle>So'rovni rad etishni tasdiqlash</DialogTitle>
+              </DialogHeader>
+              <p>Haqiqatdan ham ushbu so'rovni rad etmoqchimisiz?</p>
+              <DialogFooter className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsRejectModalOpen(false)}
+                  className="w-full sm:w-auto"
+                >
+                  Bekor qilish
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleRejectRequest}
+                  disabled={isLoading}
+                  className="w-full sm:w-auto"
+                >
+                  {isLoading ? "Yuklanmoqda..." : "Rad etish"}
                 </Button>
               </DialogFooter>
             </DialogContent>
