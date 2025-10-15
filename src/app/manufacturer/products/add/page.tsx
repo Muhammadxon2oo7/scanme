@@ -10,6 +10,8 @@ import { Label } from "@/src/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Menu, CheckCircle, Upload, ChevronDown } from "lucide-react"
 import { categories } from "@/lib/categories"
+import { getPartners } from "@/lib/api" // api.ts faylidan import qilish
+import Cookies from "js-cookie" // js-cookie kutubxonasini o'rnatish kerak: npm install js-cookie
 
 export default function AddProductPage() {
   const [isMobile, setIsMobile] = useState(false);
@@ -20,7 +22,42 @@ export default function AddProductPage() {
   const [suppliers, setSuppliers] = useState<Record<string, string>>({});
   const [images, setImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [partners, setPartners] = useState<any[]>([]); // API dan kelgan partnerlar
+  const [loadingPartners, setLoadingPartners] = useState(true); // Yuklanish holati
+  const [errorPartners, setErrorPartners] = useState<string | null>(null); // Xato holati
 
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        setLoadingPartners(true);
+        const data = await getPartners();
+        const myId = Cookies.get('myid'); // Cookie dan myid olish
+        if (myId) {
+          // Filter: owner.id yoki partner.id myId ga teng bo'lmaganlar (o'zini chiqarib tashlash)
+          const filteredPartners = data.filter((item: any) => 
+            (item.owner.id !== myId && item.partner.id !== myId) ||
+            (item.owner.id === myId && item.partner.id !== myId) ||
+            (item.partner.id === myId && item.owner.id !== myId)
+          );
+          // Ta'minotchi nomi: agar myId owner ga teng bo'lsa partner.name, aks holda owner.name
+          const mappedPartners = filteredPartners.map((item: any) => ({
+            id: item.partner.id !== myId ? item.partner.id : item.owner.id,
+            name: item.owner.id === myId ? item.partner.name : item.owner.name
+          }));
+          setPartners(mappedPartners);
+        } else {
+          setPartners([]);
+        }
+      } catch (error: any) {
+        setErrorPartners(error.message || 'Ta\'minotchilarni yuklashda xato');
+        console.error(error);
+      } finally {
+        setLoadingPartners(false);
+      }
+    };
+
+    fetchPartners();
+  }, []);
 
   const handleInputChange = (id: string, value: string) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -189,6 +226,8 @@ export default function AddProductPage() {
                       ))}
                     </div>
                   </div>
+                  {loadingPartners && <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p>}
+                  {errorPartners && <p className="text-red-500">{errorPartners}</p>}
                   {Object.entries(categories[selectedCategory].sections).map(([sectionId, section]) => (
                     <Card
                       key={sectionId}
@@ -221,12 +260,11 @@ export default function AddProductPage() {
                                       onChange={(e) => handleInputChange(question.id, e.target.value)}
                                       placeholder={question.placeholder}
                                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white"
-                                     disabled={!!(suppliers[question.id] && suppliers[question.id] !== "Supplier1")}
-
+                                      disabled={!!suppliers[question.id]} // Har qanday tanlangan ta'minotchi uchun disable (o'zim opsiyasi yo'q)
                                     />
-                                    {suppliers[question.id] && suppliers[question.id] !== "Supplier1" && (
+                                    {suppliers[question.id] && (
                                       <p className="text-xs text-gray-500 mt-1">
-                                        Bu maydon {suppliers[question.id]} tomonidan to'ldiriladi
+                                        Bu maydon {partners.find(p => p.id === suppliers[question.id])?.name || suppliers[question.id]} tomonidan to'ldiriladi
                                       </p>
                                     )}
                                   </div>
@@ -235,15 +273,17 @@ export default function AddProductPage() {
                                     <Select
                                       onValueChange={(value) => handleSupplierChange(question.id, value)}
                                       value={suppliers[question.id] || ""}
+                                      disabled={loadingPartners} // Yuklanayotganda disable
                                     >
                                       <SelectTrigger className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white/80 h-10">
                                         <SelectValue placeholder="Tanlang" />
                                       </SelectTrigger>
                                       <SelectContent className="bg-white shadow-md">
-                                        <SelectItem value="Supplier1">O'zim</SelectItem>
-                                        <SelectItem value="Supplier2">Ta'minotchi 1</SelectItem>
-                                        <SelectItem value="Supplier3">Ta'minotchi 2</SelectItem>
-                                        <SelectItem value="Supplier4">Ta'minotchi 3</SelectItem>
+                                        {partners.map((partner) => (
+                                          <SelectItem key={partner.id} value={partner.id}>
+                                            {partner.name}
+                                          </SelectItem>
+                                        ))}
                                       </SelectContent>
                                     </Select>
                                   </div>
