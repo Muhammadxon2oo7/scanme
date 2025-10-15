@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from "@/src/components/ui/label"
 import { Clock, Check, Package, Plus, Star, Menu, ChevronDown, Edit3, Save, X, CheckCircle, RotateCcw } from "lucide-react"
 import { categories } from "@/lib/categories"
+import { getPartners } from "@/lib/api" // api.ts faylidan import
 
 interface Product {
   id: string;
@@ -24,6 +25,11 @@ interface Product {
   details?: Record<string, string>;
   suppliers?: Record<string, string>;
   images?: string[];
+}
+
+interface PartnerInfo {
+  id: string;
+  name: string;
 }
 
 const getStatusText = (status: Product["status"]) => {
@@ -56,6 +62,8 @@ export default function ManufacturerProductsPage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [isStaff, setIsStaff] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [partnersMap, setPartnersMap] = useState<Record<string, string>>({}); // id -> name
+  const [loadingPartners, setLoadingPartners] = useState(true);
 
   useEffect(() => {
     const staffStatus = Cookies.get("is_staff");
@@ -76,6 +84,39 @@ export default function ManufacturerProductsPage() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        setLoadingPartners(true);
+        const data = await getPartners();
+        const myId = Cookies.get('myid');
+        const map: Record<string, string> = {};
+        if (myId) {
+          data.forEach((item: any) => {
+            let partnerId, partnerName;
+            if (item.owner.id === myId) {
+              partnerId = item.partner.id;
+              partnerName = item.partner.name;
+            } else {
+              partnerId = item.owner.id;
+              partnerName = item.owner.name;
+            }
+            if (partnerId && partnerId !== myId) {
+              map[partnerId] = partnerName;
+            }
+          });
+        }
+        setPartnersMap(map);
+      } catch (error) {
+        console.error('Ta\'minotchilarni yuklashda xato:', error);
+      } finally {
+        setLoadingPartners(false);
+      }
+    };
+
+    fetchPartners();
   }, []);
 
   const handleStatusChange = (productId: string, newStatus: Product["status"]) => {
@@ -160,17 +201,18 @@ export default function ManufacturerProductsPage() {
           <h4 className="text-lg font-medium text-gray-800">Biriktirilgan Ta'minotchilar</h4>
         </CardHeader>
         <CardContent className="p-4 space-y-3">
-          {Object.entries(suppliers).map(([questionId, supplier]) => {
+          {Object.entries(suppliers).map(([questionId, supplierId]) => {
             const question = Object.values(categories[selectedProduct?.categoryKey || "1"].sections)
               .flatMap((section) => section.questions)
               .find((q) => q.id === questionId);
-            const isCompleted = selectedProduct?.details?.[questionId] && supplier !== "Supplier1";
+            const isCompleted = selectedProduct?.details?.[questionId];
+            const supplierName = partnersMap[supplierId] || "Noma'lum ta'minotchi";
             return (
               <div key={questionId} className="flex justify-between items-center bg-white/50 p-3 rounded-md border border-blue-100">
                 <div>
                   <p className="text-sm font-medium text-gray-700">{question?.label}</p>
                   <p className="text-xs text-gray-500">
-                    {supplier === "Supplier1" ? "O'zim" : `Ta'minotchi ${supplier.slice(-1)}`}
+                    {supplierName}
                   </p>
                 </div>
                 {isCompleted ? (
@@ -268,7 +310,7 @@ export default function ManufacturerProductsPage() {
               <CardContent className="p-4 space-y-4 bg-white/90">
                 {section.questions.map((question) => {
                   const value = currentDetails[question.id] || "";
-                  const supplier = product.suppliers?.[question.id];
+                  const supplierId = product.suppliers?.[question.id];
                   const isSupplierSection = !["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "6.1", "6.2", "7.1", "7.2", "8.1", "8.2", "9.1", "9.2"].includes(sectionId);
 
                   if (isViewOnly) {
@@ -276,9 +318,9 @@ export default function ManufacturerProductsPage() {
                       <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
                         <div className="flex justify-between items-start">
                           <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
-                          {supplier && (
+                          {supplierId && (
                             <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
-                              {supplier === "Supplier1" ? "O'zim" : `Ta'minotchi ${supplier.slice(-1)}`}
+                              {partnersMap[supplierId] || "Noma'lum"}
                             </span>
                           )}
                         </div>
@@ -296,12 +338,11 @@ export default function ManufacturerProductsPage() {
                         onChange={(e) => handleInputChange(question.id, e.target.value)}
                         placeholder={question.placeholder}
                         className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-                       disabled={!!(isSupplierSection && supplier && supplier !== "Supplier1")}
-
+                        disabled={!!(isSupplierSection && supplierId)}
                       />
-                      {isSupplierSection && supplier && supplier !== "Supplier1" && (
+                      {isSupplierSection && supplierId && (
                         <p className="text-xs text-gray-500 mt-1 bg-blue-50 px-2 py-1 rounded-full inline-block">
-                          Bu maydon {supplier} tomonidan to'ldiriladi
+                          Bu maydon {partnersMap[supplierId] || "ta'minotchi"} tomonidan to'ldiriladi
                         </p>
                       )}
                     </div>
@@ -438,7 +479,7 @@ export default function ManufacturerProductsPage() {
                             <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
                           </div>
                         </div>
-                        {renderProductDetails(product, isStaff || (!isEditing && product.status !== "in-progress"))}
+                        {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(product, isStaff || (!isEditing && product.status !== "in-progress"))}
                       </div>
                       <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
                         {isStaff && product.status === "pending" ? (
