@@ -311,7 +311,7 @@ export default function PartnersPage() {
                         <div><strong>Ta'minotchi nomi:</strong> {prof.name}</div>
                         <div><strong>CEO:</strong> {prof.ceo || "N/A"}</div>
                         <div><strong>No'meri:</strong> {prof.phone || "N/A"}</div>
-                        <div className="pt-2 flex gap-2">
+                        <div className="pt-2 flex gap-2 flex-wrap">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -360,7 +360,7 @@ export default function PartnersPage() {
                           <TableCell>{prof.ceo || "N/A"}</TableCell>
                           <TableCell>{prof.phone || "N/A"}</TableCell>
                           <TableCell>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 flex-wrap">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -467,7 +467,7 @@ export default function PartnersPage() {
                           <TableCell>{formatDateTime(request.invited_at)}</TableCell>
                           {isStaff && (
                             <TableCell>
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 flex-wrap">
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -597,7 +597,7 @@ export default function PartnersPage() {
                 <DialogTitle>ta'minotchi ni o'chirishni tasdiqlash</DialogTitle>
               </DialogHeader>
               <p>Haqiqatdan ham ushbu ta'minotchi ni o'chirmoqchimisiz?</p>
-              <DialogFooter className="flex flex-col sm:flex-row gap-2">
+              <DialogFooter className="flex flex-col sm:flex-row gap-2 flex-wrap">
                 <Button
                   variant="outline"
                   onClick={() => setIsDeleteModalOpen(false)}
@@ -626,7 +626,7 @@ export default function PartnersPage() {
                 <DialogTitle>So'rovni o'chirishni tasdiqlash</DialogTitle>
               </DialogHeader>
               <p>Haqiqatdan ham ushbu so'rovni o'chirmoqchimisiz?</p>
-              <DialogFooter className="flex flex-col sm:flex-row gap-2">
+              <DialogFooter className="flex flex-col sm:flex-row gap-2 flex-wrap">
                 <Button
                   variant="outline"
                   onClick={() => setIsMyDeleteModalOpen(false)}
@@ -656,7 +656,7 @@ export default function PartnersPage() {
                 <DialogTitle>So'rovni rad etishni tasdiqlash</DialogTitle>
               </DialogHeader>
               <p>Haqiqatdan ham ushbu so'rovni rad etmoqchimisiz?</p>
-              <DialogFooter className="flex flex-col sm:flex-row gap-2">
+              <DialogFooter className="flex flex-col sm:flex-row gap-2 flex-wrap">
                 <Button
                   variant="outline"
                   onClick={() => setIsRejectModalOpen(false)}
