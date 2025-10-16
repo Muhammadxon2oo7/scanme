@@ -216,7 +216,6 @@ export const categories: Record<string, Category> = {
           { id: "5.1.4", label: "Ishlab chiqaruvchi nomi", type: "text", placeholder: "Lafarge" },
           { id: "5.1.5", label: "Ishlab chiqarilgan mamlakat", type: "text", placeholder: "Fransiya" },
           { id: "5.1.6", label: "Saqlash muddati", type: "text", placeholder: "6 oy" },
-          { id: "5.1.7", label: "Narx segmenti (premium, o‘rta, arzon)", type: "text", placeholder: "O‘rta" },
         ],
       },
       "5.2": {
@@ -229,7 +228,7 @@ export const categories: Record<string, Category> = {
           { id: "5.2.5", label: "Yonuvchanlik darajasi", type: "text", placeholder: "Yonmaydi" },
           { id: "5.2.6", label: "Foydalanish sohasi (ichki, tashqi)", type: "text", placeholder: "Ichki va tashqi" },
           { id: "5.2.7", label: "Ta’mirlash uchun moslik", type: "text", placeholder: "Mos" },
-          { id: "5.2.8", label: "Rang / dizayn variantlari", type: "text", placeholder: "Kulrang" },
+          
         ],
       },
       "5.3": {
@@ -242,7 +241,7 @@ export const categories: Record<string, Category> = {
         ],
       },
       "5.4": {
-        title: "Standartlashtirish va sifat nazorati",
+        title: "Sifat nazorati",
         questions: [
           { id: "5.4.1", label: "Sertifikat (O‘zstandart, ISO, EN)", type: "text", placeholder: "ISO 9001" },
         ],
@@ -260,11 +259,9 @@ export const categories: Record<string, Category> = {
           { id: "6.1.3", label: "O‘lchami", type: "text", placeholder: "40 mm" },
           { id: "6.1.4", label: "Og‘irligi", type: "text", placeholder: "50 g" },
           { id: "6.1.5", label: "Rang", type: "text", placeholder: "Kumush" },
-          { id: "6.1.6", label: "Brend nomi", type: "text", placeholder: "Rolex" },
-          { id: "6.1.7", label: "Ishlab chiqaruvchi nomi", type: "text", placeholder: "Rolex SA" },
-          { id: "6.1.8", label: "Ishlab chiqarilgan mamlakat", type: "text", placeholder: "Shveytsariya" },
-          { id: "6.1.9", label: "Kafolat muddati", type: "text", placeholder: "2 yil" },
-          { id: "6.1.10", label: "Xizmat muddati", type: "text", placeholder: "10 yil" },
+          { id: "6.1.6", label: "Ishlab chiqaruvchi nomi", type: "text", placeholder: "Rolex SA" },
+          { id: "6.1.7", label: "Ishlab chiqarilgan mamlakat", type: "text", placeholder: "Shveytsariya" },
+          { id: "6.1.8", label: "Xizmat muddati", type: "text", placeholder: "10 yil" },
         ],
       },
       "6.2": {
@@ -314,9 +311,7 @@ export const categories: Record<string, Category> = {
           { id: "7.2.2", label: "Foydalanish ko‘rsatmalari", type: "text", placeholder: "Kuniga 1 tabletka" },
           { id: "7.2.3", label: "Qarshi ko‘rsatmalar (kontraindikatsiya)", type: "text", placeholder: "Allergiya bo‘lsa qabul qilinmaydi" },
           { id: "7.2.4", label: "Dozalash shakli (tabletka, kapsula, eritma)", type: "text", placeholder: "Tabletka" },
-          { id: "7.2.5", label: "Yon ta’sirlar ro‘yxati", type: "text", placeholder: "Ovqat hazm qilish buzilishi" },
-          { id: "7.2.6", label: "Maxsus ogohlantirishlar (homilador ayollar, bolalar)", type: "text", placeholder: "Homiladorlar uchun maslahat talab qilinadi" },
-          { id: "7.2.7", label: "Klinik sinov ma’lumotlari", type: "text", placeholder: "Sinovdan o‘tgan" },
+          { id: "7.2.5", label: "Qanday hollarda foydalaniladi", type: "text", placeholder: "Ovqat hazm qilish buzilishi" },
         ],
       },
       "7.3": {
@@ -331,7 +326,6 @@ export const categories: Record<string, Category> = {
         title: "Standartlashtirish va sifat nazorati",
         questions: [
           { id: "7.4.1", label: "Sertifikat (ISO, GMP, FDA)", type: "text", placeholder: "GMP, FDA" },
-          { id: "7.4.2", label: "Ta’mirlash imkoniyati (tibbiy qurilma bo‘lsa)", type: "text", placeholder: "Yo‘q" },
         ],
       },
     },
@@ -349,16 +343,14 @@ export const categories: Record<string, Category> = {
           { id: "8.1.5", label: "Rang", type: "text", placeholder: "O‘q" },
           { id: "8.1.6", label: "Ishlab chiqaruvchi nomi", type: "text", placeholder: "IKEA" },
           { id: "8.1.7", label: "Ishlab chiqarilgan mamlakat", type: "text", placeholder: "Shvetsiya" },
-          { id: "8.1.8", label: "Saqlash muddati", type: "text", placeholder: "Cheklanmagan" },
-          { id: "8.1.9", label: "Xizmat muddati", type: "text", placeholder: "5 yil" },
-          { id: "8.1.10", label: "Narx segmenti", type: "text", placeholder: "O‘rta" },
+          { id: "8.1.8", label: "Xizmat muddati", type: "text", placeholder: "5 yil" },
         ],
       },
       "8.2": {
         title: "Material va sifat",
         questions: [
           { id: "8.2.1", label: "Materiali (plastik, metall, keramika, mato)", type: "text", placeholder: "Keramika" },
-          { id: "8.2.2", label: "Ekologik ta’sir (zaharli moddalar mavjudligi)", type: "text", placeholder: "Zaharli moddalar yo‘q" },
+          { id: "8.2.2", label: "Mustahkamlik darajasi ", type: "text", placeholder: "mustahkam" },
         ],
       },
       "8.3": {
@@ -366,7 +358,7 @@ export const categories: Record<string, Category> = {
         questions: [
           { id: "8.3.1", label: "Qadoqlash materiali", type: "text", placeholder: "Karton quti" },
           { id: "8.3.2", label: "Qayta ishlash imkoniyati", type: "text", placeholder: "Qayta ishlanadi" },
-          { id: "8.3.3", label: "Saqlash sharoiti", type: "text", placeholder: "Quruq joyda" },
+          { id: "8.3.3", label: "Saqlash yo‘riqnomasi", type: "text", placeholder: "Quruq joyda" },
         ],
       },
       "8.4": {
@@ -374,7 +366,6 @@ export const categories: Record<string, Category> = {
         questions: [
           { id: "8.4.1", label: "Sertifikat (eko-sertifikat)", type: "text", placeholder: "Eko-sertifikat mavjud" },
           { id: "8.4.2", label: "Ta’mirlash imkoniyati (mebel uchun)", type: "text", placeholder: "Yo‘q" },
-          { id: "8.4.3", label: "Foydalanish yo‘riqnomasi", type: "text", placeholder: "Idish yuvish mashinasida yuviladi" },
         ],
       },
     },
@@ -397,10 +388,10 @@ export const categories: Record<string, Category> = {
         ],
       },
       "9.2": {
-        title: "Material va funksiya",
+        title: "Material va sifat",
         questions: [
           { id: "9.2.1", label: "Materiali (plastik, qog‘oz, metall)", type: "text", placeholder: "Plastik" },
-          { id: "9.2.2", label: "Maxsus funksiya (masalan: o‘chiriladigan ruchka)", type: "text", placeholder: "Oddiy yozuv" },
+          { id: "9.2.2", label: "Sifat_darajasi", type: "text", placeholder: "o'rta" },
         ],
       },
       "9.3": {
@@ -415,7 +406,6 @@ export const categories: Record<string, Category> = {
         title: "Standartlashtirish va sifat nazorati",
         questions: [
           { id: "9.4.1", label: "Sertifikat (eko-qog‘oz, FSC)", type: "text", placeholder: "FSC" },
-          { id: "9.4.2", label: "Zaharli moddalar mavjudligi yoki yo‘qligi", type: "text", placeholder: "Zaharli moddalar yo‘q" },
           { id: "9.4.3", label: "Ekologik xavfsizlik belgilari", type: "text", placeholder: "Eko-sertifikat" },
         ],
       },

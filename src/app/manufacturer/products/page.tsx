@@ -1,18 +1,265 @@
-"use client"
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import Cookies from "js-cookie"
-import { Sidebar } from "@/src/components/manufacturer/Sidebar"
-import { Button } from "@/src/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/src/components/ui/card"
-import { Badge } from "@/src/components/ui/badge"
-import { Input } from "@/src/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/src/components/ui/dialog"
-import { Label } from "@/src/components/ui/label"
-import { Clock, Check, Package, Plus, Star, Menu, ChevronDown, Edit3, Save, X, CheckCircle, RotateCcw } from "lucide-react"
-import { categories } from "@/lib/categories"
-import { getPartners } from "@/lib/api" // api.ts faylidan import
+
+
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import { Button } from "@/src/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
+import { Badge } from "@/src/components/ui/badge";
+import { Input } from "@/src/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/src/components/ui/dialog";
+import { Label } from "@/src/components/ui/label";
+import {
+  Clock,
+  Check,
+  Package,
+  Plus,
+  Star,
+  ChevronDown,
+  Edit3,
+  Save,
+  X,
+  CheckCircle,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
+import { categories } from "@/lib/categories";
+import {
+  deleteProduct,
+  getAllProductsByStatus,
+  getPartners,
+  getProductById,
+  updateProduct,
+  updateProductStatus,
+} from "@/lib/api";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/src/components/ui/alert-dialog";
+
+const categoryFieldMap: Record<string, Record<string, string>> = {
+  // 1. Gadgets
+  "1": {
+    "1.1.1": "name",
+    "1.1.2": "turi",
+    "1.1.3": "ishlab_chiqarilgan_davlat",
+    "1.1.4": "ishlab_chiqaruvchi_tashkilot",
+    "1.1.5": "kafolat_muddati",
+    "1.1.6": "ishlash_muddati",
+    "1.2.1": "olchami",
+    "1.2.2": "ogirligi",
+    "1.2.3": "batareya_sigimi",
+    "1.2.4": "quvvati",
+    "1.2.5": "energiya_sarfi",
+    "1.2.6": "ekran_olchami",
+    "1.2.7": "protsessor_turi",
+    "1.2.8": "operativ_xotira",
+    "1.2.9": "doimiy_xotira",
+    "1.2.10": "operatsion_tizim",
+    "1.2.11": "kamera_korsatkichlari",
+    "1.2.12": "yangi_texnologiyalar",
+    "1.3.1": "materiallar",
+    "1.3.2": "qadoqlash_materiali",
+    "1.3.3": "qayta_ishlash_imkoniyati",
+    "1.4.1": "sertifikatlari",
+    "1.4.2": "maxsus_xavfsizlik_sertifikati",
+    "1.4.3": "saqlash_yoriqnoma",
+    "1.4.4": "tamirlash_imkoniyati",
+  },
+
+  // 2. Maishiy texnika
+  "2": {
+    "2.1.1": "name",
+    "2.1.2": "modeli",
+    "2.1.3": "olchami",
+    "2.1.4": "ogirligi",
+    "2.1.5": "ishlab_chiqarilgan_davlat",
+    "2.1.6": "ishlab_chiqaruvchi_tashkilot",
+    "2.1.7": "kafolat_muddati",
+    "2.1.8": "ishlash_muddati",
+    "2.2.1": "quvvati",
+    "2.2.2": "elektr_taminoti",
+    "2.2.3": "energiya_samaradorligi",
+    "2.2.4": "energiya_sarfi",
+    "2.2.5": "suv_sarfi",
+    "2.2.6": "shovqin_darajasi",
+    "2.2.7": "foydalanish_qulayligi",
+    "2.2.8": "maxsus_xavfsizlik_funktsiyalari",
+    "2.3.1": "material",
+    "2.3.2": "qadoqlash_turi",
+    "2.3.3": "qayta_ishlash_imkoniyati",
+    "2.4.1": "zaxira_qismlar",
+    "2.4.2": "tamirlash_yoriqnoma",
+    "2.4.3": "saqlash_sharoiti",
+    "2.4.4": "sertifikatlar",
+  },
+
+  // 3. Kiyim
+  "3": {
+    "3.1.1": "name",
+    "3.1.2": "kiyim_turi",
+    "3.1.3": "olchami",
+    "3.1.4": "ogirligi",
+    "3.1.5": "rangi",
+    "3.1.6": "ishlab_chiqarilgan_davlat",
+    "3.1.7": "ishlab_chiqaruvchi_tashkilot",
+    "3.1.8": "ishlab_chiqarilgan_sana",
+    "3.1.9": "dizayner_brand",
+    "3.1.10": "moda_malumoti",
+    "3.2.1": "asosiy_material",
+    "3.2.2": "material_foizi",
+    "3.2.3": "maxsus_ishlov",
+    "3.2.4": "sertifikat",
+    "3.2.5": "ekologik_belgi",
+    "3.3.1": "yuvish_yoriqnoma",
+    "3.3.2": "dazmollash_yoriqnoma",
+    "3.3.3": "qadoqlash_materiali",
+    "3.3.4": "saqlash_muddati",
+    "3.3.5": "xizmat_muddati",
+    "3.4.1": "qayta_ishlash_imkoniyati",
+  },
+
+  // 4. Transport
+  "4": {
+    "4.1.1": "name",
+    "4.1.2": "modeli",
+    "4.1.3": "dvigatel_turi",
+    "4.1.4": "yoqilgisi",
+    "4.1.5": "quvvati",
+    "4.1.6": "ogirligi",
+    "4.1.7": "yuk_kotarish_quvvati",
+    "4.1.8": "yoqilg'i_sarfi",
+    "4.1.9": "chiqarilgan_yili",
+    "4.1.10": "ishlab_chiqaruvchi_tashkilot",
+    "4.2.1": "texnik_holat",
+    "4.2.2": "yurgan_masofa",
+    "4.2.3": "rang",
+    "4.2.4": "kuzov_turi",
+    "4.3.1": "sertifikat",
+    "4.3.2": "ekologik_standart",
+  },
+
+  // 5. Xizmatlar
+  "5": {
+    "5.1.1": "name",
+    "5.1.2": "xizmat_turi",
+    "5.1.3": "amal_qilish_hududi",
+    "5.1.4": "muddat",
+    "5.1.5": "narx_bahosi",
+    "5.1.6": "masul_shaxs",
+    "5.2.1": "sertifikat",
+    "5.2.2": "tajriba_yillari",
+    "5.2.3": "xavfsizlik_talablari",
+  },
+
+  // 6. Aksessuar
+  "6": {
+    "6.1.1": "name",
+    "6.1.2": "modeli",
+    "6.1.3": "olchami",
+    "6.1.4": "ogirligi",
+    "6.1.5": "rangi",
+    "6.1.6": "brend_nomi",
+    "6.1.7": "ishlab_chiqarilgan_davlat",
+    "6.1.8": "ishlab_chiqaruvchi_tashkilot",
+    "6.2.1": "asosiy_material",
+    "6.2.2": "qoplama_materiali",
+    "6.2.3": "sertifikat",
+    "6.2.4": "qadoqlash_turi",
+    "6.2.5": "saqlash_yoriqnoma",
+    "6.3.1": "qayta_ishlash_imkoniyati",
+  },
+
+  // 7. Food
+  "7": {
+    "7.1.1": "name",
+    "7.1.2": "turi",
+    "7.1.3": "ishlab_chiqarilgan_davlat",
+    "7.1.4": "ishlab_chiqaruvchi_tashkilot",
+    "7.1.5": "ishlab_chiqarilgan_sana",
+    "7.1.6": "yaroqlilik_muddati",
+    "7.1.7": "ogirligi",
+    "7.2.1": "tarkibi",
+    "7.2.2": "energiya_qiymati",
+    "7.2.3": "oqsil",
+    "7.2.4": "yog",
+    "7.2.5": "uglevod",
+    "7.3.1": "saqlash_sharoiti",
+    "7.3.2": "sertifikat",
+    "7.3.3": "qadoqlash_turi",
+    "7.3.4": "transportirovka_sharoiti",
+  },
+
+  // 8. Xomashyo
+  "8": {
+    "8.1.1": "name",
+    "8.1.2": "turi",
+    "8.1.3": "kelib_chiqish_manzili",
+    "8.1.4": "ishlab_chiqarilgan_davlat",
+    "8.1.5": "ishlab_chiqaruvchi_tashkilot",
+    "8.2.1": "kimyoviy_tarkib",
+    "8.2.2": "fizik_xususiyatlar",
+    "8.2.3": "sifat_standarti",
+    "8.3.1": "qadoqlash_turi",
+    "8.3.2": "transport_talablari",
+    "8.3.3": "saqlash_sharoiti",
+  },
+
+  // 9. Boshqa
+  "9": {
+    "9.1.1": "name",
+    "9.1.2": "kategoriya_turi",
+    "9.1.3": "tavsif",
+    "9.1.4": "ishlab_chiqarilgan_davlat",
+    "9.1.5": "ishlab_chiqaruvchi_tashkilot",
+    "9.2.1": "sertifikat",
+    "9.2.2": "maxsus_talablar",
+    "9.3.1": "qadoqlash_turi",
+    "9.3.2": "saqlash_yoriqnoma",
+  },
+};
+
+const getReverseFieldMap = (categoryKey: string): Record<string, string> => {
+  const map: Record<string, string> = {};
+  const fieldMap = categoryFieldMap[categoryKey] || {};
+  Object.entries(fieldMap).forEach(([uiId, apiField]) => {
+    map[apiField] = uiId;
+  });
+  return map;
+};
+
+const modelToKey: Record<string, string> = {
+  GadgetProduct: "1",
+  MaishiyTexnikaProduct: "2",
+  KiyimProduct: "3",
+  FoodProduct: "4",
+  QurilishProduct: "5",
+  AksessuarProduct: "6",
+  SalomatlikProduct: "7",
+  UyBuyumProduct: "8",
+  KanselyariyaProduct: "9",
+};
+
+const modelToKeyLower: Record<string, string> = Object.fromEntries(
+  Object.entries(modelToKey).map(([k, v]) => [k.toLowerCase(), v])
+);
 
 interface Product {
   id: string;
@@ -25,11 +272,9 @@ interface Product {
   details?: Record<string, string>;
   suppliers?: Record<string, string>;
   images?: string[];
-}
-
-interface PartnerInfo {
-  id: string;
-  name: string;
+  blockchain_hash?: string;
+  qr_code?: string;
+  categoryModel?: string;
 }
 
 const getStatusText = (status: Product["status"]) => {
@@ -50,40 +295,44 @@ const getStatusVariant = (status: Product["status"]) => {
   }
 };
 
+const mapApiStatusToLocal = (apiStatus: string): Product["status"] => {
+  switch (apiStatus) {
+    case "active": return "active";
+    case "draft": return "in-progress";
+    case "pending": return "pending";
+    default: return "in-progress";
+  }
+};
+
+const mapLocalStatusToApi = (localStatus: Product["status"], categoryModel: string) => {
+  switch (localStatus) {
+    case "active": return { status: "active", category: categoryModel };
+    case "in-progress": return { status: "draft", category: categoryModel };
+    case "pending": return { status: "pending", category: categoryModel };
+    default: return { status: "draft", category: categoryModel };
+  }
+};
+
 export default function ManufacturerProductsPage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Record<string, string>>({});
-  const [editImages, setEditImages] = useState<string[]>([]);
+  const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [isStaff, setIsStaff] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [partnersMap, setPartnersMap] = useState<Record<string, string>>({}); // id -> name
+  const [partnersMap, setPartnersMap] = useState<Record<string, string>>({});
   const [loadingPartners, setLoadingPartners] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
-    const staffStatus = Cookies.get("is_staff");
-    setIsStaff(staffStatus === "true");
-
-    const savedProducts = JSON.parse(localStorage.getItem("manufacturerProducts") || "[]");
-    setProducts(savedProducts);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      } else {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const staffStatus = Cookies.get('is_staff') === 'true'; // Cookie dan o'qish
+    setIsStaff(staffStatus);
   }, []);
 
   useEffect(() => {
@@ -115,17 +364,97 @@ export default function ManufacturerProductsPage() {
         setLoadingPartners(false);
       }
     };
-
     fetchPartners();
   }, []);
 
-  const handleStatusChange = (productId: string, newStatus: Product["status"]) => {
-    const updatedProducts = products.map((p) =>
-      p.id === productId ? { ...p, status: newStatus } : p
-    );
-    setProducts(updatedProducts);
-    localStorage.setItem("manufacturerProducts", JSON.stringify(updatedProducts));
-    setSelectedProduct(null);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoadingProducts(true);
+        const activeData = await getAllProductsByStatus('active');
+        const draftData = await getAllProductsByStatus('draft');
+        const pendingData = await getAllProductsByStatus('pending');
+        
+        const mappedProducts: Product[] = [];
+        
+        [activeData, draftData, pendingData].forEach((data, index) => {
+          const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
+          
+          data.product_categories.forEach((cat: any) => {
+            const lowerModel = cat.model.toLowerCase();
+            const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
+            if (!key) return;
+            
+            const categoryName = categories[key].name;
+            const reverseMap = getReverseFieldMap(key);
+            const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
+            
+            cat.items.forEach((item: any) => {
+              const details: Record<string, string> = {};
+              const suppliers: Record<string, string> = {};
+              
+              Object.entries(item).forEach(([apiField, value]) => {
+                if (typeof value !== 'string' && typeof value !== 'number') return;
+                if (['id', 'status', 'scans', 'rating', 'image', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
+                
+                const cleanField = apiField.replace('_org', '');
+                const uiId = reverseMap[cleanField];
+                
+                if (uiId && allQuestions.includes(uiId)) {
+                  if (apiField.endsWith('_org')) {
+                    suppliers[uiId] = value as string;
+                  } else {
+                    details[uiId] = value as string;
+                  }
+                }
+              });
+              
+              const nameUiId = allQuestions[0];
+              details[nameUiId] = item.name || '';
+
+              mappedProducts.push({
+                id: item.id.toString(),
+                name: item.name || 'Noma\'lum',
+                category: categoryName,
+                categoryKey: key,
+                scans: item.scans || 0,
+                rating: item.rating || 0,
+                status: mapApiStatusToLocal(item.status || apiStatus),
+                details,
+                suppliers,
+                images: item.image ? [item.image] : [],
+                blockchain_hash: item.blockchain_hash,
+                qr_code: item.qr_code,
+                categoryModel: cat.model,
+              });
+            });
+          });
+        });
+        
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error('Mahsulotlarni yuklashda xato:', error);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleStatusChange = async (productId: string, newStatus: Product["status"]) => {
+    if (!selectedProduct) return;
+    try {
+      const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!);
+      await updateProductStatus(productId, apiPayload.status, apiPayload.category);
+      const updatedProducts = products.map((p) =>
+        p.id === productId ? { ...p, status: newStatus } : p
+      );
+      setProducts(updatedProducts);
+      setSelectedProduct({ ...selectedProduct, status: newStatus });
+    } catch (error) {
+      console.error('Status o\'zgartirishda xato:', error);
+    }
   };
 
   const handleInputChange = (id: string, value: string) => {
@@ -134,52 +463,65 @@ export default function ManufacturerProductsPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 0 && editImages.length < 4) {
-      const newImages: string[] = [];
-      Array.from(files).slice(0, 4 - editImages.length).forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (typeof reader.result === "string") {
-            newImages.push(reader.result);
-            if (newImages.length === files.length || editImages.length + newImages.length === 4) {
-              setEditImages((prev) => [...prev, ...newImages]);
-            }
-          }
-        };
-        reader.readAsDataURL(file);
-      });
+    if (files && files.length > 0 && editImageFiles.length < 4) {
+      const newFiles = Array.from(files).slice(0, 4 - editImageFiles.length);
+      setEditImageFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setEditImages((prev) => prev.filter((_, i) => i !== index));
+    setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSaveEdit = () => {
+  const handleDeleteProduct = async (productId: string, categoryKey: string) => {
+    setDeletingId(productId);
+    try {
+      await deleteProduct(categoryKey, productId);
+      setProducts(prev => prev.filter(p => p.id !== productId));
+      setIsDeleted(true);
+      setTimeout(() => setIsDeleted(false), 3000);
+      if (selectedProduct?.id === productId) {
+        setSelectedProduct(null);
+        setIsEditing(false);
+        setEditFormData({});
+        setEditImageFiles([]);
+        setOpenSections(new Set());
+      }
+    } catch (error) {
+      console.error('Mahsulotni o\'chirishda xato:', error);
+      alert("Mahsulotni o'chirishda xatolik yuz berdi.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handleSaveEdit = async () => {
     if (!selectedProduct) return;
 
-    const productNameFields = [
-      "1.1.1", "2.1.1", "3.1.1", "4.1.1", 
-      "5.1.1", "6.1.1", "7.1.1", "8.1.1", "9.1.1"
-    ];
-    const newName = productNameFields.reduce((acc, field) => acc || editFormData[field], "") || selectedProduct.name;
-
-    const updatedProduct = {
-      ...selectedProduct,
-      name: newName,
-      details: { ...selectedProduct.details, ...editFormData },
-      images: editImages.length > 0 ? editImages : selectedProduct.images || ["/default-avatar.png"],
-    };
-
-    const updatedProducts = products.map((p) =>
-      p.id === selectedProduct.id ? updatedProduct : p
-    );
-
     try {
-      setProducts(updatedProducts);
-      localStorage.setItem("manufacturerProducts", JSON.stringify(updatedProducts));
+      const fieldMap = categoryFieldMap[selectedProduct.categoryKey] || {};
+      const payload = new FormData();
+      
+      Object.entries(editFormData).forEach(([uiId, value]) => {
+        const apiField = fieldMap[uiId];
+        if (apiField) {
+          payload.append(apiField, value);
+        }
+      });
+      
+      if (editImageFiles.length > 0) {
+        payload.append('image', editImageFiles[0]);
+      }
+
+      await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
+
+      const newImageUrl = editImageFiles.length > 0 ? URL.createObjectURL(editImageFiles[0]) : currentImages[0];
+      const updatedProduct = { ...selectedProduct, details: editFormData, images: newImageUrl ? [newImageUrl] : currentImages };
+      setProducts(prev => prev.map(p => p.id === selectedProduct.id ? updatedProduct : p));
       setSelectedProduct(updatedProduct);
+      setCurrentImages(newImageUrl ? [newImageUrl] : currentImages);
       setIsEditing(false);
+      setEditImageFiles([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Saqlashda xatolik yuz berdi:", error);
@@ -191,6 +533,49 @@ export default function ManufacturerProductsPage() {
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const fetchSelectedProductDetails = async (product: Product) => {
+    try {
+      const fullDetails = await getProductById(product.categoryKey, product.id);
+      const reverseMap = getReverseFieldMap(product.categoryKey);
+      const allQuestions = Object.values(categories[product.categoryKey].sections).flatMap(sec => sec.questions.map(q => q.id));
+      const details: Record<string, string> = {};
+      const suppliers: Record<string, string> = {};
+      
+      Object.entries(fullDetails).forEach(([apiField, value]) => {
+        if (typeof value !== 'string' && typeof value !== 'number') return;
+        if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code'].includes(apiField)) return;
+        
+        const cleanField = apiField.replace('_org', '');
+        const uiId = reverseMap[cleanField];
+        
+        if (uiId && allQuestions.includes(uiId)) {
+          if (apiField.endsWith('_org')) {
+            suppliers[uiId] = value as string;
+          } else {
+            details[uiId] = value as string;
+          }
+        }
+      });
+      
+      details[allQuestions[0]] = fullDetails.name || '';
+
+      const updatedProduct = { 
+        ...product, 
+        details, 
+        suppliers, 
+        images: fullDetails.image ? [fullDetails.image] : product.images 
+      };
+      setSelectedProduct(updatedProduct);
+      setCurrentImages(fullDetails.image ? [fullDetails.image] : product.images || []);
+      setEditFormData(details);
+    } catch (error) {
+      console.error('Tafsilotlarni yuklashda xato:', error);
+      setSelectedProduct(product);
+      setCurrentImages(product.images || []);
+      setEditFormData(product.details || {});
+    }
+  };
 
   const renderSuppliersList = (suppliers: Record<string, string> | undefined) => {
     if (!suppliers || Object.keys(suppliers).length === 0) return null;
@@ -233,10 +618,11 @@ export default function ManufacturerProductsPage() {
 
     const category = categories[product.categoryKey];
     const currentDetails = isEditing ? editFormData : product.details || {};
+    const displayImages = isEditing ? (editImageFiles.length > 0 ? editImageFiles.map(f => URL.createObjectURL(f)) : currentImages) : currentImages;
 
     return (
       <div className="space-y-6">
-        {(isEditing || (product.images && product.images[0] !== "/default-avatar.png")) && (
+        {displayImages.length > 0 && (
           <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
             <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
               <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
@@ -257,10 +643,10 @@ export default function ManufacturerProductsPage() {
                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
                       ref={fileInputRef}
                     />
-                    {editImages.map((image, index) => (
+                    {displayImages.map((image, index) => (
                       <div key={index} className="relative group">
                         <img
-                          src={image}
+                          src={typeof image === 'string' ? `https://api.e-investment.uz/${image}` : image}
                           alt={`Mahsulot rasmi ${index + 1}`}
                           className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
                         />
@@ -268,7 +654,10 @@ export default function ManufacturerProductsPage() {
                           variant="destructive"
                           size="sm"
                           className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-                          onClick={() => handleRemoveImage(index)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveImage(index);
+                          }}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -278,10 +667,10 @@ export default function ManufacturerProductsPage() {
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-4">
-                  {product.images?.map((image, index) => (
+                  {displayImages.map((image, index) => (
                     <img
                       key={index}
-                      src={image}
+                      src={`https://api.e-investment.uz/${image}`}
                       alt={`Mahsulot rasmi ${index + 1}`}
                       className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
                     />
@@ -295,7 +684,10 @@ export default function ManufacturerProductsPage() {
           <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
             <CardHeader
               className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${!isViewOnly ? 'cursor-pointer hover:bg-blue-200/50' : ''}`}
-              onClick={() => !isViewOnly && toggleSection(sectionId)}
+              onClick={(e) => {
+                e.stopPropagation();
+                !isViewOnly && toggleSection(sectionId)
+              }}
             >
               <h4 className="text-lg font-medium text-gray-800">{section.title}</h4>
               {!isViewOnly && (
@@ -313,7 +705,7 @@ export default function ManufacturerProductsPage() {
                   const supplierId = product.suppliers?.[question.id];
                   const isSupplierSection = !["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "6.1", "6.2", "7.1", "7.2", "8.1", "8.2", "9.1", "9.2"].includes(sectionId);
 
-                  if (isViewOnly) {
+                  if (isViewOnly || (!isEditing && !isSupplierSection)) {
                     return (
                       <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
                         <div className="flex justify-between items-start">
@@ -334,11 +726,11 @@ export default function ManufacturerProductsPage() {
                       <Label htmlFor={question.id} className="text-gray-700 font-medium">{question.label}</Label>
                       <Input
                         id={question.id}
-                        value={currentDetails[question.id] || ""}
+                        value={value}
                         onChange={(e) => handleInputChange(question.id, e.target.value)}
                         placeholder={question.placeholder}
                         className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-                        disabled={!!(isSupplierSection && supplierId)}
+                        disabled={(!isEditing) || (!!(isSupplierSection && supplierId))}
                       />
                       {isSupplierSection && supplierId && (
                         <p className="text-xs text-gray-500 mt-1 bg-blue-50 px-2 py-1 rounded-full inline-block">
@@ -366,17 +758,17 @@ export default function ManufacturerProductsPage() {
     });
   };
 
-  useEffect(() => {
-    if (selectedProduct && isEditing) {
+  const startEditing = () => {
+    if (selectedProduct) {
       setEditFormData(selectedProduct.details || {});
-      setEditImages(selectedProduct.images || []);
+      setEditImageFiles([]);
       setOpenSections(new Set(Object.keys(categories[selectedProduct.categoryKey]?.sections || {})));
+      setIsEditing(true);
     }
-  }, [selectedProduct, isEditing]);
+  };
 
   return (
-    <div className=" flex min-h-screen">
-      {/* <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} /> */}
+    <div className="flex min-h-screen">
       <main className="flex-1 md:p-8 p-4">
         <div className="container mx-auto space-y-6 max-w-5xl">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -391,22 +783,13 @@ export default function ManufacturerProductsPage() {
             <div className="flex items-center gap-4">
               {!isStaff && (
                 <Button
-                  className=" text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                  className="text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                   asChild
                 >
                   <Link href="/manufacturer/products/add">
                     <Plus className="mr-2 h-4 w-4" />
                     Yangi mahsulot
                   </Link>
-                </Button>
-              )}
-              {isMobile && (
-                <Button
-                  variant="ghost"
-                  onClick={() => setIsSidebarOpen(true)}
-                  className="text-gray-600 hover:bg-blue-100 rounded-md"
-                >
-                  <Menu className="h-6 w-6" />
                 </Button>
               )}
             </div>
@@ -422,22 +805,33 @@ export default function ManufacturerProductsPage() {
           </div>
 
           <Card className="p-6 bg-gradient-to-br from-white to-blue-50/80 backdrop-blur-md border border-blue-200/50 shadow-lg rounded-lg">
-            <div className="space-y-4">
-              {filteredProducts.length > 0 ? (
+            <div className="space-y-4 overflow-y-scroll max-h-[70vh]">
+              {loadingProducts ? (
+                <p className="text-center text-gray-600 py-6">Yuklanmoqda...</p>
+              ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
                   <Dialog key={product.id} onOpenChange={(open) => {
                     if (!open) {
                       setIsEditing(false);
                       setSelectedProduct(null);
+                      setEditImageFiles([]);
+                      setEditFormData({});
+                      setOpenSections(new Set());
+                      setIsDeleted(false);
                     } else {
                       setSelectedProduct(product);
+                      fetchSelectedProductDetails(product);
                     }
                   }}>
                     <DialogTrigger asChild>
                       <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center">
-                            <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+                            {product.images && product.images.length > 0 ? (
+                              <img src={`https://api.e-investment.uz/${product.images[0]}`} alt={product.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
+                            )}
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
@@ -448,7 +842,7 @@ export default function ManufacturerProductsPage() {
                           <div className="text-right">
                             <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
                             <div className="flex items-center gap-1">
-                              <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                              <Star className="h-3 w-3 text-yellow-500" />
                               <span className="text-sm text-gray-700">{product.rating}</span>
                             </div>
                           </div>
@@ -459,14 +853,43 @@ export default function ManufacturerProductsPage() {
                             {getStatusText(product.status)}
                           </Badge>
                         </div>
+                        {!isStaff && product.status === "in-progress" && (
+                          <div onClick={(e) => e.stopPropagation()}>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="ml-2"
+                                  disabled={deletingId === product.id}
+                                >
+                                  {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
+                                    Ha, o'chirish
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        )}
                       </div>
                     </DialogTrigger>
                     <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
                       <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
                         <DialogTitle className="text-2xl font-semibold text-gray-800">
-                          {product.name} - Tafsilotlar
+                          {product.name} tafsilotlar
                         </DialogTitle>
-                        
                       </DialogHeader>
                       <div className="space-y-6 mt-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
@@ -479,7 +902,15 @@ export default function ManufacturerProductsPage() {
                             <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
                           </div>
                         </div>
-                        {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(product, isStaff || (!isEditing && product.status !== "in-progress"))}
+                        {isDeleted && (
+                          <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <p className="text-sm text-green-700">
+                              Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
+                            </p>
+                          </div>
+                        )}
+                        {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
                       </div>
                       <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
                         {isStaff && product.status === "pending" ? (
@@ -487,7 +918,7 @@ export default function ManufacturerProductsPage() {
                             <Button
                               variant="outline"
                               onClick={() => handleStatusChange(product.id, "in-progress")}
-                              className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
+                              className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
                             >
                               <RotateCcw className="mr-2 h-4 w-4" />
                               Qaytarib yuborish
@@ -510,15 +941,15 @@ export default function ManufacturerProductsPage() {
                                     onClick={() => {
                                       setIsEditing(false);
                                       setEditFormData(selectedProduct?.details || {});
-                                      setEditImages(selectedProduct?.images || []);
+                                      setEditImageFiles([]);
                                     }}
-                                    className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
+                                    className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
                                   >
                                     Bekor qilish
                                   </Button>
                                   <Button
                                     onClick={handleSaveEdit}
-                                    className=" hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                                   >
                                     <Save className="mr-2 h-4 w-4" />
                                     Saqlash
@@ -530,15 +961,15 @@ export default function ManufacturerProductsPage() {
                                     <>
                                       <Button
                                         variant="outline"
-                                        onClick={() => setIsEditing(true)}
-                                        className="border-blue-300 hover:bg-blue-100  transition-all duration-200 rounded-md"
+                                        onClick={startEditing}
+                                        className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
                                       >
                                         <Edit3 className="mr-2 h-4 w-4" />
                                         Tahrirlash
                                       </Button>
                                       <Button
                                         onClick={() => handleStatusChange(product.id, "pending")}
-                                        className="  text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                        className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                                       >
                                         Tasdiqlash uchun yuborish
                                       </Button>
@@ -563,3 +994,214 @@ export default function ManufacturerProductsPage() {
     </div>
   );
 }
+
+
+
+
+
+
+// const categoryFieldMap: Record<string, Record<string, string>> = {
+//   // 1. Gadjetlar
+//   "1": {
+//     "1.1.1": "name",
+//     "1.1.2": "turi",
+//     "1.1.3": "ishlab_chiqarilgan_davlat",
+//     "1.1.4": "ishlab_chiqaruvchi_tashkilot",
+//     "1.1.5": "kafolat_muddati",
+//     "1.1.6": "ishlash_muddati",
+//     "1.2.1": "olchami",
+//     "1.2.2": "ogirligi",
+//     "1.2.3": "batareya_sigimi",
+//     "1.2.4": "quvvati",
+//     "1.2.5": "energiya_sarfi",
+//     "1.2.6": "ekran_olchami",
+//     "1.2.7": "protsessor_turi",
+//     "1.2.8": "operativ_xotira",
+//     "1.2.9": "doimiy_xotira",
+//     "1.2.10": "operatsion_tizim",
+//     "1.2.11": "kamera_korsatkichlari",
+//     "1.2.12": "yangi_texnologiyalar",
+//     "1.3.1": "materiallar",
+//     "1.3.2": "qadoqlash_materiali",
+//     "1.3.3": "qayta_ishlash_imkoniyati",
+//     "1.4.1": "sertifikatlari",
+//     "1.4.2": "maxsus_xavfsizlik_sertifikati",
+//     "1.4.3": "saqlash_yoriqnoma",
+//     "1.4.4": "tamirlash_imkoniyati",
+//   },
+
+//   // 2. Maishiy texnika
+//   "2": {
+//     "2.1.1": "name",
+//     "2.1.2": "modeli",
+//     "2.1.3": "olchami",
+//     "2.1.4": "ogirligi",
+//     "2.1.5": "ishlab_chiqarilgan_davlat",
+//     "2.1.6": "ishlab_chiqaruvchi_tashkilot",
+//     "2.1.7": "kafolat_muddati",
+//     "2.1.8": "ishlash_muddati",
+//     "2.2.1": "quvvati",
+//     "2.2.2": "elektr_taminoti",
+//     "2.2.3": "energiya_samaradorligi",
+//     "2.2.4": "energiya_sarfi",
+//     "2.2.5": "suv_sarfi",
+//     "2.2.6": "shovqin_darajasi",
+//     "2.2.7": "foydalanish_qulayligi",
+//     "2.2.8": "maxsus_xavfsizlik_funktsiyalari",
+//     "2.3.1": "material",
+//     "2.3.2": "qadoqlash_turi",
+//     "2.3.3": "qayta_ishlash_imkoniyati",
+//     "2.4.1": "zaxira_qismlar",
+//     "2.4.2": "tamirlash_yoriqnoma",
+//     "2.4.3": "saqlash_sharoiti",
+//     "2.4.4": "sertifikatlar",
+//   },
+
+//   // 3. Kiyim
+//   "3": {
+//     "3.1.1": "name",
+//     "3.1.2": "kiyim_turi",
+//     "3.1.3": "olchami",
+//     "3.1.4": "ogirligi",
+//     "3.1.5": "rangi",
+//     "3.1.6": "ishlab_chiqarilgan_davlat",
+//     "3.1.7": "ishlab_chiqaruvchi_tashkilot",
+//     "3.1.8": "ishlab_chiqarilgan_sana",
+//     "3.1.9": "dizayner_brand",
+//     "3.1.10": "moda_malumoti",
+//     "3.2.1": "asosiy_material",
+//     "3.2.2": "material_foizi",
+//     "3.2.3": "maxsus_ishlov",
+//     "3.2.4": "sertifikat",
+//     "3.2.5": "ekologik_belgi",
+//     "3.3.1": "yuvish_yoriqnoma",
+//     "3.3.2": "dazmollash_yoriqnoma",
+//     "3.3.3": "qadoqlash_materiali",
+//     "3.3.4": "saqlash_muddati",
+//     "3.3.5": "xizmat_muddati",
+//     "3.4.1": "qayta_ishlash_imkoniyati",
+//   },
+
+//     // 4. Oziq-ovqat (Food)
+//   "4": {
+//     "4.1.1": "name",
+//     "4.1.2": "turi",
+//     "4.1.3": "ogirligi",
+//     "4.1.4": "ishlab_chiqarilgan_sana",
+//     "4.1.5": "yaroqlilik_muddati",
+//     "4.1.6": "saqlash_muddati",
+//     "4.1.7": "narx_segmenti",
+//     "4.1.8":"yetkazib_beruvchi_nomi",
+//     "4.1.9":"ishlab_chiqaruvchi_nomi",
+//     "4.1.10":"ishlab_chiqarilgan_davlat",
+//     "4.2.1": "tarkibi",
+//     "4.2.2": "energiya_qiymati",
+//     "4.2.3": "allergiya_ogohlantirish",
+//     "4.2.4": "maxsus_tamga",
+//     "4.2.5": "ekologik_iz",
+//     "4.3.1": "saqlash_sharoiti",
+//     "4.3.2": "qadoqlash_materiali",
+//     "4.3.3": "qayta_ishlash_mumkinmi",
+//     "4.4.1": "sertifikatlar",
+//   },
+//   // 5. Qurilish
+//   "5": {
+//     "5.1.1": "name",
+//     "5.1.2": "olchami",
+//     "5.1.3": "ogirligi",
+//     "5.1.4": "ishlab_chiqaruvchi_tashkilot",
+//     "5.1.5": "ishlab_chiqarilgan_davlat",
+//     "5.1.6": "saqlash_sharoiti",
+//     "5.2.1": "tarkibiy_materiallar",
+//     "5.2.2": "mustahkamlik_korsatkichi",
+//     "5.2.3": "suvga_chidamlilik",
+//     "5.2.4": "issiqqa_chidamlilik",
+//     "5.2.5": "yonuvchanlik",
+//     "5.2.6": "foydalanish_sohasi",
+//     "5.2.7": "tamirlash_moslik",
+//     "5.3.1": "saqlash_sharoiti",
+//     "5.3.2": "qadoqlash_turi",
+//     "5.3.3": "qayta_ishlash_imkoniyati",
+//     "5.3.4": "ekologik_xavfsizlik",
+//     "5.4.1": "sertifikatlar",
+//   },
+
+//   // 6. Aksessuarlar
+//   "6": {
+//     "6.1.1": "name",
+//     "6.1.2": "modeli",
+//     "6.1.3": "olchami",
+//     "6.1.4": "ogirligi",
+//     "6.1.5": "rangi",
+//     "6.1.6": "ishlab_chiqaruvchi_tashkilot",
+//     "6.1.7": "ishlab_chiqarilgan_davlat",
+//     "6.1.8": "xizmat_muddati",
+//     "6.2.1": "material",
+//     "6.2.2": "dizayner",
+//     "6.2.3": "maxsus_belgilar",
+//     "6.3.1": "qadoqlash_materiali",
+//     "6.3.2": "qayta_ishlash_imkoniyati",
+//     "6.3.3": "saqlash_yoriqnoma",
+//     "6.4.1": "sertifikatlar",
+//     "6.4.2": "tamirlash_imkoniyati",
+//   },
+
+//   // 7. Salomatlik
+//   "7": {
+//     "7.1.1": "name",
+//     "7.1.2": "mahsulot_turi",
+//     "7.1.3": "ogirligi",
+//     "7.1.4": "ishlab_chiqaruvchi_tashkilot",
+//     "7.1.5": "ishlab_chiqarilgan_davlat",
+//     "7.1.6": "saqlash_muddati",
+//     "7.1.7": "kafolat_muddati",
+//     "7.2.1": "material",
+//     "7.2.2": "saqlash_sharoiti",
+//     "7.2.3": "xavfsizlik_talablar",
+//     "7.2.4": "tibbiy_standartlar",
+//     "7.2.5": "foydalanish_sohasi",
+//     "7.3.1": "saqlash_sharoiti",
+//     "7.3.2": "qadoqlash_turi",
+//     "7.3.3": "qayta_ishlash_mumkinmi",
+//     "7.4.1": "sertifikat_turi",
+//   },
+
+//   // 8. Uy-ro‘zg‘or buyumlari (xomashyo emas)
+//   "8": {
+//     "8.1.1": "name",
+//     "8.1.2": "mahsulot_turi",
+//     "8.1.3": "olchami",
+//     "8.1.4": "ogirligi",
+//     "8.1.5": "rangi",
+//     "8.1.6": "ishlab_chiqaruvchi_tashkilot",
+//     "8.1.7": "ishlab_chiqarilgan_davlat",
+//     "8.1.8": "xizmat_muddati",
+//     "8.2.1": "material",
+//     "8.2.2": "mustahkamlik_darajasi",
+//     "8.3.1": "qadoqlash_materiali",
+//     "8.3.2": "qayta_ishlash_imkoniyati",
+//     "8.3.3": "saqlash_yoriqnoma",
+//     "8.4.1": "sertifikatlar",
+//     "8.4.2": "tamirlash_imkoniyati",
+//   },
+
+//   // 9. Xomashyo
+//   "9": {
+//     "9.1.1": "name",
+//     "9.1.2": "mahsulot_turi",
+//     "9.1.3": "olchami",
+//     "9.1.4": "ogirligi",
+//     "9.1.5": "rangi",
+//     "9.1.6": "ishlab_chiqaruvchi_tashkilot",
+//     "9.1.7": "ishlab_chiqarilgan_davlat",
+//     "9.1.8": "ishlash_muddati",
+//     "9.1.9": "narx_segmenti",
+//     "9.2.1": "material",
+//     "9.2.2": "sifat_darajasi",
+//     "9.3.1": "qadoqlash_turi",
+//     "9.3.2": "qayta_ishlash_mumkinmi",
+//     "9.3.3": "saqlash_sharoiti",
+//     "9.4.1": "sertifikatlar",
+//     "9.4.2": "ekologik_xavfsizlik",
+//   },
+// };

@@ -689,3 +689,369 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
     throw new Error(error instanceof Error ? error.message : 'Noma\'lum xato yuz berdi');
   }
 };
+
+
+// PRODUCTS -------------------------------------------------------------------------------------
+
+
+const API_products = 'https://api.e-investment.uz/api/v1/products';
+
+export const categoryEndpoints: Record<string, string> = {
+  "1": "gadgets",
+  "2": "maishiy-texnika",
+  "3": "kiyim",
+  "4": "food",
+  "5": "qurilish",
+  "6": "aksessuar",
+  "7": "salomatlik",
+  "8": "uy-buyum",
+  "9": "kanselyariya",
+};
+
+export const categoryModels: Record<string, string> = {
+  "1": "gadgetproduct",
+  "2": "maishiytexnikaproduct",
+  "3": "kiyimproduct",
+  "4": "foodproduct",
+  "5": "qurilishproduct",
+  "6": "aksessuarproduct",
+  "7": "salomatlikproduct",
+  "8": "uybuyumproduct",
+  "9": "kanselyariyaproduct",
+};
+
+const statusEndpoints = {
+  draft: 'draft',
+  pending: 'pending',
+  active: 'active',
+} as const;
+
+type StatusType = keyof typeof statusEndpoints;
+
+// Helper: Auth headers
+const getAuthHeaders = (contentType: boolean = true) => {
+  const token = Cookies.get('token');
+  if (!token) throw new Error('Access token topilmadi');
+  return {
+    headers: {
+      ...(contentType ? { 'Content-Type': 'application/json' } : {}),
+      'Authorization': `Bearer ${token}`,
+    },
+  };
+};
+
+// Helper: Response handling
+const handleResponse = async <T>(response: Response): Promise<T> => {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+  }
+  return response.json();
+};
+
+// Active products (simple GET)
+export const getAllProducts = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_products}/${statusEndpoints.active}/`, {
+      method: 'GET',
+      ...getAuthHeaders(),
+    });
+    return handleResponse(response);
+  } catch (error) {
+    console.error('Mahsulotlarni olishda xato:', error);
+    throw error;
+  }
+};
+
+// Products by status
+export const getAllProductsByStatus = async (status: StatusType): Promise<any> => {
+  try {
+    const response = await fetch(`${API_products}/${statusEndpoints[status]}/`, {
+      method: 'GET',
+      ...getAuthHeaders(),
+    });
+    return handleResponse(response);
+  } catch (error) {
+    console.error(`${status} mahsulotlarni olishda xato:`, error);
+    throw error;
+  }
+};
+
+// Get by ID
+export const getProductById = async (categoryKey: string, id: string): Promise<any> => {
+  const endpoint = categoryEndpoints[categoryKey];
+  try {
+    const response = await fetch(`${API_products}/${endpoint}/${id}/`, {
+      method: 'GET',
+      ...getAuthHeaders(),
+    });
+    return handleResponse(response);
+  } catch (error) {
+    console.error('Mahsulotni olishda xato:', error);
+    throw error;
+  }
+};
+
+// Create
+export const createProduct = async (categoryKey: string, data: FormData): Promise<any> => {
+  const endpoint = categoryEndpoints[categoryKey];
+  try {
+    const response = await fetch(`${API_products}/${endpoint}/`, {
+      method: 'POST',
+      ...getAuthHeaders(false),
+      body: data,
+    });
+    return handleResponse(response);
+  } catch (error) {
+    console.error('Mahsulot yaratishda xato:', error);
+    throw error;
+  }
+};
+
+// Update
+export const updateProduct = async (categoryKey: string, id: string, data: FormData): Promise<any> => {
+  const endpoint = categoryEndpoints[categoryKey];
+  try {
+    const response = await fetch(`${API_products}/${endpoint}/${id}/`, {
+      method: 'PATCH',
+      ...getAuthHeaders(false),
+      body: data,
+    });
+    return handleResponse(response);
+  } catch (error) {
+    console.error('Mahsulot yangilashda xato:', error);
+    throw error;
+  }
+};
+
+// Delete
+export const deleteProduct = async (categoryKey: string, id: string): Promise<void> => {
+  const endpoint = categoryEndpoints[categoryKey];
+  try {
+    const response = await fetch(`${API_products}/${endpoint}/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${Cookies.get('token')}`,
+      },
+    });
+    if (!response.ok) throw new Error('O\'chirish muvaffaqiyatsiz');
+  } catch (error) {
+    console.error('Mahsulot o\'chirishda xato:', error);
+    throw error;
+  }
+};
+
+// Update status
+export const updateProductStatus = async (productId: string, status: string, categoryModel: string): Promise<void> => {
+  try {
+    const response = await fetch(`${API_products}/update-status/`, {
+      method: 'POST',
+      ...getAuthHeaders(),
+      body: JSON.stringify({
+        product_id: productId,
+        status,
+        category: categoryModel,
+      }),
+    });
+    await handleResponse(response);
+  } catch (error) {
+    console.error('Status yangilashda xato:', error);
+    throw error;
+  }
+};
+// lib/api.ts fayliga qo'shimcha funksiyalar (mavjud kodga qo'shing)
+
+// const API_products = 'https://api.e-investment.uz/api/v1/products';
+
+// const categoryEndpoints: Record<string, string> = {
+//   "1": "gadgets",
+//   "2": "maishiy-texnika",
+//   "3": "kiyim",
+//   "4": "food",
+//   "5": "qurilish",
+//   "6": "aksessuar",
+//   "7": "salomatlik",
+//   "8": "uy-buyum",
+//   "9": "kanselyariya",
+// };
+
+// const categoryModels: Record<string, string> = {
+//   "1": "gadgetproduct",
+//   "2": "maishiytexnikaproduct",
+//   "3": "kiyimproduct",
+//   "4": "foodproduct",
+//   "5": "qurilishproduct",
+//   "6": "aksessuarproduct",
+//   "7": "salomatlikproduct",
+//   "8": "uybuyumproduct",
+//   "9": "kanselyariyaproduct",
+// };
+
+// const statusEndpoints = {
+//   draft: 'draft',
+//   pending: 'pending',
+//   active: 'active',
+// };
+
+// export const getAllProducts = async (): Promise<any> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   try {
+//     const response = await fetch(`${API_products}/${statusEndpoints.active}/`, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Mahsulotlarni olishda xato:', error);
+//     throw error;
+//   }
+// };
+
+// export const getAllProductsByStatus = async (status: 'draft' | 'pending' | 'active'): Promise<any> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   const statusEndpoint = statusEndpoints[status];
+
+//   try {
+//     const response = await fetch(`${API_products}/${statusEndpoint}/`, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+
+//     return await response.json(); // { product_categories: [...] }
+//   } catch (error) {
+//     console.error(`${status} mahsulotlarni olishda xato:`, error);
+//     throw error;
+//   }
+// };
+
+// export const getProductById = async (categoryKey: string, id: string): Promise<any> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   const endpoint = categoryEndpoints[categoryKey];
+
+//   try {
+//     const response = await fetch(`${API_products}/${endpoint}/${id}/`, {
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Mahsulotni olishda xato:', error);
+//     throw error;
+//   }
+// };
+// export const createProduct = async (categoryKey: string, data: Record<string, any>): Promise<any> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   const endpoint = categoryEndpoints[categoryKey];
+
+//   // Agar image base64 bo'lsa va backend string qabul qilsa, OK. Aks holda, FormData ishlatish kerak bo'ladi:
+//   try {
+//     const response = await fetch(`${API_products}/${endpoint}/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Mahsulot yaratishda xato:', error);
+//     throw error;
+//   }
+// };
+
+// export const updateProduct = async (categoryKey: string, id: string, data: Record<string, any>): Promise<any> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   const endpoint = categoryEndpoints[categoryKey];
+
+//   try {
+//     const response = await fetch(`${API_products}/${endpoint}/${id}/`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Mahsulot yangilashda xato:', error);
+//     throw error;
+//   }
+// };
+
+// export const updateProductStatus = async (productId: string, status: string, categoryModel: string): Promise<void> => {
+//   const token = Cookies.get('token');
+//   if (!token) throw new Error('Access token topilmadi');
+
+//   try {
+//     const response = await fetch(`${API_products}/update-status/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({
+//         product_id: productId,
+//         status,
+//         category: categoryModel,
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.detail || `HTTP xato! Status: ${response.status}`);
+//     }
+//   } catch (error) {
+//     console.error('Status yangilashda xato:', error);
+//     throw error;
+//   }
+// };
