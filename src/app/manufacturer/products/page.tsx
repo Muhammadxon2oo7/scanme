@@ -646,7 +646,7 @@
 //                     {displayImages.map((image, index) => (
 //                       <div key={index} className="relative group">
 //                         <img
-//                           src={typeof image === 'string' ? `https://api.e-investment.uz/${image}` : image}
+//                           src={typeof image === 'string' ? `${image}` : image}
 //                           alt={`Mahsulot rasmi ${index + 1}`}
 //                           className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
 //                         />
@@ -828,7 +828,7 @@
 //                         <div className="flex items-center gap-4 flex-1">
 //                           <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
 //                             {product.images && product.images.length > 0 ? (
-//                               <img src={`https://api.e-investment.uz/${product.images[0]}`} alt={product.name} className="w-full h-full object-cover" />
+//                               <img src={`${product.images[0]}`} alt={product.name} className="w-full h-full object-cover" />
 //                             ) : (
 //                               <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
 //                             )}
@@ -1002,6 +1002,7 @@
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -1033,6 +1034,8 @@ import {
   CheckCircle,
   RotateCcw,
   Trash2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { categories } from "@/lib/categories";
 import {
@@ -1344,9 +1347,10 @@ export default function ManufacturerProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Record<string, string>>({});
-  const [originalFormData, setOriginalFormData] = useState<Record<string, string>>({}); // Original for diff
+  const [originalFormData, setOriginalFormData] = useState<Record<string, string>>({});
   const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
-  const [originalImages, setOriginalImages] = useState<string[]>([]); // Original images
+  const [originalImages, setOriginalImages] = useState<string[]>([]);
+  const [keptOriginalImages, setKeptOriginalImages] = useState<string[]>([]);
   const [currentImages, setCurrentImages] = useState<string[]>([]);
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [isStaff, setIsStaff] = useState<boolean>(false);
@@ -1356,11 +1360,32 @@ export default function ManufacturerProductsPage() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>({});
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [replaceImages, setReplaceImages] = useState(false);
 
   useEffect(() => {
-    const staffStatus = Cookies.get('is_staff') === 'true'; // Cookie dan o'qish
+    const staffStatus = Cookies.get('is_staff') === 'true';
     setIsStaff(staffStatus);
   }, []);
+
+  useEffect(() => {
+    const intervals: Record<string, NodeJS.Timeout> = {};
+    products.forEach(product => {
+      if (product.images && product.images.length > 1) {
+        intervals[product.id] = setInterval(() => {
+          setCarouselIndex(prev => ({
+            ...prev,
+            [product.id]: ((prev[product.id] || 0) + 1) % product.images!.length
+          }));
+        }, 3000);
+      }
+    });
+    return () => {
+      Object.values(intervals).forEach(clearInterval);
+    };
+  }, [products]);
 
   const fetchPartners = async () => {
     try {
@@ -1418,7 +1443,7 @@ export default function ManufacturerProductsPage() {
             
             Object.entries(item).forEach(([apiField, value]) => {
               if (typeof value !== 'string' && typeof value !== 'number') return;
-              if (['id', 'status', 'scans', 'rating', 'image', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
+              if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
               
               const cleanField = apiField.replace('_org', '');
               const uiId = reverseMap[cleanField];
@@ -1432,8 +1457,14 @@ export default function ManufacturerProductsPage() {
               }
             });
             
-            const nameUiId = allQuestions[0];
-            details[nameUiId] = item.name || '';
+            details[allQuestions[0]] = item.name || '';
+
+            let images: string[] = [];
+            if (item.images) {
+              images = Array.isArray(item.images) ? item.images : (item.image ? [item.image] : []);
+            } else if (item.image) {
+              images = [item.image];
+            }
 
             mappedProducts.push({
               id: item.id.toString(),
@@ -1445,7 +1476,7 @@ export default function ManufacturerProductsPage() {
               status: mapApiStatusToLocal(item.status || apiStatus),
               details,
               suppliers,
-              images: item.image ? [item.image] : [],
+              images,
               blockchain_hash: item.blockchain_hash,
               qr_code: item.qr_code,
               categoryModel: cat.model,
@@ -1475,11 +1506,11 @@ export default function ManufacturerProductsPage() {
     try {
       const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!);
       await updateProductStatus(productId, apiPayload.status, apiPayload.category);
-      await fetchProducts(); // Refetch after status change
+      await fetchProducts();
       const updatedProduct = products.find(p => p.id === productId);
       if (updatedProduct) {
         setSelectedProduct({ ...updatedProduct, status: newStatus });
-        fetchSelectedProductDetails(updatedProduct); // Refresh details
+        fetchSelectedProductDetails(updatedProduct);
       }
     } catch (error) {
       console.error('Status o\'zgartirishda xato:', error);
@@ -1492,21 +1523,33 @@ export default function ManufacturerProductsPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 0 && editImageFiles.length < 4) {
-      const newFiles = Array.from(files).slice(0, 4 - editImageFiles.length);
+    if (files) {
+      const newFiles = Array.from(files);
+      const totalImages = editImageFiles.length + newFiles.length;
+      if (totalImages > 5) {
+        alert("Maksimum 5 ta rasm qo'shish mumkin");
+        return;
+      }
       setEditImageFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
-  const handleRemoveImage = (index: number) => {
+  const handleRemoveNewImage = (index: number) => {
     setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleReplaceImages = () => {
+    setReplaceImages(true);
+    setKeptOriginalImages([]);
+    setEditImageFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleDeleteProduct = async (productId: string, categoryKey: string) => {
     setDeletingId(productId);
     try {
       await deleteProduct(categoryKey, productId);
-      await fetchProducts(); // Refetch after delete
+      await fetchProducts();
       setIsDeleted(true);
       setTimeout(() => setIsDeleted(false), 3000);
       if (selectedProduct?.id === productId) {
@@ -1527,7 +1570,7 @@ export default function ManufacturerProductsPage() {
   const hasChanges = () => {
     if (!selectedProduct) return false;
     const detailsChanged = Object.keys(editFormData).some(key => editFormData[key] !== originalFormData[key]);
-    const imagesChanged = editImageFiles.length > 0 || currentImages.length !== originalImages.length;
+    const imagesChanged = editImageFiles.length > 0 || keptOriginalImages.length !== originalImages.length;
     return detailsChanged || imagesChanged;
   };
 
@@ -1538,8 +1581,7 @@ export default function ManufacturerProductsPage() {
       const fieldMap = categoryFieldMap[selectedProduct.categoryKey] || {};
       const payload = new FormData();
       let hasPatchData = false;
-      
-      // Only changed details
+
       Object.entries(editFormData).forEach(([uiId, value]) => {
         if (originalFormData[uiId] !== value) {
           const apiField = fieldMap[uiId];
@@ -1549,26 +1591,27 @@ export default function ManufacturerProductsPage() {
           }
         }
       });
-      
-      // Images (if new files added, replace first or append if API supports)
-      if (editImageFiles.length > 0) {
-        payload.append('image', editImageFiles[0]);
+
+      editImageFiles.forEach((file) => {
+        payload.append('images', file);
         hasPatchData = true;
-      }
+      });
 
       if (hasPatchData) {
         await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
       }
-      await fetchProducts(); // Refetch after update
+      await fetchProducts();
 
       const updatedProduct = products.find(p => p.id === selectedProduct.id);
       if (updatedProduct) {
         setSelectedProduct(updatedProduct);
         setCurrentImages(updatedProduct.images || []);
-        fetchSelectedProductDetails(updatedProduct); // Refresh details with new data
+        fetchSelectedProductDetails(updatedProduct);
       }
       setIsEditing(false);
       setEditImageFiles([]);
+      setKeptOriginalImages([]);
+      setReplaceImages(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Saqlashda xatolik yuz berdi:", error);
@@ -1607,24 +1650,33 @@ export default function ManufacturerProductsPage() {
       
       details[allQuestions[0]] = fullDetails.name || '';
 
+      let images: string[] = [];
+      if (fullDetails.images) {
+        images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
+      } else if (fullDetails.image) {
+        images = [fullDetails.image];
+      }
+
       const updatedProduct = { 
         ...product, 
         details, 
         suppliers, 
-        images: fullDetails.image ? [fullDetails.image] : product.images 
+        images 
       };
       setSelectedProduct(updatedProduct);
-      setCurrentImages(fullDetails.image ? [fullDetails.image] : product.images || []);
+      setCurrentImages(images);
+      setOriginalImages(images);
+      setKeptOriginalImages(images);
       setEditFormData(details);
-      setOriginalFormData(details); // Set original
-      setOriginalImages(fullDetails.image ? [fullDetails.image] : product.images || []);
+      setOriginalFormData(details);
     } catch (error) {
       console.error('Tafsilotlarni yuklashda xato:', error);
       setSelectedProduct(product);
       setCurrentImages(product.images || []);
+      setOriginalImages(product.images || []);
+      setKeptOriginalImages(product.images || []);
       setEditFormData(product.details || {});
       setOriginalFormData(product.details || {});
-      setOriginalImages(product.images || []);
     }
   };
 
@@ -1664,27 +1716,55 @@ export default function ManufacturerProductsPage() {
     );
   };
 
+  const getDisplayImages = () => {
+    if (!isEditing) return currentImages;
+    if (replaceImages) {
+      return editImageFiles.map(f => URL.createObjectURL(f));
+    }
+    return currentImages;
+  };
+
   const renderProductDetails = (product: Product, isViewOnly: boolean = false) => {
     if (!product.categoryKey || !categories[product.categoryKey]) return null;
 
     const category = categories[product.categoryKey];
     const currentDetails = isEditing ? editFormData : product.details || {};
-    const displayImages = isEditing ? (editImageFiles.length > 0 ? editImageFiles.map(f => URL.createObjectURL(f)) : currentImages) : currentImages;
+    const displayImages = getDisplayImages();
 
     return (
       <div className="space-y-6">
-        {displayImages.length > 0 && (
-          <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
-            <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-              <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
-            </CardHeader>
-            <CardContent className="p-4">
-              {isEditing ? (
-                <div className="space-y-3">
-                  <Label htmlFor="images" className="text-gray-700 font-medium">
-                    Rasmlar (maksimum 4 ta)
-                  </Label>
-                  <div className="flex flex-wrap gap-4">
+        <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
+          <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
+            <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
+          </CardHeader>
+          <CardContent className="p-4">
+            {isEditing ? (
+              <div className="space-y-3">
+                {!replaceImages && displayImages.length > 0 ? (
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-4">
+                      {displayImages.map((image, index) => (
+                        <img
+                          key={index}
+                          src={`${image}`}
+                          alt={`Mahsulot rasmi ${index + 1}`}
+                          className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
+                        />
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={handleReplaceImages}
+                      className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+                    >
+                      Rasmlarni almashtirish
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Label htmlFor="images" className="text-gray-700 font-medium">
+                      Rasmlar (maksimum 5 ta)
+                    </Label>
                     <Input
                       id="images"
                       type="file"
@@ -1694,42 +1774,89 @@ export default function ManufacturerProductsPage() {
                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
                       ref={fileInputRef}
                     />
-                    {displayImages.map((image, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={typeof image === 'string' ? `https://api.e-investment.uz/${image}` : image}
-                          alt={`Mahsulot rasmi ${index + 1}`}
-                          className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
-                        />
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveImage(index);
-                          }}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-4">
-                  {displayImages.map((image, index) => (
+                    <div className="flex flex-wrap gap-4">
+                      {editImageFiles.map((file, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Yangi rasm ${index + 1}`}
+                            className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
+                          />
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
+                            onClick={() => handleRemoveNewImage(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      {editImageFiles.length === 0 && (
+                        <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
+                          <Plus className="h-6 w-6 text-gray-600" />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-4">
+                {displayImages.length > 0 ? (
+                  displayImages.map((image, index) => (
                     <img
                       key={index}
                       src={`${image}`}
                       alt={`Mahsulot rasmi ${index + 1}`}
-                      className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
+                      className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105 cursor-pointer"
+                      onClick={() => {
+                        setLightboxIndex(index);
+                        setLightboxOpen(true);
+                      }}
                     />
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                  ))
+                ) : (
+                  <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
+                    <Plus className="h-6 w-6 text-gray-600" />
+                  </div>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        {lightboxOpen && (
+          <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+            <DialogContent className="max-w-4xl p-0 overflow-hidden">
+              <div className="relative">
+                <img
+                  src={`${displayImages[lightboxIndex]}`}
+                  alt="Kattalashtirilgan rasm"
+                  className="w-full h-auto"
+                />
+                {displayImages.length > 1 && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="absolute left-2 top-1/2 -translate-y-1/2"
+                      onClick={() => setLightboxIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length)}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="absolute right-2 top-1/2 -translate-y-1/2"
+                      onClick={() => setLightboxIndex((prev) => (prev + 1) % displayImages.length)}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
         {Object.entries(category.sections).map(([sectionId, section]) => (
           <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
@@ -1814,10 +1941,21 @@ export default function ManufacturerProductsPage() {
       setEditFormData(selectedProduct.details || {});
       setOriginalFormData(selectedProduct.details || {});
       setEditImageFiles([]);
-      setOriginalImages(currentImages);
+      setKeptOriginalImages([]);
+      setReplaceImages(true);
       setOpenSections(new Set(Object.keys(categories[selectedProduct.categoryKey]?.sections || {})));
       setIsEditing(true);
     }
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setEditFormData(originalFormData);
+    setEditImageFiles([]);
+    setKeptOriginalImages(originalImages);
+    setCurrentImages(originalImages);
+    setReplaceImages(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
@@ -1862,184 +2000,187 @@ export default function ManufacturerProductsPage() {
               {loadingProducts ? (
                 <p className="text-center text-gray-600 py-6">Yuklanmoqda...</p>
               ) : filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
-                  <Dialog key={product.id} onOpenChange={(open) => {
-                    if (!open) {
-                      setIsEditing(false);
-                      setSelectedProduct(null);
-                      setEditImageFiles([]);
-                      setEditFormData({});
-                      setOriginalFormData({});
-                      setOpenSections(new Set());
-                      setIsDeleted(false);
-                    } else {
-                      setSelectedProduct(product);
-                      fetchSelectedProductDetails(product);
-                    }
-                  }}>
-                    <DialogTrigger asChild>
-                      <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
-                            {product.images && product.images.length > 0 ? (
-                              <img src={`https://api.e-investment.uz/${product.images[0]}`} alt={product.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
-                            )}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
-                            <p className="text-sm text-gray-600">{product.category}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-3 w-3 text-yellow-500" />
-                              <span className="text-sm text-gray-700">{product.rating}</span>
+                filteredProducts.map((product) => {
+                  const currentIdx = carouselIndex[product.id] || 0;
+                  const hasImages = product.images && product.images.length > 0;
+                  const displayImg = hasImages ? product.images?.[currentIdx] : null;
+                  return (
+                    <Dialog key={product.id} onOpenChange={(open) => {
+                      if (!open) {
+                        setIsEditing(false);
+                        setSelectedProduct(null);
+                        setEditImageFiles([]);
+                        setEditFormData({});
+                        setOriginalFormData({});
+                        setKeptOriginalImages([]);
+                        setReplaceImages(false);
+                        setOpenSections(new Set());
+                        setIsDeleted(false);
+                        setLightboxOpen(false);
+                      } else {
+                        setSelectedProduct(product);
+                        fetchSelectedProductDetails(product);
+                      }
+                    }}>
+                      <DialogTrigger asChild>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+                              {hasImages ? (
+                                <img src={`${displayImg}`} alt={product.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
+                              <p className="text-sm text-gray-600">{product.category}</p>
                             </div>
                           </div>
-                          <Badge
-                            variant={getStatusVariant(product.status)}
-                            className="transition-all duration-200 px-3 py-1 rounded-full"
-                          >
-                            {getStatusText(product.status)}
-                          </Badge>
-                        </div>
-                        {!isStaff && product.status === "in-progress" && (
-                          <div onClick={(e) => e.stopPropagation()}>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  className="ml-2"
-                                  disabled={deletingId === product.id}
-                                >
-                                  {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
-                                    Ha, o'chirish
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        )}
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
-                      <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
-                        <DialogTitle className="text-2xl font-semibold text-gray-800">
-                          {product.name} tafsilotlar
-                        </DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-6 mt-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-                          <div>
-                            <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
-                            <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
-                          </div>
-                          <div>
-                            <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
-                            <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
-                          </div>
-                        </div>
-                        {isDeleted && (
-                          <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <p className="text-sm text-green-700">
-                              Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
-                            </p>
-                          </div>
-                        )}
-                        {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
-                      </div>
-                      <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
-                        {isStaff && product.status === "pending" ? (
-                          <>
-                            <Button
-                              variant="outline"
-                              onClick={() => handleStatusChange(product.id, "in-progress")}
-                              className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
+                              <div className="flex items-center gap-1">
+                                <Star className="h-3 w-3 text-yellow-500" />
+                                <span className="text-sm text-gray-700">{product.rating}</span>
+                              </div>
+                            </div>
+                            <Badge
+                              variant={getStatusVariant(product.status)}
+                              className="transition-all duration-200 px-3 py-1 rounded-full"
                             >
-                              <RotateCcw className="mr-2 h-4 w-4" />
-                              Qaytarib yuborish
-                            </Button>
-                            <Button
-                              onClick={() => handleStatusChange(product.id, "active")}
-                              className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                            >
-                              <CheckCircle className="mr-2 h-4 w-4" />
-                              Tasdiqlash
-                            </Button>
-                          </>
-                        ) : (
-                          !isStaff && (
+                              {getStatusText(product.status)}
+                            </Badge>
+                          </div>
+                          {!isStaff && product.status === "in-progress" && (
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="ml-2"
+                                    disabled={deletingId === product.id}
+                                  >
+                                    {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
+                                      Ha, o'chirish
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          )}
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
+                        <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
+                          <DialogTitle className="text-2xl font-semibold text-gray-800">
+                            {product.name} tafsilotlar
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-6 mt-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                            <div>
+                              <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
+                              <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
+                            </div>
+                            <div>
+                              <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
+                              <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
+                            </div>
+                          </div>
+                          {isDeleted && (
+                            <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
+                              <CheckCircle className="h-5 w-5 text-green-600" />
+                              <p className="text-sm text-green-700">
+                                Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
+                              </p>
+                            </div>
+                          )}
+                          {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
+                        </div>
+                        <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
+                          {isStaff && product.status === "pending" ? (
                             <>
-                              {isEditing ? (
-                                <>
-                                  <Button
-                                    variant="outline"
-                                    onClick={() => {
-                                      setIsEditing(false);
-                                      setEditFormData(originalFormData);
-                                      setEditImageFiles([]);
-                                      setCurrentImages(originalImages);
-                                    }}
-                                    className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                                  >
-                                    Bekor qilish
-                                  </Button>
-                                  <Button
-                                    onClick={handleSaveEdit}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                    disabled={!hasChanges()}
-                                  >
-                                    <Save className="mr-2 h-4 w-4" />
-                                    Saqlash
-                                  </Button>
-                                </>
-                              ) : (
-                                <>
-                                  {product.status === "in-progress" && (
-                                    <>
-                                      <Button
-                                        variant="outline"
-                                        onClick={startEditing}
-                                        className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                                      >
-                                        <Edit3 className="mr-2 h-4 w-4" />
-                                        Tahrirlash
-                                      </Button>
-                                      <Button
-                                        onClick={() => handleStatusChange(product.id, "pending")}
-                                        className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                      >
-                                        Tasdiqlash uchun yuborish
-                                      </Button>
-                                    </>
-                                  )}
-                                </>
-                              )}
+                              <Button
+                                variant="outline"
+                                onClick={() => handleStatusChange(product.id, "in-progress")}
+                                className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+                              >
+                                <RotateCcw className="mr-2 h-4 w-4" />
+                                Qaytarib yuborish
+                              </Button>
+                              <Button
+                                onClick={() => handleStatusChange(product.id, "active")}
+                                className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                              >
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Tasdiqlash
+                              </Button>
                             </>
-                          )
-                        )}
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                ))
+                          ) : (
+                            !isStaff && (
+                              <>
+                                {isEditing ? (
+                                  <>
+                                    <Button
+                                      variant="outline"
+                                      onClick={cancelEditing}
+                                      className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+                                    >
+                                      Bekor qilish
+                                    </Button>
+                                    <Button
+                                      onClick={handleSaveEdit}
+                                      className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                      disabled={!hasChanges()}
+                                    >
+                                      <Save className="mr-2 h-4 w-4" />
+                                      Saqlash
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <>
+                                    {product.status === "in-progress" && (
+                                      <>
+                                        <Button
+                                          variant="outline"
+                                          onClick={startEditing}
+                                          className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+                                        >
+                                          <Edit3 className="mr-2 h-4 w-4" />
+                                          Tahrirlash
+                                        </Button>
+                                        <Button
+                                          onClick={() => handleStatusChange(product.id, "pending")}
+                                          className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                                        >
+                                          Tasdiqlash uchun yuborish
+                                        </Button>
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </>
+                            )
+                          )}
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  );
+                })
               ) : (
                 <p className="text-center text-gray-600 py-6">Mahsulotlar topilmadi.</p>
               )}
@@ -2050,8 +2191,6 @@ export default function ManufacturerProductsPage() {
     </div>
   );
 }
-
-
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 

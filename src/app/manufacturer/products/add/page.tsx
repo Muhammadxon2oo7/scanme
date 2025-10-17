@@ -901,7 +901,9 @@ export default function AddProductPage() {
         }
       });
       if (imageFiles.length > 0) {
-        formDataToSend.append('image', imageFiles[0]);
+        imageFiles.forEach((file) => {
+          formDataToSend.append('images', file);
+        });
       }
 
       await createProduct(selectedCategory, formDataToSend);
