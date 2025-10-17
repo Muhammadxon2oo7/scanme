@@ -1,6 +1,3 @@
-
-
-
 // "use client";
 
 // import { useState, useEffect, useRef } from "react";
@@ -32,6 +29,8 @@
 //   CheckCircle,
 //   RotateCcw,
 //   Trash2,
+//   ChevronLeft,
+//   ChevronRight,
 // } from "lucide-react";
 // import { categories } from "@/lib/categories";
 // import {
@@ -55,7 +54,7 @@
 // } from "@/src/components/ui/alert-dialog";
 
 // const categoryFieldMap: Record<string, Record<string, string>> = {
-//   // 1. Gadgets
+//   // 1. Gadjetlar
 //   "1": {
 //     "1.1.1": "name",
 //     "1.1.2": "turi",
@@ -83,157 +82,7 @@
 //     "1.4.3": "saqlash_yoriqnoma",
 //     "1.4.4": "tamirlash_imkoniyati",
 //   },
-
-//   // 2. Maishiy texnika
-//   "2": {
-//     "2.1.1": "name",
-//     "2.1.2": "modeli",
-//     "2.1.3": "olchami",
-//     "2.1.4": "ogirligi",
-//     "2.1.5": "ishlab_chiqarilgan_davlat",
-//     "2.1.6": "ishlab_chiqaruvchi_tashkilot",
-//     "2.1.7": "kafolat_muddati",
-//     "2.1.8": "ishlash_muddati",
-//     "2.2.1": "quvvati",
-//     "2.2.2": "elektr_taminoti",
-//     "2.2.3": "energiya_samaradorligi",
-//     "2.2.4": "energiya_sarfi",
-//     "2.2.5": "suv_sarfi",
-//     "2.2.6": "shovqin_darajasi",
-//     "2.2.7": "foydalanish_qulayligi",
-//     "2.2.8": "maxsus_xavfsizlik_funktsiyalari",
-//     "2.3.1": "material",
-//     "2.3.2": "qadoqlash_turi",
-//     "2.3.3": "qayta_ishlash_imkoniyati",
-//     "2.4.1": "zaxira_qismlar",
-//     "2.4.2": "tamirlash_yoriqnoma",
-//     "2.4.3": "saqlash_sharoiti",
-//     "2.4.4": "sertifikatlar",
-//   },
-
-//   // 3. Kiyim
-//   "3": {
-//     "3.1.1": "name",
-//     "3.1.2": "kiyim_turi",
-//     "3.1.3": "olchami",
-//     "3.1.4": "ogirligi",
-//     "3.1.5": "rangi",
-//     "3.1.6": "ishlab_chiqarilgan_davlat",
-//     "3.1.7": "ishlab_chiqaruvchi_tashkilot",
-//     "3.1.8": "ishlab_chiqarilgan_sana",
-//     "3.1.9": "dizayner_brand",
-//     "3.1.10": "moda_malumoti",
-//     "3.2.1": "asosiy_material",
-//     "3.2.2": "material_foizi",
-//     "3.2.3": "maxsus_ishlov",
-//     "3.2.4": "sertifikat",
-//     "3.2.5": "ekologik_belgi",
-//     "3.3.1": "yuvish_yoriqnoma",
-//     "3.3.2": "dazmollash_yoriqnoma",
-//     "3.3.3": "qadoqlash_materiali",
-//     "3.3.4": "saqlash_muddati",
-//     "3.3.5": "xizmat_muddati",
-//     "3.4.1": "qayta_ishlash_imkoniyati",
-//   },
-
-//   // 4. Transport
-//   "4": {
-//     "4.1.1": "name",
-//     "4.1.2": "modeli",
-//     "4.1.3": "dvigatel_turi",
-//     "4.1.4": "yoqilgisi",
-//     "4.1.5": "quvvati",
-//     "4.1.6": "ogirligi",
-//     "4.1.7": "yuk_kotarish_quvvati",
-//     "4.1.8": "yoqilg'i_sarfi",
-//     "4.1.9": "chiqarilgan_yili",
-//     "4.1.10": "ishlab_chiqaruvchi_tashkilot",
-//     "4.2.1": "texnik_holat",
-//     "4.2.2": "yurgan_masofa",
-//     "4.2.3": "rang",
-//     "4.2.4": "kuzov_turi",
-//     "4.3.1": "sertifikat",
-//     "4.3.2": "ekologik_standart",
-//   },
-
-//   // 5. Xizmatlar
-//   "5": {
-//     "5.1.1": "name",
-//     "5.1.2": "xizmat_turi",
-//     "5.1.3": "amal_qilish_hududi",
-//     "5.1.4": "muddat",
-//     "5.1.5": "narx_bahosi",
-//     "5.1.6": "masul_shaxs",
-//     "5.2.1": "sertifikat",
-//     "5.2.2": "tajriba_yillari",
-//     "5.2.3": "xavfsizlik_talablari",
-//   },
-
-//   // 6. Aksessuar
-//   "6": {
-//     "6.1.1": "name",
-//     "6.1.2": "modeli",
-//     "6.1.3": "olchami",
-//     "6.1.4": "ogirligi",
-//     "6.1.5": "rangi",
-//     "6.1.6": "brend_nomi",
-//     "6.1.7": "ishlab_chiqarilgan_davlat",
-//     "6.1.8": "ishlab_chiqaruvchi_tashkilot",
-//     "6.2.1": "asosiy_material",
-//     "6.2.2": "qoplama_materiali",
-//     "6.2.3": "sertifikat",
-//     "6.2.4": "qadoqlash_turi",
-//     "6.2.5": "saqlash_yoriqnoma",
-//     "6.3.1": "qayta_ishlash_imkoniyati",
-//   },
-
-//   // 7. Food
-//   "7": {
-//     "7.1.1": "name",
-//     "7.1.2": "turi",
-//     "7.1.3": "ishlab_chiqarilgan_davlat",
-//     "7.1.4": "ishlab_chiqaruvchi_tashkilot",
-//     "7.1.5": "ishlab_chiqarilgan_sana",
-//     "7.1.6": "yaroqlilik_muddati",
-//     "7.1.7": "ogirligi",
-//     "7.2.1": "tarkibi",
-//     "7.2.2": "energiya_qiymati",
-//     "7.2.3": "oqsil",
-//     "7.2.4": "yog",
-//     "7.2.5": "uglevod",
-//     "7.3.1": "saqlash_sharoiti",
-//     "7.3.2": "sertifikat",
-//     "7.3.3": "qadoqlash_turi",
-//     "7.3.4": "transportirovka_sharoiti",
-//   },
-
-//   // 8. Xomashyo
-//   "8": {
-//     "8.1.1": "name",
-//     "8.1.2": "turi",
-//     "8.1.3": "kelib_chiqish_manzili",
-//     "8.1.4": "ishlab_chiqarilgan_davlat",
-//     "8.1.5": "ishlab_chiqaruvchi_tashkilot",
-//     "8.2.1": "kimyoviy_tarkib",
-//     "8.2.2": "fizik_xususiyatlar",
-//     "8.2.3": "sifat_standarti",
-//     "8.3.1": "qadoqlash_turi",
-//     "8.3.2": "transport_talablari",
-//     "8.3.3": "saqlash_sharoiti",
-//   },
-
-//   // 9. Boshqa
-//   "9": {
-//     "9.1.1": "name",
-//     "9.1.2": "kategoriya_turi",
-//     "9.1.3": "tavsif",
-//     "9.1.4": "ishlab_chiqarilgan_davlat",
-//     "9.1.5": "ishlab_chiqaruvchi_tashkilot",
-//     "9.2.1": "sertifikat",
-//     "9.2.2": "maxsus_talablar",
-//     "9.3.1": "qadoqlash_turi",
-//     "9.3.2": "saqlash_yoriqnoma",
-//   },
+//   // ...
 // };
 
 // const getReverseFieldMap = (categoryKey: string): Record<string, string> => {
@@ -319,7 +168,10 @@
 //   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 //   const [isEditing, setIsEditing] = useState(false);
 //   const [editFormData, setEditFormData] = useState<Record<string, string>>({});
+//   const [originalFormData, setOriginalFormData] = useState<Record<string, string>>({});
 //   const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
+//   const [originalImages, setOriginalImages] = useState<string[]>([]);
+//   const [keptOriginalImages, setKeptOriginalImages] = useState<string[]>([]);
 //   const [currentImages, setCurrentImages] = useState<string[]>([]);
 //   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
 //   const [isStaff, setIsStaff] = useState<boolean>(false);
@@ -329,116 +181,144 @@
 //   const [loadingProducts, setLoadingProducts] = useState(true);
 //   const [deletingId, setDeletingId] = useState<string | null>(null);
 //   const [isDeleted, setIsDeleted] = useState(false);
+//   const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>({});
+//   const [lightboxOpen, setLightboxOpen] = useState(false);
+//   const [lightboxIndex, setLightboxIndex] = useState(0);
+//   const [replaceImages, setReplaceImages] = useState(false);
 
 //   useEffect(() => {
-//     const staffStatus = Cookies.get('is_staff') === 'true'; // Cookie dan o'qish
+//     const staffStatus = Cookies.get('is_staff') === 'true';
 //     setIsStaff(staffStatus);
 //   }, []);
 
 //   useEffect(() => {
-//     const fetchPartners = async () => {
-//       try {
-//         setLoadingPartners(true);
-//         const data = await getPartners();
-//         const myId = Cookies.get('myid');
-//         const map: Record<string, string> = {};
-//         if (myId) {
-//           data.forEach((item: any) => {
-//             let partnerId, partnerName;
-//             if (item.owner.id === myId) {
-//               partnerId = item.partner.id;
-//               partnerName = item.partner.name;
-//             } else {
-//               partnerId = item.owner.id;
-//               partnerName = item.owner.name;
-//             }
-//             if (partnerId && partnerId !== myId) {
-//               map[partnerId] = partnerName;
-//             }
-//           });
-//         }
-//         setPartnersMap(map);
-//       } catch (error) {
-//         console.error('Ta\'minotchilarni yuklashda xato:', error);
-//       } finally {
-//         setLoadingPartners(false);
+//     const intervals: Record<string, NodeJS.Timeout> = {};
+//     products.forEach(product => {
+//       if (product.images && product.images.length > 1) {
+//         intervals[product.id] = setInterval(() => {
+//           setCarouselIndex(prev => ({
+//             ...prev,
+//             [product.id]: ((prev[product.id] || 0) + 1) % product.images!.length
+//           }));
+//         }, 3000);
 //       }
+//     });
+//     return () => {
+//       Object.values(intervals).forEach(clearInterval);
 //     };
+//   }, [products]);
+
+//   const fetchPartners = async () => {
+//     try {
+//       setLoadingPartners(true);
+//       const data = await getPartners();
+//       const myId = Cookies.get('myid');
+//       const map: Record<string, string> = {};
+//       if (myId) {
+//         data.forEach((item: any) => {
+//           let partnerId, partnerName;
+//           if (item.owner.id === myId) {
+//             partnerId = item.partner.id;
+//             partnerName = item.partner.name;
+//           } else {
+//             partnerId = item.owner.id;
+//             partnerName = item.owner.name;
+//           }
+//           if (partnerId && partnerId !== myId) {
+//             map[partnerId] = partnerName;
+//           }
+//         });
+//       }
+//       setPartnersMap(map);
+//     } catch (error) {
+//       console.error('Ta\'minotchilarni yuklashda xato:', error);
+//     } finally {
+//       setLoadingPartners(false);
+//     }
+//   };
+
+//   const fetchProducts = async () => {
+//     try {
+//       setLoadingProducts(true);
+//       const activeData = await getAllProductsByStatus('active');
+//       const draftData = await getAllProductsByStatus('draft');
+//       const pendingData = await getAllProductsByStatus('pending');
+      
+//       const mappedProducts: Product[] = [];
+      
+//       [activeData, draftData, pendingData].forEach((data, index) => {
+//         const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
+        
+//         data.product_categories.forEach((cat: any) => {
+//           const lowerModel = cat.model.toLowerCase();
+//           const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
+//           if (!key) return;
+          
+//           const categoryName = categories[key].name;
+//           const reverseMap = getReverseFieldMap(key);
+//           const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
+          
+//           cat.items.forEach((item: any) => {
+//             const details: Record<string, string> = {};
+//             const suppliers: Record<string, string> = {};
+            
+//             Object.entries(item).forEach(([apiField, value]) => {
+//               if (typeof value !== 'string' && typeof value !== 'number') return;
+//               if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
+              
+//               const cleanField = apiField.replace('_org', '');
+//               const uiId = reverseMap[cleanField];
+              
+//               if (uiId && allQuestions.includes(uiId)) {
+//                 if (apiField.endsWith('_org')) {
+//                   suppliers[uiId] = value as string;
+//                 } else {
+//                   details[uiId] = value as string;
+//                 }
+//               }
+//             });
+            
+//             details[allQuestions[0]] = item.name || '';
+
+//             let images: string[] = [];
+//             if (item.images) {
+//               images = Array.isArray(item.images) ? item.images : (item.image ? [item.image] : []);
+//             } else if (item.image) {
+//               images = [item.image];
+//             }
+
+//             mappedProducts.push({
+//               id: item.id.toString(),
+//               name: item.name || 'Noma\'lum',
+//               category: categoryName,
+//               categoryKey: key,
+//               scans: item.scans || 0,
+//               rating: item.rating || 0,
+//               status: mapApiStatusToLocal(item.status || apiStatus),
+//               details,
+//               suppliers,
+//               images,
+//               blockchain_hash: item.blockchain_hash,
+//               qr_code: item.qr_code,
+//               categoryModel: cat.model,
+//             });
+//           });
+//         });
+//       });
+      
+//       setProducts(mappedProducts);
+//     } catch (error) {
+//       console.error('Mahsulotlarni yuklashda xato:', error);
+//     } finally {
+//       setLoadingProducts(false);
+//     }
+//   };
+
+//   useEffect(() => {
 //     fetchPartners();
 //   }, []);
 
 //   useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         setLoadingProducts(true);
-//         const activeData = await getAllProductsByStatus('active');
-//         const draftData = await getAllProductsByStatus('draft');
-//         const pendingData = await getAllProductsByStatus('pending');
-        
-//         const mappedProducts: Product[] = [];
-        
-//         [activeData, draftData, pendingData].forEach((data, index) => {
-//           const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
-          
-//           data.product_categories.forEach((cat: any) => {
-//             const lowerModel = cat.model.toLowerCase();
-//             const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
-//             if (!key) return;
-            
-//             const categoryName = categories[key].name;
-//             const reverseMap = getReverseFieldMap(key);
-//             const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
-            
-//             cat.items.forEach((item: any) => {
-//               const details: Record<string, string> = {};
-//               const suppliers: Record<string, string> = {};
-              
-//               Object.entries(item).forEach(([apiField, value]) => {
-//                 if (typeof value !== 'string' && typeof value !== 'number') return;
-//                 if (['id', 'status', 'scans', 'rating', 'image', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
-                
-//                 const cleanField = apiField.replace('_org', '');
-//                 const uiId = reverseMap[cleanField];
-                
-//                 if (uiId && allQuestions.includes(uiId)) {
-//                   if (apiField.endsWith('_org')) {
-//                     suppliers[uiId] = value as string;
-//                   } else {
-//                     details[uiId] = value as string;
-//                   }
-//                 }
-//               });
-              
-//               const nameUiId = allQuestions[0];
-//               details[nameUiId] = item.name || '';
-
-//               mappedProducts.push({
-//                 id: item.id.toString(),
-//                 name: item.name || 'Noma\'lum',
-//                 category: categoryName,
-//                 categoryKey: key,
-//                 scans: item.scans || 0,
-//                 rating: item.rating || 0,
-//                 status: mapApiStatusToLocal(item.status || apiStatus),
-//                 details,
-//                 suppliers,
-//                 images: item.image ? [item.image] : [],
-//                 blockchain_hash: item.blockchain_hash,
-//                 qr_code: item.qr_code,
-//                 categoryModel: cat.model,
-//               });
-//             });
-//           });
-//         });
-        
-//         setProducts(mappedProducts);
-//       } catch (error) {
-//         console.error('Mahsulotlarni yuklashda xato:', error);
-//       } finally {
-//         setLoadingProducts(false);
-//       }
-//     };
-
 //     fetchProducts();
 //   }, []);
 
@@ -447,11 +327,12 @@
 //     try {
 //       const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!);
 //       await updateProductStatus(productId, apiPayload.status, apiPayload.category);
-//       const updatedProducts = products.map((p) =>
-//         p.id === productId ? { ...p, status: newStatus } : p
-//       );
-//       setProducts(updatedProducts);
-//       setSelectedProduct({ ...selectedProduct, status: newStatus });
+//       await fetchProducts();
+//       const updatedProduct = products.find(p => p.id === productId);
+//       if (updatedProduct) {
+//         setSelectedProduct({ ...updatedProduct, status: newStatus });
+//         fetchSelectedProductDetails(updatedProduct);
+//       }
 //     } catch (error) {
 //       console.error('Status o\'zgartirishda xato:', error);
 //     }
@@ -463,21 +344,33 @@
 
 //   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     const files = e.target.files;
-//     if (files && files.length > 0 && editImageFiles.length < 4) {
-//       const newFiles = Array.from(files).slice(0, 4 - editImageFiles.length);
+//     if (files) {
+//       const newFiles = Array.from(files);
+//       const totalImages = editImageFiles.length + newFiles.length;
+//       if (totalImages > 5) {
+//         alert("Maksimum 5 ta rasm qo'shish mumkin");
+//         return;
+//       }
 //       setEditImageFiles((prev) => [...prev, ...newFiles]);
 //     }
 //   };
 
-//   const handleRemoveImage = (index: number) => {
+//   const handleRemoveNewImage = (index: number) => {
 //     setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
+//   };
+
+//   const handleReplaceImages = () => {
+//     setReplaceImages(true);
+//     setKeptOriginalImages([]);
+//     setEditImageFiles([]);
+//     if (fileInputRef.current) fileInputRef.current.value = "";
 //   };
 
 //   const handleDeleteProduct = async (productId: string, categoryKey: string) => {
 //     setDeletingId(productId);
 //     try {
 //       await deleteProduct(categoryKey, productId);
-//       setProducts(prev => prev.filter(p => p.id !== productId));
+//       await fetchProducts();
 //       setIsDeleted(true);
 //       setTimeout(() => setIsDeleted(false), 3000);
 //       if (selectedProduct?.id === productId) {
@@ -495,33 +388,51 @@
 //     }
 //   };
 
+//   const hasChanges = () => {
+//     if (!selectedProduct) return false;
+//     const detailsChanged = Object.keys(editFormData).some(key => editFormData[key] !== originalFormData[key]);
+//     const imagesChanged = editImageFiles.length > 0 || keptOriginalImages.length !== originalImages.length;
+//     return detailsChanged || imagesChanged;
+//   };
+
 //   const handleSaveEdit = async () => {
-//     if (!selectedProduct) return;
+//     if (!selectedProduct || !hasChanges()) return;
 
 //     try {
 //       const fieldMap = categoryFieldMap[selectedProduct.categoryKey] || {};
 //       const payload = new FormData();
-      
+//       let hasPatchData = false;
+
 //       Object.entries(editFormData).forEach(([uiId, value]) => {
-//         const apiField = fieldMap[uiId];
-//         if (apiField) {
-//           payload.append(apiField, value);
+//         if (originalFormData[uiId] !== value) {
+//           const apiField = fieldMap[uiId];
+//           if (apiField) {
+//             payload.append(apiField, value);
+//             hasPatchData = true;
+//           }
 //         }
 //       });
-      
-//       if (editImageFiles.length > 0) {
-//         payload.append('image', editImageFiles[0]);
+
+//       editImageFiles.forEach((file) => {
+//         payload.append('images', file);
+//         hasPatchData = true;
+//       });
+
+//       if (hasPatchData) {
+//         await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
 //       }
+//       await fetchProducts();
 
-//       await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
-
-//       const newImageUrl = editImageFiles.length > 0 ? URL.createObjectURL(editImageFiles[0]) : currentImages[0];
-//       const updatedProduct = { ...selectedProduct, details: editFormData, images: newImageUrl ? [newImageUrl] : currentImages };
-//       setProducts(prev => prev.map(p => p.id === selectedProduct.id ? updatedProduct : p));
-//       setSelectedProduct(updatedProduct);
-//       setCurrentImages(newImageUrl ? [newImageUrl] : currentImages);
+//       const updatedProduct = products.find(p => p.id === selectedProduct.id);
+//       if (updatedProduct) {
+//         setSelectedProduct(updatedProduct);
+//         setCurrentImages(updatedProduct.images || []);
+//         fetchSelectedProductDetails(updatedProduct);
+//       }
 //       setIsEditing(false);
 //       setEditImageFiles([]);
+//       setKeptOriginalImages([]);
+//       setReplaceImages(false);
 //       if (fileInputRef.current) fileInputRef.current.value = "";
 //     } catch (error) {
 //       console.error("Saqlashda xatolik yuz berdi:", error);
@@ -560,20 +471,33 @@
       
 //       details[allQuestions[0]] = fullDetails.name || '';
 
+//       let images: string[] = [];
+//       if (fullDetails.images) {
+//         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
+//       } else if (fullDetails.image) {
+//         images = [fullDetails.image];
+//       }
+
 //       const updatedProduct = { 
 //         ...product, 
 //         details, 
 //         suppliers, 
-//         images: fullDetails.image ? [fullDetails.image] : product.images 
+//         images 
 //       };
 //       setSelectedProduct(updatedProduct);
-//       setCurrentImages(fullDetails.image ? [fullDetails.image] : product.images || []);
+//       setCurrentImages(images);
+//       setOriginalImages(images);
+//       setKeptOriginalImages(images);
 //       setEditFormData(details);
+//       setOriginalFormData(details);
 //     } catch (error) {
 //       console.error('Tafsilotlarni yuklashda xato:', error);
 //       setSelectedProduct(product);
 //       setCurrentImages(product.images || []);
+//       setOriginalImages(product.images || []);
+//       setKeptOriginalImages(product.images || []);
 //       setEditFormData(product.details || {});
+//       setOriginalFormData(product.details || {});
 //     }
 //   };
 
@@ -613,27 +537,55 @@
 //     );
 //   };
 
+//   const getDisplayImages = () => {
+//     if (!isEditing) return currentImages;
+//     if (replaceImages) {
+//       return editImageFiles.map(f => URL.createObjectURL(f));
+//     }
+//     return currentImages;
+//   };
+
 //   const renderProductDetails = (product: Product, isViewOnly: boolean = false) => {
 //     if (!product.categoryKey || !categories[product.categoryKey]) return null;
 
 //     const category = categories[product.categoryKey];
 //     const currentDetails = isEditing ? editFormData : product.details || {};
-//     const displayImages = isEditing ? (editImageFiles.length > 0 ? editImageFiles.map(f => URL.createObjectURL(f)) : currentImages) : currentImages;
+//     const displayImages = getDisplayImages();
 
 //     return (
 //       <div className="space-y-6">
-//         {displayImages.length > 0 && (
-//           <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
-//             <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-//               <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
-//             </CardHeader>
-//             <CardContent className="p-4">
-//               {isEditing ? (
-//                 <div className="space-y-3">
-//                   <Label htmlFor="images" className="text-gray-700 font-medium">
-//                     Rasmlar (maksimum 4 ta)
-//                   </Label>
-//                   <div className="flex flex-wrap gap-4">
+//         <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
+//           <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
+//             <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
+//           </CardHeader>
+//           <CardContent className="p-4">
+//             {isEditing ? (
+//               <div className="space-y-3">
+//                 {!replaceImages && displayImages.length > 0 ? (
+//                   <div className="space-y-3">
+//                     <div className="flex flex-wrap gap-4">
+//                       {displayImages.map((image, index) => (
+//                         <img
+//                           key={index}
+//                           src={`${image}`}
+//                           alt={`Mahsulot rasmi ${index + 1}`}
+//                           className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
+//                         />
+//                       ))}
+//                     </div>
+//                     <Button
+//                       variant="outline"
+//                       onClick={handleReplaceImages}
+//                       className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+//                     >
+//                       Rasmlarni almashtirish
+//                     </Button>
+//                   </div>
+//                 ) : (
+//                   <>
+//                     <Label htmlFor="images" className="text-gray-700 font-medium">
+//                       Rasmlar (maksimum 5 ta)
+//                     </Label>
 //                     <Input
 //                       id="images"
 //                       type="file"
@@ -643,42 +595,89 @@
 //                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
 //                       ref={fileInputRef}
 //                     />
-//                     {displayImages.map((image, index) => (
-//                       <div key={index} className="relative group">
-//                         <img
-//                           src={typeof image === 'string' ? `${image}` : image}
-//                           alt={`Mahsulot rasmi ${index + 1}`}
-//                           className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
-//                         />
-//                         <Button
-//                           variant="destructive"
-//                           size="sm"
-//                           className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-//                           onClick={(e) => {
-//                             e.stopPropagation();
-//                             handleRemoveImage(index);
-//                           }}
-//                         >
-//                           <X className="h-4 w-4" />
-//                         </Button>
-//                       </div>
-//                     ))}
-//                   </div>
-//                 </div>
-//               ) : (
-//                 <div className="flex flex-wrap gap-4">
-//                   {displayImages.map((image, index) => (
+//                     <div className="flex flex-wrap gap-4">
+//                       {editImageFiles.map((file, index) => (
+//                         <div key={index} className="relative group">
+//                           <img
+//                             src={URL.createObjectURL(file)}
+//                             alt={`Yangi rasm ${index + 1}`}
+//                             className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
+//                           />
+//                           <Button
+//                             variant="destructive"
+//                             size="sm"
+//                             className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
+//                             onClick={() => handleRemoveNewImage(index)}
+//                           >
+//                             <X className="h-4 w-4" />
+//                           </Button>
+//                         </div>
+//                       ))}
+//                       {editImageFiles.length === 0 && (
+//                         <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
+//                           <Plus className="h-6 w-6 text-gray-600" />
+//                         </div>
+//                       )}
+//                     </div>
+//                   </>
+//                 )}
+//               </div>
+//             ) : (
+//               <div className="flex flex-wrap gap-4">
+//                 {displayImages.length > 0 ? (
+//                   displayImages.map((image, index) => (
 //                     <img
 //                       key={index}
 //                       src={`${image}`}
 //                       alt={`Mahsulot rasmi ${index + 1}`}
-//                       className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
+//                       className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105 cursor-pointer"
+//                       onClick={() => {
+//                         setLightboxIndex(index);
+//                         setLightboxOpen(true);
+//                       }}
 //                     />
-//                   ))}
-//                 </div>
-//               )}
-//             </CardContent>
-//           </Card>
+//                   ))
+//                 ) : (
+//                   <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
+//                     <Plus className="h-6 w-6 text-gray-600" />
+//                   </div>
+//                 )}
+//               </div>
+//             )}
+//           </CardContent>
+//         </Card>
+//         {lightboxOpen && (
+//           <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+//             <DialogContent className="max-w-4xl p-0 overflow-hidden">
+//               <div className="relative">
+//                 <img
+//                   src={`${displayImages[lightboxIndex]}`}
+//                   alt="Kattalashtirilgan rasm"
+//                   className="w-full h-auto"
+//                 />
+//                 {displayImages.length > 1 && (
+//                   <>
+//                     <Button
+//                       variant="outline"
+//                       size="icon"
+//                       className="absolute left-2 top-1/2 -translate-y-1/2"
+//                       onClick={() => setLightboxIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length)}
+//                     >
+//                       <ChevronLeft className="h-4 w-4" />
+//                     </Button>
+//                     <Button
+//                       variant="outline"
+//                       size="icon"
+//                       className="absolute right-2 top-1/2 -translate-y-1/2"
+//                       onClick={() => setLightboxIndex((prev) => (prev + 1) % displayImages.length)}
+//                     >
+//                       <ChevronRight className="h-4 w-4" />
+//                     </Button>
+//                   </>
+//                 )}
+//               </div>
+//             </DialogContent>
+//           </Dialog>
 //         )}
 //         {Object.entries(category.sections).map(([sectionId, section]) => (
 //           <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
@@ -761,10 +760,23 @@
 //   const startEditing = () => {
 //     if (selectedProduct) {
 //       setEditFormData(selectedProduct.details || {});
+//       setOriginalFormData(selectedProduct.details || {});
 //       setEditImageFiles([]);
+//       setKeptOriginalImages([]);
+//       setReplaceImages(true);
 //       setOpenSections(new Set(Object.keys(categories[selectedProduct.categoryKey]?.sections || {})));
 //       setIsEditing(true);
 //     }
+//   };
+
+//   const cancelEditing = () => {
+//     setIsEditing(false);
+//     setEditFormData(originalFormData);
+//     setEditImageFiles([]);
+//     setKeptOriginalImages(originalImages);
+//     setCurrentImages(originalImages);
+//     setReplaceImages(false);
+//     if (fileInputRef.current) fileInputRef.current.value = "";
 //   };
 
 //   return (
@@ -809,181 +821,187 @@
 //               {loadingProducts ? (
 //                 <p className="text-center text-gray-600 py-6">Yuklanmoqda...</p>
 //               ) : filteredProducts.length > 0 ? (
-//                 filteredProducts.map((product) => (
-//                   <Dialog key={product.id} onOpenChange={(open) => {
-//                     if (!open) {
-//                       setIsEditing(false);
-//                       setSelectedProduct(null);
-//                       setEditImageFiles([]);
-//                       setEditFormData({});
-//                       setOpenSections(new Set());
-//                       setIsDeleted(false);
-//                     } else {
-//                       setSelectedProduct(product);
-//                       fetchSelectedProductDetails(product);
-//                     }
-//                   }}>
-//                     <DialogTrigger asChild>
-//                       <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
-//                         <div className="flex items-center gap-4 flex-1">
-//                           <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
-//                             {product.images && product.images.length > 0 ? (
-//                               <img src={`${product.images[0]}`} alt={product.name} className="w-full h-full object-cover" />
-//                             ) : (
-//                               <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
-//                             )}
-//                           </div>
-//                           <div>
-//                             <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
-//                             <p className="text-sm text-gray-600">{product.category}</p>
-//                           </div>
-//                         </div>
-//                         <div className="flex items-center gap-4">
-//                           <div className="text-right">
-//                             <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
-//                             <div className="flex items-center gap-1">
-//                               <Star className="h-3 w-3 text-yellow-500" />
-//                               <span className="text-sm text-gray-700">{product.rating}</span>
+//                 filteredProducts.map((product) => {
+//                   const currentIdx = carouselIndex[product.id] || 0;
+//                   const hasImages = product.images && product.images.length > 0;
+//                   const displayImg = hasImages ? product.images?.[currentIdx] : null;
+//                   return (
+//                     <Dialog key={product.id} onOpenChange={(open) => {
+//                       if (!open) {
+//                         setIsEditing(false);
+//                         setSelectedProduct(null);
+//                         setEditImageFiles([]);
+//                         setEditFormData({});
+//                         setOriginalFormData({});
+//                         setKeptOriginalImages([]);
+//                         setReplaceImages(false);
+//                         setOpenSections(new Set());
+//                         setIsDeleted(false);
+//                         setLightboxOpen(false);
+//                       } else {
+//                         setSelectedProduct(product);
+//                         fetchSelectedProductDetails(product);
+//                       }
+//                     }}>
+//                       <DialogTrigger asChild>
+//                         <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
+//                           <div className="flex items-center gap-4 flex-1">
+//                             <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+//                               {hasImages ? (
+//                                 <img src={`${displayImg}`} alt={product.name} className="w-full h-full object-cover" />
+//                               ) : (
+//                                 <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
+//                               )}
+//                             </div>
+//                             <div>
+//                               <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
+//                               <p className="text-sm text-gray-600">{product.category}</p>
 //                             </div>
 //                           </div>
-//                           <Badge
-//                             variant={getStatusVariant(product.status)}
-//                             className="transition-all duration-200 px-3 py-1 rounded-full"
-//                           >
-//                             {getStatusText(product.status)}
-//                           </Badge>
-//                         </div>
-//                         {!isStaff && product.status === "in-progress" && (
-//                           <div onClick={(e) => e.stopPropagation()}>
-//                             <AlertDialog>
-//                               <AlertDialogTrigger asChild>
-//                                 <Button
-//                                   variant="destructive"
-//                                   size="sm"
-//                                   className="ml-2"
-//                                   disabled={deletingId === product.id}
-//                                 >
-//                                   {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
-//                                 </Button>
-//                               </AlertDialogTrigger>
-//                               <AlertDialogContent>
-//                                 <AlertDialogHeader>
-//                                   <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
-//                                   <AlertDialogDescription>
-//                                     Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
-//                                   </AlertDialogDescription>
-//                                 </AlertDialogHeader>
-//                                 <AlertDialogFooter>
-//                                   <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
-//                                   <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
-//                                     Ha, o'chirish
-//                                   </AlertDialogAction>
-//                                 </AlertDialogFooter>
-//                               </AlertDialogContent>
-//                             </AlertDialog>
-//                           </div>
-//                         )}
-//                       </div>
-//                     </DialogTrigger>
-//                     <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
-//                       <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
-//                         <DialogTitle className="text-2xl font-semibold text-gray-800">
-//                           {product.name} tafsilotlar
-//                         </DialogTitle>
-//                       </DialogHeader>
-//                       <div className="space-y-6 mt-4">
-//                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-//                           <div>
-//                             <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
-//                             <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
-//                           </div>
-//                           <div>
-//                             <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
-//                             <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
-//                           </div>
-//                         </div>
-//                         {isDeleted && (
-//                           <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
-//                             <CheckCircle className="h-5 w-5 text-green-600" />
-//                             <p className="text-sm text-green-700">
-//                               Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
-//                             </p>
-//                           </div>
-//                         )}
-//                         {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
-//                       </div>
-//                       <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
-//                         {isStaff && product.status === "pending" ? (
-//                           <>
-//                             <Button
-//                               variant="outline"
-//                               onClick={() => handleStatusChange(product.id, "in-progress")}
-//                               className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+//                           <div className="flex items-center gap-4">
+//                             <div className="text-right">
+//                               <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
+//                               <div className="flex items-center gap-1">
+//                                 <Star className="h-3 w-3 text-yellow-500" />
+//                                 <span className="text-sm text-gray-700">{product.rating}</span>
+//                               </div>
+//                             </div>
+//                             <Badge
+//                               variant={getStatusVariant(product.status)}
+//                               className="transition-all duration-200 px-3 py-1 rounded-full"
 //                             >
-//                               <RotateCcw className="mr-2 h-4 w-4" />
-//                               Qaytarib yuborish
-//                             </Button>
-//                             <Button
-//                               onClick={() => handleStatusChange(product.id, "active")}
-//                               className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                             >
-//                               <CheckCircle className="mr-2 h-4 w-4" />
-//                               Tasdiqlash
-//                             </Button>
-//                           </>
-//                         ) : (
-//                           !isStaff && (
+//                               {getStatusText(product.status)}
+//                             </Badge>
+//                           </div>
+//                           {!isStaff && product.status === "in-progress" && (
+//                             <div onClick={(e) => e.stopPropagation()}>
+//                               <AlertDialog>
+//                                 <AlertDialogTrigger asChild>
+//                                   <Button
+//                                     variant="destructive"
+//                                     size="sm"
+//                                     className="ml-2"
+//                                     disabled={deletingId === product.id}
+//                                   >
+//                                     {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
+//                                   </Button>
+//                                 </AlertDialogTrigger>
+//                                 <AlertDialogContent>
+//                                   <AlertDialogHeader>
+//                                     <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
+//                                     <AlertDialogDescription>
+//                                       Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
+//                                     </AlertDialogDescription>
+//                                   </AlertDialogHeader>
+//                                   <AlertDialogFooter>
+//                                     <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
+//                                     <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
+//                                       Ha, o'chirish
+//                                     </AlertDialogAction>
+//                                   </AlertDialogFooter>
+//                                 </AlertDialogContent>
+//                               </AlertDialog>
+//                             </div>
+//                           )}
+//                         </div>
+//                       </DialogTrigger>
+//                       <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
+//                         <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
+//                           <DialogTitle className="text-2xl font-semibold text-gray-800">
+//                             {product.name} tafsilotlar
+//                           </DialogTitle>
+//                         </DialogHeader>
+//                         <div className="space-y-6 mt-4">
+//                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+//                             <div>
+//                               <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
+//                               <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
+//                             </div>
+//                             <div>
+//                               <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
+//                               <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
+//                             </div>
+//                           </div>
+//                           {isDeleted && (
+//                             <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
+//                               <CheckCircle className="h-5 w-5 text-green-600" />
+//                               <p className="text-sm text-green-700">
+//                                 Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
+//                               </p>
+//                             </div>
+//                           )}
+//                           {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
+//                         </div>
+//                         <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
+//                           {isStaff && product.status === "pending" ? (
 //                             <>
-//                               {isEditing ? (
-//                                 <>
-//                                   <Button
-//                                     variant="outline"
-//                                     onClick={() => {
-//                                       setIsEditing(false);
-//                                       setEditFormData(selectedProduct?.details || {});
-//                                       setEditImageFiles([]);
-//                                     }}
-//                                     className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                                   >
-//                                     Bekor qilish
-//                                   </Button>
-//                                   <Button
-//                                     onClick={handleSaveEdit}
-//                                     className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                                   >
-//                                     <Save className="mr-2 h-4 w-4" />
-//                                     Saqlash
-//                                   </Button>
-//                                 </>
-//                               ) : (
-//                                 <>
-//                                   {product.status === "in-progress" && (
-//                                     <>
-//                                       <Button
-//                                         variant="outline"
-//                                         onClick={startEditing}
-//                                         className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                                       >
-//                                         <Edit3 className="mr-2 h-4 w-4" />
-//                                         Tahrirlash
-//                                       </Button>
-//                                       <Button
-//                                         onClick={() => handleStatusChange(product.id, "pending")}
-//                                         className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                                       >
-//                                         Tasdiqlash uchun yuborish
-//                                       </Button>
-//                                     </>
-//                                   )}
-//                                 </>
-//                               )}
+//                               <Button
+//                                 variant="outline"
+//                                 onClick={() => handleStatusChange(product.id, "in-progress")}
+//                                 className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+//                               >
+//                                 <RotateCcw className="mr-2 h-4 w-4" />
+//                                 Qaytarib yuborish
+//                               </Button>
+//                               <Button
+//                                 onClick={() => handleStatusChange(product.id, "active")}
+//                                 className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+//                               >
+//                                 <CheckCircle className="mr-2 h-4 w-4" />
+//                                 Tasdiqlash
+//                               </Button>
 //                             </>
-//                           )
-//                         )}
-//                       </DialogFooter>
-//                     </DialogContent>
-//                   </Dialog>
-//                 ))
+//                           ) : (
+//                             !isStaff && (
+//                               <>
+//                                 {isEditing ? (
+//                                   <>
+//                                     <Button
+//                                       variant="outline"
+//                                       onClick={cancelEditing}
+//                                       className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+//                                     >
+//                                       Bekor qilish
+//                                     </Button>
+//                                     <Button
+//                                       onClick={handleSaveEdit}
+//                                       className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+//                                       disabled={!hasChanges()}
+//                                     >
+//                                       <Save className="mr-2 h-4 w-4" />
+//                                       Saqlash
+//                                     </Button>
+//                                   </>
+//                                 ) : (
+//                                   <>
+//                                     {product.status === "in-progress" && (
+//                                       <>
+//                                         <Button
+//                                           variant="outline"
+//                                           onClick={startEditing}
+//                                           className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
+//                                         >
+//                                           <Edit3 className="mr-2 h-4 w-4" />
+//                                           Tahrirlash
+//                                         </Button>
+//                                         <Button
+//                                           onClick={() => handleStatusChange(product.id, "pending")}
+//                                           className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+//                                         >
+//                                           Tasdiqlash uchun yuborish
+//                                         </Button>
+//                                       </>
+//                                     )}
+//                                   </>
+//                                 )}
+//                               </>
+//                             )
+//                           )}
+//                         </DialogFooter>
+//                       </DialogContent>
+//                     </Dialog>
+//                   );
+//                 })
 //               ) : (
 //                 <p className="text-center text-gray-600 py-6">Mahsulotlar topilmadi.</p>
 //               )}
@@ -994,15 +1012,6 @@
 //     </div>
 //   );
 // }
-
-
-
-
-
-
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -1057,221 +1066,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
-
-const categoryFieldMap: Record<string, Record<string, string>> = {
-  // 1. Gadjetlar
-  "1": {
-    "1.1.1": "name",
-    "1.1.2": "turi",
-    "1.1.3": "ishlab_chiqarilgan_davlat",
-    "1.1.4": "ishlab_chiqaruvchi_tashkilot",
-    "1.1.5": "kafolat_muddati",
-    "1.1.6": "ishlash_muddati",
-    "1.2.1": "olchami",
-    "1.2.2": "ogirligi",
-    "1.2.3": "batareya_sigimi",
-    "1.2.4": "quvvati",
-    "1.2.5": "energiya_sarfi",
-    "1.2.6": "ekran_olchami",
-    "1.2.7": "protsessor_turi",
-    "1.2.8": "operativ_xotira",
-    "1.2.9": "doimiy_xotira",
-    "1.2.10": "operatsion_tizim",
-    "1.2.11": "kamera_korsatkichlari",
-    "1.2.12": "yangi_texnologiyalar",
-    "1.3.1": "materiallar",
-    "1.3.2": "qadoqlash_materiali",
-    "1.3.3": "qayta_ishlash_imkoniyati",
-    "1.4.1": "sertifikatlari",
-    "1.4.2": "maxsus_xavfsizlik_sertifikati",
-    "1.4.3": "saqlash_yoriqnoma",
-    "1.4.4": "tamirlash_imkoniyati",
-  },
-
-  // 2. Maishiy texnika
-  "2": {
-    "2.1.1": "name",
-    "2.1.2": "modeli",
-    "2.1.3": "olchami",
-    "2.1.4": "ogirligi",
-    "2.1.5": "ishlab_chiqarilgan_davlat",
-    "2.1.6": "ishlab_chiqaruvchi_tashkilot",
-    "2.1.7": "kafolat_muddati",
-    "2.1.8": "ishlash_muddati",
-    "2.2.1": "quvvati",
-    "2.2.2": "elektr_taminoti",
-    "2.2.3": "energiya_samaradorligi",
-    "2.2.4": "energiya_sarfi",
-    "2.2.5": "suv_sarfi",
-    "2.2.6": "shovqin_darajasi",
-    "2.2.7": "foydalanish_qulayligi",
-    "2.2.8": "maxsus_xavfsizlik_funktsiyalari",
-    "2.3.1": "material",
-    "2.3.2": "qadoqlash_turi",
-    "2.3.3": "qayta_ishlash_imkoniyati",
-    "2.4.1": "zaxira_qismlar",
-    "2.4.2": "tamirlash_yoriqnoma",
-    "2.4.3": "saqlash_sharoiti",
-    "2.4.4": "sertifikatlar",
-  },
-
-  // 3. Kiyim
-  "3": {
-    "3.1.1": "name",
-    "3.1.2": "kiyim_turi",
-    "3.1.3": "olchami",
-    "3.1.4": "ogirligi",
-    "3.1.5": "rangi",
-    "3.1.6": "ishlab_chiqarilgan_davlat",
-    "3.1.7": "ishlab_chiqaruvchi_tashkilot",
-    "3.1.8": "ishlab_chiqarilgan_sana",
-    "3.1.9": "dizayner_brand",
-    "3.1.10": "moda_malumoti",
-    "3.2.1": "asosiy_material",
-    "3.2.2": "material_foizi",
-    "3.2.3": "maxsus_ishlov",
-    "3.2.4": "sertifikat",
-    "3.2.5": "ekologik_belgi",
-    "3.3.1": "yuvish_yoriqnoma",
-    "3.3.2": "dazmollash_yoriqnoma",
-    "3.3.3": "qadoqlash_materiali",
-    "3.3.4": "saqlash_muddati",
-    "3.3.5": "xizmat_muddati",
-    "3.4.1": "qayta_ishlash_imkoniyati",
-  },
-
-    // 4. Oziq-ovqat (Food)
-  "4": {
-    "4.1.1": "name",
-    "4.1.2": "mahsulot_turi",
-    "4.1.3": "ogirligi",
-    "4.1.4": "ishlab_chiqarilgan_sana",
-    "4.1.5": "yaroqlilik_muddati",
-    "4.1.6": "saqlash_muddati",
-    "4.1.7": "narx_segmenti",
-    "4.1.8":"yetkazib_beruvchi_nomi",
-    "4.1.9":"ishlab_chiqaruvchi_nomi",
-    "4.1.10":"ishlab_chiqarilgan_davlat",
-    "4.2.1": "tarkibi",
-    "4.2.2": "energiya_qiymati",
-    "4.2.3": "allergiya_ogohlantirish",
-    "4.2.4": "maxsus_tamga",
-    "4.2.5": "ekologik_iz",
-    "4.3.1": "saqlash_sharoiti",
-    "4.3.2": "qadoqlash_materiali",
-    "4.3.3": "qayta_ishlash_mumkinmi",
-    "4.4.1": "sertifikatlar",
-  },
-  // 5. Qurilish
-  "5": {
-    "5.1.1": "name",
-    "5.1.2": "olchami",
-    "5.1.3": "ogirligi",
-    "5.1.4": "ishlab_chiqaruvchi_tashkilot",
-    "5.1.5": "ishlab_chiqarilgan_davlat",
-    "5.1.6": "saqlash_sharoiti",
-    "5.2.1": "tarkibiy_materiallar",
-    "5.2.2": "mustahkamlik_korsatkichi",
-    "5.2.3": "suvga_chidamlilik",
-    "5.2.4": "issiqqa_chidamlilik",
-    "5.2.5": "yonuvchanlik",
-    "5.2.6": "foydalanish_sohasi",
-    "5.2.7": "tamirlash_moslik",
-    "5.3.1": "saqlash_sharoiti",
-    "5.3.2": "qadoqlash_turi",
-    "5.3.3": "qayta_ishlash_imkoniyati",
-    "5.3.4": "ekologik_xavfsizlik",
-    "5.4.1": "sertifikatlar",
-  },
-
-  // 6. Aksessuarlar
-  "6": {
-    "6.1.1": "name",
-    "6.1.2": "modeli",
-    "6.1.3": "olchami",
-    "6.1.4": "ogirligi",
-    "6.1.5": "rangi",
-    "6.1.6": "ishlab_chiqaruvchi_tashkilot",
-    "6.1.7": "ishlab_chiqarilgan_davlat",
-    "6.1.8": "xizmat_muddati",
-    "6.2.1": "material",
-    "6.2.2": "dizayner",
-    "6.2.3": "maxsus_belgilar",
-    "6.3.1": "qadoqlash_materiali",
-    "6.3.2": "qayta_ishlash_imkoniyati",
-    "6.3.3": "saqlash_yoriqnoma",
-    "6.4.1": "sertifikatlar",
-    "6.4.2": "tamirlash_imkoniyati",
-  },
-
-  // 7. Salomatlik
-  "7": {
-    "7.1.1": "name",
-    "7.1.2": "mahsulot_turi",
-    "7.1.3": "ogirligi",
-    "7.1.4": "ishlab_chiqaruvchi_tashkilot",
-    "7.1.5": "ishlab_chiqarilgan_davlat",
-    "7.1.6": "saqlash_muddati",
-    "7.1.7": "kafolat_muddati",
-    "7.2.1": "material",
-    "7.2.2": "saqlash_sharoiti",
-    "7.2.3": "xavfsizlik_talablar",
-    "7.2.4": "tibbiy_standartlar",
-    "7.2.5": "foydalanish_sohasi",
-    "7.3.1": "saqlash_sharoiti",
-    "7.3.2": "qadoqlash_turi",
-    "7.3.3": "qayta_ishlash_mumkinmi",
-    "7.4.1": "sertifikat_turi",
-  },
-
-  // 8. Uy-ro‘zg‘or buyumlari (xomashyo emas)
-  "8": {
-    "8.1.1": "name",
-    "8.1.2": "mahsulot_turi",
-    "8.1.3": "olchami",
-    "8.1.4": "ogirligi",
-    "8.1.5": "rangi",
-    "8.1.6": "ishlab_chiqaruvchi_tashkilot",
-    "8.1.7": "ishlab_chiqarilgan_davlat",
-    "8.1.8": "xizmat_muddati",
-    "8.2.1": "material",
-    "8.2.2": "mustahkamlik_darajasi",
-    "8.3.1": "qadoqlash_materiali",
-    "8.3.2": "qayta_ishlash_imkoniyati",
-    "8.3.3": "saqlash_yoriqnoma",
-    "8.4.1": "sertifikatlar",
-    "8.4.2": "tamirlash_imkoniyati",
-  },
-
-  // 9. Xomashyo
-  "9": {
-    "9.1.1": "name",
-    "9.1.2": "mahsulot_turi",
-    "9.1.3": "olchami",
-    "9.1.4": "ogirligi",
-    "9.1.5": "rangi",
-    "9.1.6": "ishlab_chiqaruvchi_tashkilot",
-    "9.1.7": "ishlab_chiqarilgan_davlat",
-    "9.1.8": "ishlash_muddati",
-    "9.1.9": "narx_segmenti",
-    "9.2.1": "material",
-    "9.2.2": "sifat_darajasi",
-    "9.3.1": "qadoqlash_turi",
-    "9.3.2": "qayta_ishlash_mumkinmi",
-    "9.3.3": "saqlash_sharoiti",
-    "9.4.1": "sertifikatlar",
-    "9.4.2": "ekologik_xavfsizlik",
-  },
-};
-
-const getReverseFieldMap = (categoryKey: string): Record<string, string> => {
-  const map: Record<string, string> = {};
-  const fieldMap = categoryFieldMap[categoryKey] || {};
-  Object.entries(fieldMap).forEach(([uiId, apiField]) => {
-    map[apiField] = uiId;
-  });
-  return map;
-};
+import { categoryFieldMap, getReverseFieldMap } from "./note";
 
 const modelToKey: Record<string, string> = {
   GadgetProduct: "1",
@@ -1542,7 +1337,10 @@ export default function ManufacturerProductsPage() {
     setReplaceImages(true);
     setKeptOriginalImages([]);
     setEditImageFiles([]);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
   };
 
   const handleDeleteProduct = async (productId: string, categoryKey: string) => {
@@ -1596,7 +1394,6 @@ export default function ManufacturerProductsPage() {
         payload.append('images', file);
         hasPatchData = true;
       });
-
       if (hasPatchData) {
         await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
       }
@@ -1652,6 +1449,7 @@ export default function ManufacturerProductsPage() {
 
       let images: string[] = [];
       if (fullDetails.images) {
+        // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : [] 
         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
       } else if (fullDetails.image) {
         images = [fullDetails.image];
@@ -1771,7 +1569,7 @@ export default function ManufacturerProductsPage() {
                       accept="image/*"
                       multiple
                       onChange={handleImageChange}
-                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
+                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden "
                       ref={fileInputRef}
                     />
                     <div className="flex flex-wrap gap-4">
@@ -1785,18 +1583,33 @@ export default function ManufacturerProductsPage() {
                           <Button
                             variant="destructive"
                             size="sm"
-                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-                            onClick={() => handleRemoveNewImage(index)}
-                          >
+                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-429 "
+                            onClick={() => handleRemoveNewImage(index)}>
                             <X className="h-4 w-4" />
                           </Button>
                         </div>
                       ))}
-                      {editImageFiles.length === 0 && (
-                        <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
-                          <Plus className="h-6 w-6 text-gray-600" />
-                        </div>
-                      )}
+                      <div>
+      {/* Plus tugma */}
+      <div
+        className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
+        onClick={() => {
+          console.log("bosildi------------------")
+          fileInputRef.current?.click()
+        }}
+      >
+        <Plus className="h-6 w-6 text-gray-600" />
+      </div>
+
+      {/* Yashirin fayl input */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleImageChange}
+        className="hidden"
+      />
+    </div>
                     </div>
                   </>
                 )}
@@ -2191,215 +2004,3 @@ export default function ManufacturerProductsPage() {
     </div>
   );
 }
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-// const categoryFieldMap: Record<string, Record<string, string>> = {
-//   // 1. Gadjetlar
-//   "1": {
-//     "1.1.1": "name",
-//     "1.1.2": "turi",
-//     "1.1.3": "ishlab_chiqarilgan_davlat",
-//     "1.1.4": "ishlab_chiqaruvchi_tashkilot",
-//     "1.1.5": "kafolat_muddati",
-//     "1.1.6": "ishlash_muddati",
-//     "1.2.1": "olchami",
-//     "1.2.2": "ogirligi",
-//     "1.2.3": "batareya_sigimi",
-//     "1.2.4": "quvvati",
-//     "1.2.5": "energiya_sarfi",
-//     "1.2.6": "ekran_olchami",
-//     "1.2.7": "protsessor_turi",
-//     "1.2.8": "operativ_xotira",
-//     "1.2.9": "doimiy_xotira",
-//     "1.2.10": "operatsion_tizim",
-//     "1.2.11": "kamera_korsatkichlari",
-//     "1.2.12": "yangi_texnologiyalar",
-//     "1.3.1": "materiallar",
-//     "1.3.2": "qadoqlash_materiali",
-//     "1.3.3": "qayta_ishlash_imkoniyati",
-//     "1.4.1": "sertifikatlari",
-//     "1.4.2": "maxsus_xavfsizlik_sertifikati",
-//     "1.4.3": "saqlash_yoriqnoma",
-//     "1.4.4": "tamirlash_imkoniyati",
-//   },
-
-//   // 2. Maishiy texnika
-//   "2": {
-//     "2.1.1": "name",
-//     "2.1.2": "modeli",
-//     "2.1.3": "olchami",
-//     "2.1.4": "ogirligi",
-//     "2.1.5": "ishlab_chiqarilgan_davlat",
-//     "2.1.6": "ishlab_chiqaruvchi_tashkilot",
-//     "2.1.7": "kafolat_muddati",
-//     "2.1.8": "ishlash_muddati",
-//     "2.2.1": "quvvati",
-//     "2.2.2": "elektr_taminoti",
-//     "2.2.3": "energiya_samaradorligi",
-//     "2.2.4": "energiya_sarfi",
-//     "2.2.5": "suv_sarfi",
-//     "2.2.6": "shovqin_darajasi",
-//     "2.2.7": "foydalanish_qulayligi",
-//     "2.2.8": "maxsus_xavfsizlik_funktsiyalari",
-//     "2.3.1": "material",
-//     "2.3.2": "qadoqlash_turi",
-//     "2.3.3": "qayta_ishlash_imkoniyati",
-//     "2.4.1": "zaxira_qismlar",
-//     "2.4.2": "tamirlash_yoriqnoma",
-//     "2.4.3": "saqlash_sharoiti",
-//     "2.4.4": "sertifikatlar",
-//   },
-
-//   // 3. Kiyim
-//   "3": {
-//     "3.1.1": "name",
-//     "3.1.2": "kiyim_turi",
-//     "3.1.3": "olchami",
-//     "3.1.4": "ogirligi",
-//     "3.1.5": "rangi",
-//     "3.1.6": "ishlab_chiqarilgan_davlat",
-//     "3.1.7": "ishlab_chiqaruvchi_tashkilot",
-//     "3.1.8": "ishlab_chiqarilgan_sana",
-//     "3.1.9": "dizayner_brand",
-//     "3.1.10": "moda_malumoti",
-//     "3.2.1": "asosiy_material",
-//     "3.2.2": "material_foizi",
-//     "3.2.3": "maxsus_ishlov",
-//     "3.2.4": "sertifikat",
-//     "3.2.5": "ekologik_belgi",
-//     "3.3.1": "yuvish_yoriqnoma",
-//     "3.3.2": "dazmollash_yoriqnoma",
-//     "3.3.3": "qadoqlash_materiali",
-//     "3.3.4": "saqlash_muddati",
-//     "3.3.5": "xizmat_muddati",
-//     "3.4.1": "qayta_ishlash_imkoniyati",
-//   },
-
-//     // 4. Oziq-ovqat (Food)
-//   "4": {
-//     "4.1.1": "name",
-//     "4.1.2": "turi",
-//     "4.1.3": "ogirligi",
-//     "4.1.4": "ishlab_chiqarilgan_sana",
-//     "4.1.5": "yaroqlilik_muddati",
-//     "4.1.6": "saqlash_muddati",
-//     "4.1.7": "narx_segmenti",
-//     "4.1.8":"yetkazib_beruvchi_nomi",
-//     "4.1.9":"ishlab_chiqaruvchi_nomi",
-//     "4.1.10":"ishlab_chiqarilgan_davlat",
-//     "4.2.1": "tarkibi",
-//     "4.2.2": "energiya_qiymati",
-//     "4.2.3": "allergiya_ogohlantirish",
-//     "4.2.4": "maxsus_tamga",
-//     "4.2.5": "ekologik_iz",
-//     "4.3.1": "saqlash_sharoiti",
-//     "4.3.2": "qadoqlash_materiali",
-//     "4.3.3": "qayta_ishlash_mumkinmi",
-//     "4.4.1": "sertifikatlar",
-//   },
-//   // 5. Qurilish
-//   "5": {
-//     "5.1.1": "name",
-//     "5.1.2": "olchami",
-//     "5.1.3": "ogirligi",
-//     "5.1.4": "ishlab_chiqaruvchi_tashkilot",
-//     "5.1.5": "ishlab_chiqarilgan_davlat",
-//     "5.1.6": "saqlash_sharoiti",
-//     "5.2.1": "tarkibiy_materiallar",
-//     "5.2.2": "mustahkamlik_korsatkichi",
-//     "5.2.3": "suvga_chidamlilik",
-//     "5.2.4": "issiqqa_chidamlilik",
-//     "5.2.5": "yonuvchanlik",
-//     "5.2.6": "foydalanish_sohasi",
-//     "5.2.7": "tamirlash_moslik",
-//     "5.3.1": "saqlash_sharoiti",
-//     "5.3.2": "qadoqlash_turi",
-//     "5.3.3": "qayta_ishlash_imkoniyati",
-//     "5.3.4": "ekologik_xavfsizlik",
-//     "5.4.1": "sertifikatlar",
-//   },
-
-//   // 6. Aksessuarlar
-//   "6": {
-//     "6.1.1": "name",
-//     "6.1.2": "modeli",
-//     "6.1.3": "olchami",
-//     "6.1.4": "ogirligi",
-//     "6.1.5": "rangi",
-//     "6.1.6": "ishlab_chiqaruvchi_tashkilot",
-//     "6.1.7": "ishlab_chiqarilgan_davlat",
-//     "6.1.8": "xizmat_muddati",
-//     "6.2.1": "material",
-//     "6.2.2": "dizayner",
-//     "6.2.3": "maxsus_belgilar",
-//     "6.3.1": "qadoqlash_materiali",
-//     "6.3.2": "qayta_ishlash_imkoniyati",
-//     "6.3.3": "saqlash_yoriqnoma",
-//     "6.4.1": "sertifikatlar",
-//     "6.4.2": "tamirlash_imkoniyati",
-//   },
-
-//   // 7. Salomatlik
-//   "7": {
-//     "7.1.1": "name",
-//     "7.1.2": "mahsulot_turi",
-//     "7.1.3": "ogirligi",
-//     "7.1.4": "ishlab_chiqaruvchi_tashkilot",
-//     "7.1.5": "ishlab_chiqarilgan_davlat",
-//     "7.1.6": "saqlash_muddati",
-//     "7.1.7": "kafolat_muddati",
-//     "7.2.1": "material",
-//     "7.2.2": "saqlash_sharoiti",
-//     "7.2.3": "xavfsizlik_talablar",
-//     "7.2.4": "tibbiy_standartlar",
-//     "7.2.5": "foydalanish_sohasi",
-//     "7.3.1": "saqlash_sharoiti",
-//     "7.3.2": "qadoqlash_turi",
-//     "7.3.3": "qayta_ishlash_mumkinmi",
-//     "7.4.1": "sertifikat_turi",
-//   },
-
-//   // 8. Uy-ro‘zg‘or buyumlari (xomashyo emas)
-//   "8": {
-//     "8.1.1": "name",
-//     "8.1.2": "mahsulot_turi",
-//     "8.1.3": "olchami",
-//     "8.1.4": "ogirligi",
-//     "8.1.5": "rangi",
-//     "8.1.6": "ishlab_chiqaruvchi_tashkilot",
-//     "8.1.7": "ishlab_chiqarilgan_davlat",
-//     "8.1.8": "xizmat_muddati",
-//     "8.2.1": "material",
-//     "8.2.2": "mustahkamlik_darajasi",
-//     "8.3.1": "qadoqlash_materiali",
-//     "8.3.2": "qayta_ishlash_imkoniyati",
-//     "8.3.3": "saqlash_yoriqnoma",
-//     "8.4.1": "sertifikatlar",
-//     "8.4.2": "tamirlash_imkoniyati",
-//   },
-
-//   // 9. Xomashyo
-//   "9": {
-//     "9.1.1": "name",
-//     "9.1.2": "mahsulot_turi",
-//     "9.1.3": "olchami",
-//     "9.1.4": "ogirligi",
-//     "9.1.5": "rangi",
-//     "9.1.6": "ishlab_chiqaruvchi_tashkilot",
-//     "9.1.7": "ishlab_chiqarilgan_davlat",
-//     "9.1.8": "ishlash_muddati",
-//     "9.1.9": "narx_segmenti",
-//     "9.2.1": "material",
-//     "9.2.2": "sifat_darajasi",
-//     "9.3.1": "qadoqlash_turi",
-//     "9.3.2": "qayta_ishlash_mumkinmi",
-//     "9.3.3": "saqlash_sharoiti",
-//     "9.4.1": "sertifikatlar",
-//     "9.4.2": "ekologik_xavfsizlik",
-//   },
-// };

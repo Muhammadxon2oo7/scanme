@@ -11,14 +11,12 @@ interface Section {
 }
 
 interface Category {
-  [x: string]: any;
   name: string;
   sections: Record<string, Section>;
 }
 
 export const categories: Record<string, Category> = {
   "1": {
-    model:'GadgetProduct',
     name: "Gadjetlar",
     sections: {
       "1.1": {
@@ -117,7 +115,6 @@ export const categories: Record<string, Category> = {
     },
   },
   "3": {
-    model:'KiyimProduct',
     name: "Kiyim-kechak",
     sections: {
       "3.1": {
@@ -208,7 +205,6 @@ export const categories: Record<string, Category> = {
     },
   },
   "5": {
-    model:"QurilishProduct",
     name: "Qurilish va ta’mirlash",
     sections: {
       "5.1": {
