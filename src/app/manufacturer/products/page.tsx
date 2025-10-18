@@ -1322,7 +1322,7 @@ const fetchPartners = async () => {
               name: item.name || "Noma'lum",
               category: categoryName,
               categoryKey: key,
-              scans: item.scans || 0,
+              scans: item.all_scan || 0,
               rating: item.rating || 0,
               status: mapApiStatusToLocal(item.status || apiStatus),
               details,
