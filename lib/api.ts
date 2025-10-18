@@ -183,7 +183,7 @@ export const employeeLogin = async (data: EmployeeLoginData): Promise<AuthRespon
     if (result.tokens?.access) {
       Cookies.set('token', result.tokens.access, { expires: 1 });
       Cookies.set('refresh_token', result.tokens.refresh, { expires: 7 });
-      Cookies.set('is_staff', 'false', { expires: 1 });
+      Cookies.set('is_staff', 'false', { expires: 100 });
     }
     return result;
   } catch (error) {
