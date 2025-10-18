@@ -47,6 +47,7 @@
     "embla-carousel-react": "latest",
     "geist": "latest",
     "gsap": "^3.13.0",
+    "html5-qrcode": "^2.3.8",
     "input-otp": "latest",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.454.0",
