@@ -203,32 +203,32 @@
 //       const activeData = await getAllProductsByStatus('active');
 //       const draftData = await getAllProductsByStatus('draft');
 //       const pendingData = await getAllProductsByStatus('pending');
-      
+
 //       const mappedProducts: Product[] = [];
-      
+
 //       [activeData, draftData, pendingData].forEach((data, index) => {
 //         const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
-        
+
 //         data.product_categories.forEach((cat: any) => {
 //           const lowerModel = cat.model.toLowerCase();
 //           const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
 //           if (!key) return;
-          
+
 //           const categoryName = categories[key].name;
 //           const reverseMap = getReverseFieldMap(key);
 //           const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
-          
+
 //           cat.items.forEach((item: any) => {
 //             const details: Record<string, string> = {};
 //             const suppliers: Record<string, string> = {};
-            
+
 //             Object.entries(item).forEach(([apiField, value]) => {
 //               if (typeof value !== 'string' && typeof value !== 'number') return;
 //               if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
-              
+
 //               const cleanField = apiField.replace('_org', '');
 //               const uiId = reverseMap[cleanField];
-              
+
 //               if (uiId && allQuestions.includes(uiId)) {
 //                 if (apiField.endsWith('_org')) {
 //                   suppliers[uiId] = value as string;
@@ -237,7 +237,7 @@
 //                 }
 //               }
 //             });
-            
+
 //             details[allQuestions[0]] = item.name || '';
 
 //             let images: string[] = [];
@@ -265,7 +265,7 @@
 //           });
 //         });
 //       });
-      
+
 //       setProducts(mappedProducts);
 //     } catch (error) {
 //       console.error('Mahsulotlarni yuklashda xato:', error);
@@ -414,14 +414,14 @@
 //       const allQuestions = Object.values(categories[product.categoryKey].sections).flatMap(sec => sec.questions.map(q => q.id));
 //       const details: Record<string, string> = {};
 //       const suppliers: Record<string, string> = {};
-      
+
 //       Object.entries(fullDetails).forEach(([apiField, value]) => {
 //         if (typeof value !== 'string' && typeof value !== 'number') return;
 //         if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code'].includes(apiField)) return;
-        
+
 //         const cleanField = apiField.replace('_org', '');
 //         const uiId = reverseMap[cleanField];
-        
+
 //         if (uiId && allQuestions.includes(uiId)) {
 //           if (apiField.endsWith('_org')) {
 //             suppliers[uiId] = value as string;
@@ -430,22 +430,22 @@
 //           }
 //         }
 //       });
-      
+
 //       details[allQuestions[0]] = fullDetails.name || '';
 
 //       let images: string[] = [];
 //       if (fullDetails.images) {
-//         // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : [] 
+//         // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : []
 //         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
 //       } else if (fullDetails.image) {
 //         images = [fullDetails.image];
 //       }
 
-//       const updatedProduct = { 
-//         ...product, 
-//         details, 
-//         suppliers, 
-//         images 
+//       const updatedProduct = {
+//         ...product,
+//         details,
+//         suppliers,
+//         images
 //       };
 //       setSelectedProduct(updatedProduct);
 //       setCurrentImages(images);
@@ -1025,6 +1025,9 @@ import {
   ChevronLeft,
   ChevronRight,
   QrCode,
+  ScanEyeIcon,
+  StarHalf,
+  StarOff,
 } from "lucide-react";
 import { categories } from "@/lib/categories";
 import {
@@ -1083,37 +1086,56 @@ interface Product {
 
 const getStatusText = (status: Product["status"]) => {
   switch (status) {
-    case "active": return "Faol";
-    case "in-progress": return "To'ldirilmoqda";
-    case "pending": return "Tasdiqlanishi kutilmoqda";
-    default: return "Noma'lum";
+    case "active":
+      return "Faol";
+    case "in-progress":
+      return "To'ldirilmoqda";
+    case "pending":
+      return "Tasdiqlanishi kutilmoqda";
+    default:
+      return "Noma'lum";
   }
 };
 
 const getStatusVariant = (status: Product["status"]) => {
   switch (status) {
-    case "active": return "default";
-    case "in-progress": return "outline";
-    case "pending": return "secondary";
-    default: return "secondary";
+    case "active":
+      return "default";
+    case "in-progress":
+      return "outline";
+    case "pending":
+      return "secondary";
+    default:
+      return "secondary";
   }
 };
 
 const mapApiStatusToLocal = (apiStatus: string): Product["status"] => {
   switch (apiStatus) {
-    case "active": return "active";
-    case "draft": return "in-progress";
-    case "pending": return "pending";
-    default: return "in-progress";
+    case "active":
+      return "active";
+    case "draft":
+      return "in-progress";
+    case "pending":
+      return "pending";
+    default:
+      return "in-progress";
   }
 };
 
-const mapLocalStatusToApi = (localStatus: Product["status"], categoryModel: string) => {
+const mapLocalStatusToApi = (
+  localStatus: Product["status"],
+  categoryModel: string
+) => {
   switch (localStatus) {
-    case "active": return { status: "active", category: categoryModel };
-    case "in-progress": return { status: "draft", category: categoryModel };
-    case "pending": return { status: "pending", category: categoryModel };
-    default: return { status: "draft", category: categoryModel };
+    case "active":
+      return { status: "active", category: categoryModel };
+    case "in-progress":
+      return { status: "draft", category: categoryModel };
+    case "pending":
+      return { status: "pending", category: categoryModel };
+    default:
+      return { status: "draft", category: categoryModel };
   }
 };
 
@@ -1123,7 +1145,9 @@ export default function ManufacturerProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Record<string, string>>({});
-  const [originalFormData, setOriginalFormData] = useState<Record<string, string>>({});
+  const [originalFormData, setOriginalFormData] = useState<
+    Record<string, string>
+  >({});
   const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
   const [originalImages, setOriginalImages] = useState<string[]>([]);
   const [keptOriginalImages, setKeptOriginalImages] = useState<string[]>([]);
@@ -1136,7 +1160,9 @@ export default function ManufacturerProductsPage() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleted, setIsDeleted] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>({});
+  const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>(
+    {}
+  );
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [replaceImages, setReplaceImages] = useState(false);
@@ -1144,18 +1170,19 @@ export default function ManufacturerProductsPage() {
   const [selectedQrCode, setSelectedQrCode] = useState<string | null>(null);
 
   useEffect(() => {
-    const staffStatus = Cookies.get('is_staff') === 'true';
+    const staffStatus = Cookies.get("is_staff") === "true";
     setIsStaff(staffStatus);
   }, []);
 
   useEffect(() => {
     const intervals: Record<string, NodeJS.Timeout> = {};
-    products.forEach(product => {
+    products.forEach((product) => {
       if (product.images && product.images.length > 1) {
         intervals[product.id] = setInterval(() => {
-          setCarouselIndex(prev => ({
+          setCarouselIndex((prev) => ({
             ...prev,
-            [product.id]: ((prev[product.id] || 0) + 1) % product.images!.length
+            [product.id]:
+              ((prev[product.id] || 0) + 1) % product.images!.length,
           }));
         }, 3000);
       }
@@ -1169,7 +1196,7 @@ export default function ManufacturerProductsPage() {
     try {
       setLoadingPartners(true);
       const data = await getPartners();
-      const myId = Cookies.get('myid');
+      const myId = Cookies.get("myid");
       const map: Record<string, string> = {};
       if (myId) {
         data.forEach((item: any) => {
@@ -1188,7 +1215,7 @@ export default function ManufacturerProductsPage() {
       }
       setPartnersMap(map);
     } catch (error) {
-      console.error('Ta\'minotchilarni yuklashda xato:', error);
+      console.error("Ta'minotchilarni yuklashda xato:", error);
     } finally {
       setLoadingPartners(false);
     }
@@ -1197,56 +1224,82 @@ export default function ManufacturerProductsPage() {
   const fetchProducts = async () => {
     try {
       setLoadingProducts(true);
-      const activeData = await getAllProductsByStatus('active');
-      const draftData = await getAllProductsByStatus('draft');
-      const pendingData = await getAllProductsByStatus('pending');
-      
+      const activeData = await getAllProductsByStatus("active");
+      const draftData = await getAllProductsByStatus("draft");
+      const pendingData = await getAllProductsByStatus("pending");
+
       const mappedProducts: Product[] = [];
-      
+
       [activeData, draftData, pendingData].forEach((data, index) => {
-        const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
-        
+        const apiStatus =
+          index === 0 ? "active" : index === 1 ? "draft" : "pending";
+
         data.product_categories.forEach((cat: any) => {
           const lowerModel = cat.model.toLowerCase();
-          const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
+          const key =
+            modelToKey[cat.model] ||
+            modelToKeyLower[lowerModel] ||
+            modelToKey[
+              cat.model.charAt(0).toUpperCase() +
+                cat.model.slice(1).toLowerCase()
+            ];
           if (!key) return;
-          
+
           const categoryName = categories[key].name;
           const reverseMap = getReverseFieldMap(key);
-          const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
-          
+          const allQuestions = Object.values(categories[key].sections).flatMap(
+            (sec) => sec.questions.map((q) => q.id)
+          );
+
           cat.items.forEach((item: any) => {
             const details: Record<string, string> = {};
             const suppliers: Record<string, string> = {};
-            
+
             Object.entries(item).forEach(([apiField, value]) => {
-              if (typeof value !== 'string' && typeof value !== 'number') return;
-              if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name', 'created_at'].includes(apiField)) return;
-              
-              const cleanField = apiField.replace('_org', '');
+              if (typeof value !== "string" && typeof value !== "number")
+                return;
+              if (
+                [
+                  "id",
+                  "status",
+                  "scans",
+                  "rating",
+                  "blockchain_hash",
+                  "qr_code",
+                  "name",
+                  "created_at",
+                ].includes(apiField)
+              )
+                return;
+
+              const cleanField = apiField.replace("_org", "");
               const uiId = reverseMap[cleanField];
-              
+
               if (uiId && allQuestions.includes(uiId)) {
-                if (apiField.endsWith('_org')) {
+                if (apiField.endsWith("_org")) {
                   suppliers[uiId] = value as string;
                 } else {
                   details[uiId] = value as string;
                 }
               }
             });
-            
-            details[allQuestions[0]] = item.name || '';
+
+            details[allQuestions[0]] = item.name || "";
 
             let images: string[] = [];
             if (item.images) {
-              images = Array.isArray(item.images) ? item.images : (item.image ? [item.image] : []);
+              images = Array.isArray(item.images)
+                ? item.images
+                : item.image
+                ? [item.image]
+                : [];
             } else if (item.image) {
               images = [item.image];
             }
 
             mappedProducts.push({
               id: item.id.toString(),
-              name: item.name || 'Noma\'lum',
+              name: item.name || "Noma'lum",
               category: categoryName,
               categoryKey: key,
               scans: item.scans || 0,
@@ -1263,10 +1316,10 @@ export default function ManufacturerProductsPage() {
           });
         });
       });
-      
+
       setProducts(mappedProducts);
     } catch (error) {
-      console.error('Mahsulotlarni yuklashda xato:', error);
+      console.error("Mahsulotlarni yuklashda xato:", error);
     } finally {
       setLoadingProducts(false);
     }
@@ -1280,19 +1333,29 @@ export default function ManufacturerProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleStatusChange = async (productId: string, newStatus: Product["status"]) => {
+  const handleStatusChange = async (
+    productId: string,
+    newStatus: Product["status"]
+  ) => {
     if (!selectedProduct) return;
     try {
-      const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!);
-      await updateProductStatus(productId, apiPayload.status, apiPayload.category);
+      const apiPayload = mapLocalStatusToApi(
+        newStatus,
+        selectedProduct.categoryModel!
+      );
+      await updateProductStatus(
+        productId,
+        apiPayload.status,
+        apiPayload.category
+      );
       await fetchProducts();
-      const updatedProduct = products.find(p => p.id === productId);
+      const updatedProduct = products.find((p) => p.id === productId);
       if (updatedProduct) {
         setSelectedProduct({ ...updatedProduct, status: newStatus });
         fetchSelectedProductDetails(updatedProduct);
       }
     } catch (error) {
-      console.error('Status o\'zgartirishda xato:', error);
+      console.error("Status o'zgartirishda xato:", error);
     }
   };
 
@@ -1327,7 +1390,10 @@ export default function ManufacturerProductsPage() {
     }
   };
 
-  const handleDeleteProduct = async (productId: string, categoryKey: string) => {
+  const handleDeleteProduct = async (
+    productId: string,
+    categoryKey: string
+  ) => {
     setDeletingId(productId);
     try {
       await deleteProduct(categoryKey, productId);
@@ -1342,7 +1408,7 @@ export default function ManufacturerProductsPage() {
         setOpenSections(new Set());
       }
     } catch (error) {
-      console.error('Mahsulotni o\'chirishda xato:', error);
+      console.error("Mahsulotni o'chirishda xato:", error);
       alert("Mahsulotni o'chirishda xatolik yuz berdi.");
     } finally {
       setDeletingId(null);
@@ -1351,8 +1417,12 @@ export default function ManufacturerProductsPage() {
 
   const hasChanges = () => {
     if (!selectedProduct) return false;
-    const detailsChanged = Object.keys(editFormData).some(key => editFormData[key] !== originalFormData[key]);
-    const imagesChanged = editImageFiles.length > 0 || keptOriginalImages.length !== originalImages.length;
+    const detailsChanged = Object.keys(editFormData).some(
+      (key) => editFormData[key] !== originalFormData[key]
+    );
+    const imagesChanged =
+      editImageFiles.length > 0 ||
+      keptOriginalImages.length !== originalImages.length;
     return detailsChanged || imagesChanged;
   };
 
@@ -1375,15 +1445,19 @@ export default function ManufacturerProductsPage() {
       });
 
       editImageFiles.forEach((file) => {
-        payload.append('images', file);
+        payload.append("images", file);
         hasPatchData = true;
       });
       if (hasPatchData) {
-        await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
+        await updateProduct(
+          selectedProduct.categoryKey,
+          selectedProduct.id,
+          payload
+        );
       }
       await fetchProducts();
 
-      const updatedProduct = products.find(p => p.id === selectedProduct.id);
+      const updatedProduct = products.find((p) => p.id === selectedProduct.id);
       if (updatedProduct) {
         setSelectedProduct(updatedProduct);
         setCurrentImages(updatedProduct.images || []);
@@ -1409,39 +1483,56 @@ export default function ManufacturerProductsPage() {
     try {
       const fullDetails = await getProductById(product.categoryKey, product.id);
       const reverseMap = getReverseFieldMap(product.categoryKey);
-      const allQuestions = Object.values(categories[product.categoryKey].sections).flatMap(sec => sec.questions.map(q => q.id));
+      const allQuestions = Object.values(
+        categories[product.categoryKey].sections
+      ).flatMap((sec) => sec.questions.map((q) => q.id));
       const details: Record<string, string> = {};
       const suppliers: Record<string, string> = {};
-      
+
       Object.entries(fullDetails).forEach(([apiField, value]) => {
-        if (typeof value !== 'string' && typeof value !== 'number') return;
-        if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'created_at'].includes(apiField)) return;
-        
-        const cleanField = apiField.replace('_org', '');
+        if (typeof value !== "string" && typeof value !== "number") return;
+        if (
+          [
+            "id",
+            "status",
+            "scans",
+            "rating",
+            "blockchain_hash",
+            "qr_code",
+            "created_at",
+          ].includes(apiField)
+        )
+          return;
+
+        const cleanField = apiField.replace("_org", "");
         const uiId = reverseMap[cleanField];
-        
+
         if (uiId && allQuestions.includes(uiId)) {
-          if (apiField.endsWith('_org')) {
+          if (apiField.endsWith("_org")) {
             suppliers[uiId] = value as string;
           } else {
             details[uiId] = value as string;
           }
         }
       });
-      
-      details[allQuestions[0]] = fullDetails.name || '';
+
+      details[allQuestions[0]] = fullDetails.name || "";
 
       let images: string[] = [];
       if (fullDetails.images) {
-        images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
+        images = Array.isArray(fullDetails.images)
+          ? fullDetails.images
+          : fullDetails.image
+          ? [fullDetails.image]
+          : [];
       } else if (fullDetails.image) {
         images = [fullDetails.image];
       }
 
-      const updatedProduct = { 
-        ...product, 
-        details, 
-        suppliers, 
+      const updatedProduct = {
+        ...product,
+        details,
+        suppliers,
         images,
         created_at: fullDetails.created_at,
       };
@@ -1452,7 +1543,7 @@ export default function ManufacturerProductsPage() {
       setEditFormData(details);
       setOriginalFormData(details);
     } catch (error) {
-      console.error('Tafsilotlarni yuklashda xato:', error);
+      console.error("Tafsilotlarni yuklashda xato:", error);
       setSelectedProduct(product);
       setCurrentImages(product.images || []);
       setOriginalImages(product.images || []);
@@ -1461,41 +1552,48 @@ export default function ManufacturerProductsPage() {
       setOriginalFormData(product.details || {});
     }
   };
-const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
-  const proxyUrl = `/api/proxy?url=${encodeURIComponent(qrCodeUrl)}`;
-  const link = document.createElement("a");
-  link.href = proxyUrl;
-  link.download = `${productName}_qr_code.png`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+  const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(qrCodeUrl)}`;
+    const link = document.createElement("a");
+    link.href = proxyUrl;
+    link.download = `${productName}_qr_code.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
-
-
-
-  const renderSuppliersList = (suppliers: Record<string, string> | undefined) => {
+  const renderSuppliersList = (
+    suppliers: Record<string, string> | undefined
+  ) => {
     if (!suppliers || Object.keys(suppliers).length === 0) return null;
 
     return (
       <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
         <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-          <h4 className="text-lg font-medium text-gray-800">Biriktirilgan Ta'minotchilar</h4>
+          <h4 className="text-lg font-medium text-gray-800">
+            Biriktirilgan Ta'minotchilar
+          </h4>
         </CardHeader>
         <CardContent className="p-4 space-y-3">
           {Object.entries(suppliers).map(([questionId, supplierId]) => {
-            const question = Object.values(categories[selectedProduct?.categoryKey || "1"].sections)
+            const question = Object.values(
+              categories[selectedProduct?.categoryKey || "1"].sections
+            )
               .flatMap((section) => section.questions)
               .find((q) => q.id === questionId);
             const isCompleted = selectedProduct?.details?.[questionId];
-            const supplierName = partnersMap[supplierId] || "Noma'lum ta'minotchi";
+            const supplierName =
+              partnersMap[supplierId] || "Noma'lum ta'minotchi";
             return (
-              <div key={questionId} className="flex justify-between items-center bg-white/50 p-3 rounded-md border border-blue-100">
+              <div
+                key={questionId}
+                className="flex justify-between items-center bg-white/50 p-3 rounded-md border border-blue-100"
+              >
                 <div>
-                  <p className="text-sm font-medium text-gray-700">{question?.label}</p>
-                  <p className="text-xs text-gray-500">
-                    {supplierName}
+                  <p className="text-sm font-medium text-gray-700">
+                    {question?.label}
                   </p>
+                  <p className="text-xs text-gray-500">{supplierName}</p>
                 </div>
                 {isCompleted ? (
                   <Check className="h-5 w-5 text-green-600" />
@@ -1513,12 +1611,15 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
   const getDisplayImages = () => {
     if (!isEditing) return currentImages;
     if (replaceImages) {
-      return editImageFiles.map(f => URL.createObjectURL(f));
+      return editImageFiles.map((f) => URL.createObjectURL(f));
     }
     return currentImages;
   };
 
-  const renderProductDetails = (product: Product, isViewOnly: boolean = false) => {
+  const renderProductDetails = (
+    product: Product,
+    isViewOnly: boolean = false
+  ) => {
     if (!product.categoryKey || !categories[product.categoryKey]) return null;
 
     const category = categories[product.categoryKey];
@@ -1529,7 +1630,9 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
       <div className="space-y-6">
         <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
           <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-            <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
+            <h4 className="text-lg font-medium text-gray-800">
+              Mahsulot Rasmlari
+            </h4>
           </CardHeader>
           <CardContent className="p-4">
             {isEditing ? (
@@ -1556,7 +1659,10 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                   </div>
                 ) : (
                   <>
-                    <Label htmlFor="images" className="text-gray-700 font-medium">
+                    <Label
+                      htmlFor="images"
+                      className="text-gray-700 font-medium"
+                    >
                       Rasmlar (maksimum 5 ta)
                     </Label>
                     <Input
@@ -1635,7 +1741,13 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                       variant="outline"
                       size="icon"
                       className="absolute left-2 top-1/2 -translate-y-1/2"
-                      onClick={() => setLightboxIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length)}
+                      onClick={() =>
+                        setLightboxIndex(
+                          (prev) =>
+                            (prev - 1 + displayImages.length) %
+                            displayImages.length
+                        )
+                      }
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -1643,7 +1755,11 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                       variant="outline"
                       size="icon"
                       className="absolute right-2 top-1/2 -translate-y-1/2"
-                      onClick={() => setLightboxIndex((prev) => (prev + 1) % displayImages.length)}
+                      onClick={() =>
+                        setLightboxIndex(
+                          (prev) => (prev + 1) % displayImages.length
+                        )
+                      }
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -1654,12 +1770,19 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
           </Dialog>
         )}
         {Object.entries(category.sections).map(([sectionId, section]) => (
-          <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
+          <Card
+            key={sectionId}
+            className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg"
+          >
             <CardHeader
-              className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${!isViewOnly ? 'cursor-pointer hover:bg-blue-200/50' : ''}`}
+              className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${
+                !isViewOnly ? "cursor-pointer hover:bg-blue-200/50" : ""
+              }`}
               onClick={() => !isViewOnly && toggleSection(sectionId)}
             >
-              <h4 className="text-lg font-medium text-gray-800">{section.title}</h4>
+              <h4 className="text-lg font-medium text-gray-800">
+                {section.title}
+              </h4>
               {!isViewOnly && (
                 <ChevronDown
                   className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
@@ -1673,38 +1796,74 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                 {section.questions.map((question) => {
                   const value = currentDetails[question.id] || "";
                   const supplierId = product.suppliers?.[question.id];
-                  const isSupplierSection = !["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "6.1", "6.2", "7.1", "7.2", "8.1", "8.2", "9.1", "9.2"].includes(sectionId);
+                  const isSupplierSection = ![
+                    "1.1",
+                    "1.2",
+                    "2.1",
+                    "2.2",
+                    "3.1",
+                    "3.2",
+                    "4.1",
+                    "4.2",
+                    "5.1",
+                    "5.2",
+                    "6.1",
+                    "6.2",
+                    "7.1",
+                    "7.2",
+                    "8.1",
+                    "8.2",
+                    "9.1",
+                    "9.2",
+                  ].includes(sectionId);
 
                   if (isViewOnly || (!isEditing && !isSupplierSection)) {
                     return (
-                      <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
+                      <div
+                        key={question.id}
+                        className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100"
+                      >
                         <div className="flex justify-between items-start">
-                          <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
+                          <Label className="text-sm font-medium text-gray-700">
+                            {question.label}
+                          </Label>
                           {supplierId && (
                             <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
                               {partnersMap[supplierId] || "Noma'lum"}
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">{value || "Ma'lumot kiritilmagan"}</p>
+                        <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
+                          {value || "Ma'lumot kiritilmagan"}
+                        </p>
                       </div>
                     );
                   }
 
                   return (
                     <div key={question.id} className="space-y-2">
-                      <Label htmlFor={question.id} className="text-gray-700 font-medium">{question.label}</Label>
+                      <Label
+                        htmlFor={question.id}
+                        className="text-gray-700 font-medium"
+                      >
+                        {question.label}
+                      </Label>
                       <Input
                         id={question.id}
                         value={value}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange(question.id, e.target.value)
+                        }
                         placeholder={question.placeholder}
                         className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-                        disabled={(!isEditing) || (!!(isSupplierSection && supplierId))}
+                        disabled={
+                          !isEditing || !!(isSupplierSection && supplierId)
+                        }
                       />
                       {isSupplierSection && supplierId && (
                         <p className="text-xs text-gray-500 mt-1 bg-blue-50 px-2 py-1 rounded-full inline-block">
-                          Bu maydon {partnersMap[supplierId] || "ta'minotchi"} tomonidan to'ldiriladi
+                          Bu maydon {partnersMap[supplierId] || "ta'minotchi"}{" "}
+                          tomonidan to'ldiriladi
                         </p>
                       )}
                     </div>
@@ -1735,7 +1894,11 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
       setEditImageFiles([]);
       setKeptOriginalImages([]);
       setReplaceImages(true);
-      setOpenSections(new Set(Object.keys(categories[selectedProduct.categoryKey]?.sections || {})));
+      setOpenSections(
+        new Set(
+          Object.keys(categories[selectedProduct.categoryKey]?.sections || {})
+        )
+      );
       setIsEditing(true);
     }
   };
@@ -1795,55 +1958,114 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                 filteredProducts.map((product) => {
                   const currentIdx = carouselIndex[product.id] || 0;
                   const hasImages = product.images && product.images.length > 0;
-                  const displayImg = hasImages ? product.images?.[currentIdx] : null;
+                  const displayImg = hasImages
+                    ? product.images?.[currentIdx]
+                    : null;
                   return (
-                    <Dialog key={product.id} onOpenChange={(open) => {
-                      if (!open) {
-                        setIsEditing(false);
-                        setSelectedProduct(null);
-                        setEditImageFiles([]);
-                        setEditFormData({});
-                        setOriginalFormData({});
-                        setKeptOriginalImages([]);
-                        setReplaceImages(false);
-                        setOpenSections(new Set());
-                        setIsDeleted(false);
-                        setLightboxOpen(false);
-                        setQrModalOpen(false);
-                        setSelectedQrCode(null);
-                      } else {
-                        setSelectedProduct(product);
-                        fetchSelectedProductDetails(product);
-                      }
-                    }}>
+                    <Dialog
+                      key={product.id}
+                      onOpenChange={(open) => {
+                        if (!open) {
+                          setIsEditing(false);
+                          setSelectedProduct(null);
+                          setEditImageFiles([]);
+                          setEditFormData({});
+                          setOriginalFormData({});
+                          setKeptOriginalImages([]);
+                          setReplaceImages(false);
+                          setOpenSections(new Set());
+                          setIsDeleted(false);
+                          setLightboxOpen(false);
+                          setQrModalOpen(false);
+                          setSelectedQrCode(null);
+                        } else {
+                          setSelectedProduct(product);
+                          fetchSelectedProductDetails(product);
+                        }
+                      }}
+                    >
                       <DialogTrigger asChild>
                         <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
                           <div className="flex items-center gap-4 flex-1">
                             <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
                               {hasImages ? (
-                                <img src={`${displayImg}`} alt={product.name} className="w-full h-full object-cover" />
+                                <img
+                                  src={`${displayImg}`}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                />
                               ) : (
                                 <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
                               )}
                             </div>
                             <div>
-                              <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
-                              <p className="text-sm text-gray-600">{product.category}</p>
+                              <h3 className="font-semibold text-gray-800 text-lg">
+                                {product.name}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {product.category}
+                              </p>
                               {isStaff && product.created_at && (
-                                
-                                 <p className="flex gap-[2px] items-center"><p className="text-gray-500 text-xs">Yaratilgan: </p>  <p className="text-xs text-gray-500 ">
-                                  {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
-                                </p></p>
+                                <p className="flex gap-[2px] items-center">
+                                  <p className="text-gray-500 text-xs">
+                                    Yaratilgan:{" "}
+                                  </p>{" "}
+                                  <p className="text-xs text-gray-500 ">
+                                    {format(
+                                      new Date(product.created_at),
+                                      "dd.MM.yyyy HH:mm"
+                                    )}
+                                  </p>
+                                </p>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
-                              <div className="flex items-center gap-1">
-                                <Star className="h-3 w-3 text-yellow-500" />
+                              {product.status === "active" && (
+                                <div className="flex items-center gap-1">
+                                  {/* <p className="text-sm font-medium text-gray-700 flex  items-center gap-[2px]">
+                                  <Star className="h-3 w-3 text-yellow-500" />
                                 <span className="text-sm text-gray-700">{product.rating}</span>
-                              </div>
+                                </p> */}
+                                  <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                                    {Array.from({ length: 5 }, (_, i) => {
+                                      const starValue = i + 1;
+                                      if (product.rating >= starValue) {
+                                        return (
+                                          <Star
+                                            key={i}
+                                            className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+                                          />
+                                        );
+                                      } else if (
+                                        product.rating >=
+                                        starValue - 0.5
+                                      ) {
+                                        return (
+                                          <StarHalf
+                                            key={i}
+                                            className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+                                          />
+                                        );
+                                      } else {
+                                        return (
+                                          <StarOff
+                                            key={i}
+                                            className="h-3.5 w-3.5 text-gray-300"
+                                          />
+                                        );
+                                      }
+                                    })}
+                                    {/* <span className="text-xs text-gray-600 ml-1">{product.rating.toFixed(1)}</span> */}
+                                  </p>
+
+                                  <p className="text-sm font-medium text-gray-700 flex  items-center gap-[2px] ">
+                                    <ScanEyeIcon className="h-3 w-3" />{" "}
+                                    {product.scans}
+                                  </p>
+                                </div>
+                              )}
                             </div>
                             <Badge
                               variant={getStatusVariant(product.status)}
@@ -1851,20 +2073,22 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                             >
                               {getStatusText(product.status)}
                             </Badge>
-                            {isStaff && product.status === "active" && product.qr_code && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedQrCode(product.qr_code!);
-                                  setQrModalOpen(true);
-                                }}
-                                className="hover:bg-blue-100"
-                              >
-                                <QrCode className="h-4 w-4 text-blue-600" />
-                              </Button>
-                            )}
+                            {isStaff &&
+                              product.status === "active" &&
+                              product.qr_code && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedQrCode(product.qr_code!);
+                                    setQrModalOpen(true);
+                                  }}
+                                  className="hover:bg-blue-100"
+                                >
+                                  <QrCode className="h-4 w-4 text-blue-600" />
+                                </Button>
+                              )}
                           </div>
                           {!isStaff && product.status === "in-progress" && (
                             <div onClick={(e) => e.stopPropagation()}>
@@ -1876,19 +2100,36 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                                     className="ml-2"
                                     disabled={deletingId === product.id}
                                   >
-                                    {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
+                                    {deletingId === product.id ? (
+                                      "O'chirilmoqda..."
+                                    ) : (
+                                      <Trash2 className="h-4 w-4" />
+                                    )}
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
+                                    <AlertDialogTitle>
+                                      Mahsulotni o'chirish
+                                    </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
+                                      Siz haqiqatan ham "{product.name}"
+                                      mahsulotini o'chirishni xohlaysizmi? Bu
+                                      amalni ortga qaytarib bo'lmaydi.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
+                                    <AlertDialogCancel>
+                                      Bekor qilish
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() =>
+                                        handleDeleteProduct(
+                                          product.id,
+                                          product.categoryKey
+                                        )
+                                      }
+                                    >
                                       Ha, o'chirish
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
@@ -1903,65 +2144,140 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                           <DialogTitle className="text-2xl font-semibold text-gray-800">
                             {product.name} tafsilotlar
                           </DialogTitle>
-                          
                         </DialogHeader>
                         <div className="space-y-6 mt-4">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-  <div>
-    <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
-    <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
-    {isStaff && product.created_at && (
-      <p className="flex gap-[2px] items-center"><strong className="text-gray-700">Yaratilgan: </strong>  <p className="text-xs text-gray-500 ">
-                                  {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
-                                </p></p>
-    )}
-  </div>
+                            <div>
+                              <p>
+                                <strong className="text-gray-700">
+                                  Kategoriya:
+                                </strong>{" "}
+                                {product.category}
+                              </p>
+                              <p>
+                                <strong className="text-gray-700">
+                                  Status:
+                                </strong>{" "}
+                                {getStatusText(product.status)}
+                              </p>
+                              {isStaff && product.created_at && (
+                                <p className="flex gap-[2px] items-center">
+                                  <strong className="text-gray-700">
+                                    Yaratilgan:{" "}
+                                  </strong>{" "}
+                                  <p className="text-xs text-gray-500 ">
+                                    {format(
+                                      new Date(product.created_at),
+                                      "dd.MM.yyyy HH:mm"
+                                    )}
+                                  </p>
+                                </p>
+                              )}
+                            </div>
 
-  <div>
-    <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
-    <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
-  </div>
+                            {product.status === "active" && <div>
+                              <p>
+                                <strong className="text-gray-700">
+                                  Skanlar soni:
+                                </strong>{" "}
+                                {product.scans}
+                              </p>
+                              <p className="flex">
+                                <strong className="text-gray-700">
+                                  Reyting:
+                                </strong>{" "}
+                                <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                                      {Array.from({ length: 5 }, (_, i) => {
+                                        const starValue = i + 1;
+                                        if (product.rating >= starValue) {
+                                          return (
+                                            <Star
+                                              key={i}
+                                              className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+                                            />
+                                          );
+                                        } else if (
+                                          product.rating >=
+                                          starValue - 0.5
+                                        ) {
+                                          return (
+                                            <StarHalf
+                                              key={i}
+                                              className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+                                            />
+                                          );
+                                        } else {
+                                          return (
+                                            <StarOff
+                                              key={i}
+                                              className="h-3.5 w-3.5 text-gray-300"
+                                            />
+                                          );
+                                        }
+                                      })}
+                                    </p>
+                              </p>
 
-  {isStaff && product.status === "active" && product.qr_code && (
-    <div className="flex justify-end items-center">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => {
-          setSelectedQrCode(product.qr_code!);
-          setQrModalOpen(true);
-        }}
-        className="hover:bg-blue-100 h-[40px] w-[40px]"
-      >
-        <QrCode className="h-5 w-5 text-blue-600" />
-      </Button>
-    </div>
-  )}
-</div>
+                        
+                            </div>}
+
+                            {isStaff &&
+                              product.status === "active" &&
+                              product.qr_code && (
+                                <div className="flex justify-end items-center">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setSelectedQrCode(product.qr_code!);
+                                      setQrModalOpen(true);
+                                    }}
+                                    className="hover:bg-blue-100 h-[40px] w-[40px]"
+                                  >
+                                    <QrCode className="h-5 w-5 text-blue-600" />
+                                  </Button>
+                                </div>
+                              )}
+                          </div>
 
                           {isDeleted && (
                             <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
                               <CheckCircle className="h-5 w-5 text-green-600" />
                               <p className="text-sm text-green-700">
-                                Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
+                                Mahsulot muvaffaqiyatli o'chirildi va QR kod
+                                o'chirildi!
                               </p>
                             </div>
                           )}
-                          {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
+                          {loadingPartners ? (
+                            <p className="text-gray-500">
+                              Ta'minotchilar yuklanmoqda...
+                            </p>
+                          ) : (
+                            renderProductDetails(
+                              selectedProduct || product,
+                              isStaff ||
+                                (!isEditing && product.status !== "in-progress")
+                            )
+                          )}
                         </div>
                         <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
                           {isStaff && product.status === "pending" ? (
                             <>
                               <Button
                                 variant="outline"
-                                onClick={() => handleStatusChange(product.id, "in-progress")}
+                                onClick={() =>
+                                  handleStatusChange(product.id, "in-progress")
+                                }
                                 className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
                               >
                                 <RotateCcw className="mr-2 h-4 w-4" />
                                 Qaytarib yuborish
                               </Button>
                               <Button
-                                onClick={() => handleStatusChange(product.id, "active")}
+                                onClick={() =>
+                                  handleStatusChange(product.id, "active")
+                                }
                                 className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                               >
                                 <CheckCircle className="mr-2 h-4 w-4" />
@@ -2002,7 +2318,12 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                                           Tahrirlash
                                         </Button>
                                         <Button
-                                          onClick={() => handleStatusChange(product.id, "pending")}
+                                          onClick={() =>
+                                            handleStatusChange(
+                                              product.id,
+                                              "pending"
+                                            )
+                                          }
                                           className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                                         >
                                           Tasdiqlash uchun yuborish
@@ -2020,7 +2341,9 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                   );
                 })
               ) : (
-                <p className="text-center text-gray-600 py-6">Mahsulotlar topilmadi.</p>
+                <p className="text-center text-gray-600 py-6">
+                  Mahsulotlar topilmadi.
+                </p>
               )}
             </div>
           </Card>
@@ -2039,7 +2362,12 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                     className="w-64 h-64 object-contain"
                   />
                   <Button
-                    onClick={() => handleDownloadQrCode(selectedQrCode, selectedProduct?.name || "product")}
+                    onClick={() =>
+                      handleDownloadQrCode(
+                        selectedQrCode,
+                        selectedProduct?.name || "product"
+                      )
+                    }
                     className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
                   >
                     QR Kodni Yuklab Olish

@@ -824,22 +824,6 @@ export const updateProduct = async (categoryKey: string, id: string, data: FormD
   }
 };
 
-
-export const updateProductt = async (categoryKey: string, id: string, data: FormData): Promise<any> => {
-  
-  try {
-    const response = await fetch(`${API_products}/${categoryKey}/${id}/`, {
-      method: 'PATCH',
-      ...getAuthHeaders(false),
-      body: data,
-    });
-    return handleResponse(response);
-  } catch (error) {
-    console.error('Mahsulot yangilashda xato:', error);
-    throw error;
-  }
-};
-
 // Delete
 export const deleteProduct = async (categoryKey: string, id: string): Promise<void> => {
   const endpoint = categoryEndpoints[categoryKey];

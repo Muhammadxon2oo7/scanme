@@ -8,6 +8,7 @@
 // import { ChevronDown, ChevronUp, Building2, Star } from "lucide-react";
 // import { categoryFieldMap, getReverseFieldMap } from "../../../manufacturer/products/note";
 // import { categories } from "@/lib/categories";
+// import { Label } from "@/src/components/ui/label";
 
 // type Question = {
 //   id: string;
@@ -44,6 +45,22 @@
 //   suppliers: SuppliersMap;
 // };
 
+// const modelToKey: Record<string, string> = {
+//   GadgetProduct: "1",
+//   MaishiyTexnikaProduct: "2",
+//   KiyimProduct: "3",
+//   FoodProduct: "4",
+//   QurilishProduct: "5",
+//   AksessuarProduct: "6",
+//   SalomatlikProduct: "7",
+//   UyBuyumProduct: "8",
+//   KanselyariyaProduct: "9",
+// };
+
+// const modelToKeyLower: Record<string, string> = Object.fromEntries(
+//   Object.entries(modelToKey).map(([k, v]) => [k.toLowerCase(), v])
+// );
+
 // const fetchProductByToken = async (token: string) => {
 //   try {
 //     const response = await fetch(`https://api.e-investment.uz/api/v1/products/qr/token/${token}/`, {
@@ -79,9 +96,14 @@
 //       try {
 //         setLoading(true);
 //         const data = await fetchProductByToken(token);
-//         const categoryKey = Object.entries(categories).find(([_, cat]) =>
-//           cat.sections["1.1"]?.questions.some(q => q.id === "1.1.1")
-//         )?.[0] || "1";
+        
+//         // Modeldan categoryKey ni aniqlash
+//         const model = data.model;
+//         const categoryKey = modelToKey[model] || 
+//                           modelToKeyLower[model.toLowerCase()] || 
+//                           modelToKey[model.charAt(0).toUpperCase() + model.slice(1).toLowerCase()] || 
+//                           "1";
+        
 //         const reverseMap = getReverseFieldMap(categoryKey);
 //         const allQuestions = Object.values(categories[categoryKey].sections).flatMap(sec => sec.questions.map(q => q.id));
         
@@ -90,7 +112,7 @@
         
 //         Object.entries(data).forEach(([apiField, value]) => {
 //           if (typeof value !== "string" && typeof value !== "number") return;
-//           if (["id", "status", "token", "blockchain_hash", "qr_code", "created_at", "created_by", "created_user", "qr_token"].includes(apiField)) return;
+//           if (["id", "status", "token", "blockchain_hash", "qr_code", "created_at", "created_by", "created_user", "qr_token", "model"].includes(apiField)) return;
           
 //           const cleanField = apiField.replace("_org", "");
 //           const uiId = reverseMap[cleanField];
@@ -116,9 +138,9 @@
 //         setProductData({
 //           id: data.id.toString(),
 //           name: data.name || "Noma'lum",
-//           category: categories[categoryKey].name || "Noma'lum",
+//           category: categories[categoryKey]?.name || "Noma'lum",
 //           categoryKey,
-//           created_by: data.created_by || "Noma'lum",
+//           created_by: data.ishlab_chiqaruvchi_tashkilot || data.created_by || "Noma'lum",
 //           scans: data.scans || 0,
 //           rating: data.rating || 0,
 //           status: data.status || "active",
@@ -266,7 +288,7 @@
 //               <p className="text-gray-600 mt-2 text-sm sm:text-base">Kategoriya: {productData.category}</p>
 //               <div className="flex items-center gap-2 mt-2">
 //                 <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-//                 <p className="text-gray-600 text-sm sm:text-base">Ishlab chiqaruvchi: {productData?.created_by}</p>
+//                 <p className="text-gray-600 text-sm sm:text-base">Ishlab chiqaruvchi: {productData.created_by}</p>
 //               </div>
 //               <div className="flex items-center gap-2 mt-2">
 //                 <span className="text-sm text-gray-700">Reyting:</span>
@@ -342,26 +364,28 @@
 //                     </CardHeader>
 //                     {openSections.has(sectionId) && (
 //                       <CardContent className="p-4 bg-white/80">
-//                         <dl className="space-y-3">
-//                           {section.questions.map((question) => (
-//                             <div key={question.id} className="flex flex-col sm:flex-row sm:gap-4">
-//                               <dt className="text-gray-700 font-medium w-full sm:w-1/2 text-sm sm:text-base">{question.label}</dt>
-//                               <dd className="text-gray-600 w-full sm:w-1/2 text-sm sm:text-base">
-//                                 {productData.details[question.id] && String(productData.details[question.id]).trim() !== "" ? (
-//                                   <span>{productData.details[question.id]}</span>
-//                                 ) : (
-//                                   <span className="text-gray-400 italic">Ma’lumot kiritilmagan</span>
-//                                 )}
-//                                 {productData.suppliers[question.id] && (
-//                                   <span className="ml-2 text-xs text-gray-500">
-//                                     (Hamkor: {productData.suppliers[question.id]})
-//                                   </span>
-//                                 )}
-//                               </dd>
-//                             </div>
-//                           ))}
-//                         </dl>
-//                       </CardContent>
+//   <div className="space-y-3">
+//     {section.questions.map((question) => {
+//       const value = productData.details[question.id];
+//       const supplierId = productData.suppliers[question.id];
+//       return (
+//         <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
+//           <div className="flex justify-between items-start">
+//             <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
+//             {supplierId && (
+//               <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
+//                 Hamkor: {supplierId || "Noma'lum"}
+//               </span>
+//             )}
+//           </div>
+//           <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
+//             {value && String(value).trim() !== "" ? value : "Ma'lumot kiritilmagan"}
+//           </p>
+//         </div>
+//       );
+//     })}
+//   </div>
+// </CardContent>
 //                     )}
 //                   </Card>
 //                 );
@@ -379,11 +403,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import { Sidebar } from "@/src/components/manufacturer/Sidebar";
-import { ChevronDown, ChevronUp, Building2, Star } from "lucide-react";
+import { ChevronDown, ChevronUp, Building2, Star, StarHalf, StarOff, Vote } from "lucide-react";
 import { categoryFieldMap, getReverseFieldMap } from "../../../manufacturer/products/note";
 import { categories } from "@/lib/categories";
 import { Label } from "@/src/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 
 type Question = {
   id: string;
@@ -418,6 +442,8 @@ type ProductData = {
   images: string[];
   details: ProductDetails;
   suppliers: SuppliersMap;
+  model: string;
+  user_rating: number | null;
 };
 
 const modelToKey: Record<string, string> = {
@@ -454,14 +480,38 @@ const fetchProductByToken = async (token: string) => {
   }
 };
 
+const submitRating = async (rating: number, productId: string, category: string) => {
+  try {
+    const response = await fetch(`https://api.e-investment.uz/api/v1/products/rating/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        rating,
+        product_id: parseInt(productId),
+        category,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Reyting yuborishda xatolik yuz berdi");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Reyting API xatosi:", error);
+    throw error;
+  }
+};
+
 export default function ProductDetailsPage(): JSX.Element {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [openSections, setOpenSections] = useState<Set<string>>(() => new Set());
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [productData, setProductData] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [ratingFeedback, setRatingFeedback] = useState<string | null>(null);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const params = useParams();
   const token = params.id as string;
@@ -472,7 +522,6 @@ export default function ProductDetailsPage(): JSX.Element {
         setLoading(true);
         const data = await fetchProductByToken(token);
         
-        // Modeldan categoryKey ni aniqlash
         const model = data.model;
         const categoryKey = modelToKey[model] || 
                           modelToKeyLower[model.toLowerCase()] || 
@@ -522,6 +571,8 @@ export default function ProductDetailsPage(): JSX.Element {
           images,
           details,
           suppliers,
+          model: data.model,
+          user_rating: data.user_rating,
         });
       } catch (err) {
         setError("Mahsulot ma'lumotlarini olishda xatolik yuz berdi");
@@ -542,8 +593,6 @@ export default function ProductDetailsPage(): JSX.Element {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) setIsSidebarOpen(true);
-      else setIsSidebarOpen(false);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -622,23 +671,57 @@ export default function ProductDetailsPage(): JSX.Element {
   };
 
   const renderRatingStars = (rating: number) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      const filled = i <= Math.floor(rating);
-      stars.push(
-        <Star
-          key={i}
-          aria-hidden
-          className={`h-4 w-4 sm:h-5 sm:w-5 ${filled ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-        />
-      );
+    return (
+      <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+        {Array.from({ length: 5 }, (_, i) => {
+          const starValue = i + 1;
+          if (rating >= starValue) {
+            return (
+              <Star
+                key={i}
+                className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+              />
+            );
+          } else if (rating >= starValue - 0.5) {
+            return (
+              <StarHalf
+                key={i}
+                className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+              />
+            );
+          } else {
+            return (
+              <StarOff
+                key={i}
+                className="h-3.5 w-3.5 text-gray-300"
+              />
+            );
+          }
+        })}
+      </p>
+    );
+  };
+
+  const handleUserRating = async (newRating: number) => {
+    if (!productData || productData.user_rating !== null) return;
+    try {
+      setRatingFeedback(null);
+      await submitRating(newRating, productData.id, productData.model);
+      setProductData((prev) => prev ? { ...prev, user_rating: newRating, rating: newRating } : prev);
+      setRatingFeedback("Sizning fikringiz biz uchun muhim, rahmat!");
+      setTimeout(() => {
+        setIsRatingModalOpen(false);
+        setRatingFeedback(null);
+      }, 2000);
+    } catch (err) {
+      setRatingFeedback("Reyting yuborishda xatolik yuz berdi");
+      setTimeout(() => setRatingFeedback(null), 5000);
     }
-    return stars;
   };
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center ">
+      <div className="flex min-h-screen items-center justify-center">
         <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
       </div>
     );
@@ -646,15 +729,14 @@ export default function ProductDetailsPage(): JSX.Element {
 
   if (error || !productData) {
     return (
-      <div className="flex min-h-screen items-center justify-center ">
+      <div className="flex min-h-screen items-center justify-center">
         <p className="text-red-600 text-lg">{error || "Mahsulot topilmadi"}</p>
       </div>
     );
   }
 
   return (
-    <div className=" flex min-h-screen">
-      {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> */}
+    <div className="flex min-h-screen">
       <main className="w-full p-4 sm:p-6 md:p-8 lg:p-10">
         <div className="container mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -668,7 +750,54 @@ export default function ProductDetailsPage(): JSX.Element {
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-sm text-gray-700">Reyting:</span>
                 <div className="flex items-center">{renderRatingStars(productData.rating)}</div>
-                <span className="text-sm font-medium text-gray-700">{productData.rating}/5</span>
+                <span className="text-sm font-medium text-gray-700">{productData.rating.toFixed(1)}/5.0</span>
+                <Dialog open={isRatingModalOpen} onOpenChange={setIsRatingModalOpen}>
+                  <DialogTrigger asChild>
+                    <button className="focus:outline-none">
+                      <Vote className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 hover:text-blue-600 transition-colors" />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Mahsulotni baholang</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center gap-4 py-4">
+                      <div className="flex items-center gap-2">
+                        {Array.from({ length: 5 }, (_, i) => {
+                          const starValue = i + 1;
+                          return (
+                            <button
+                              key={i}
+                              onClick={() => handleUserRating(starValue)}
+                              className={`focus:outline-none ${productData.user_rating !== null ? "cursor-not-allowed" : ""}`}
+                              disabled={productData.user_rating !== null}
+                            >
+                              {productData.user_rating && productData.user_rating >= starValue ? (
+                                <Star
+                                  className="h-6 w-6 text-yellow-500 fill-yellow-500"
+                                />
+                              ) : (
+                                <StarOff
+                                  className={`h-6 w-6 ${productData.user_rating !== null ? "text-gray-300" : "text-gray-300 hover:text-yellow-400 hover:scale-110 transition-transform"}`}
+                                />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {ratingFeedback && (
+                        <span className={`text-sm ${ratingFeedback.includes("xatolik") ? "text-red-600" : "text-green-600"}`}>
+                          {ratingFeedback}
+                        </span>
+                      )}
+                      {productData.user_rating !== null && !ratingFeedback && (
+                        <span className="text-sm text-gray-600">
+                          Siz allaqachon {productData.user_rating} baho qo'ygansiz
+                        </span>
+                      )}
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-sm text-gray-700">To‘ldirilganlik:</span>
@@ -739,28 +868,28 @@ export default function ProductDetailsPage(): JSX.Element {
                     </CardHeader>
                     {openSections.has(sectionId) && (
                       <CardContent className="p-4 bg-white/80">
-  <div className="space-y-3">
-    {section.questions.map((question) => {
-      const value = productData.details[question.id];
-      const supplierId = productData.suppliers[question.id];
-      return (
-        <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
-          <div className="flex justify-between items-start">
-            <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
-            {supplierId && (
-              <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
-                Hamkor: {supplierId || "Noma'lum"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
-            {value && String(value).trim() !== "" ? value : "Ma'lumot kiritilmagan"}
-          </p>
-        </div>
-      );
-    })}
-  </div>
-</CardContent>
+                        <div className="space-y-3">
+                          {section.questions.map((question) => {
+                            const value = productData.details[question.id];
+                            const supplierId = productData.suppliers[question.id];
+                            return (
+                              <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
+                                <div className="flex justify-between items-start">
+                                  <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
+                                  {supplierId && (
+                                    <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
+                                      Hamkor: {supplierId || "Noma'lum"}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
+                                  {value && String(value).trim() !== "" ? value : "Ma'lumot kiritilmagan"}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
                     )}
                   </Card>
                 );
