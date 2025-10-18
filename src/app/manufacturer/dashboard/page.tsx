@@ -233,14 +233,14 @@ export default function ManufacturerDashboardPage() {
                   ) : error ? (
                     <p className="text-center text-red-500 py-6">{error}</p>
                   ) : products.length > 0 ? (
-                    products.map((product) => {
+                    products.map((product,idx) => {
                       const currentIdx = carouselIndex[product.id] || 0
                       const hasImages = product.images && product.images.length > 0
                       const displayImg = hasImages ? product?.images?.[currentIdx] : null
-
+                      const key = `${product.id}-${product.status}-${idx}`
                       return (
                         <div
-                          key={product.id}
+                          key={key}
                           className="flex items-center justify-between p-4 rounded-lg bg-background/50 border border-border/50 hover:bg-background/80 transition-all duration-200 hover:shadow-sm"
                         >
                           <div className="flex items-center gap-4">
