@@ -377,14 +377,7 @@ export function HeroSection() {
       <Dialog open={isScannerOpen} onOpenChange={setIsScannerOpen}>
         <DialogContent className="sm:max-w-md bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-2 border-primary/20">
           <div className="relative flex flex-col items-center p-6 space-y-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 hover:bg-primary/10"
-              onClick={handleCloseScanner}
-            >
-              <X className="h-5 w-5 text-muted-foreground" />
-            </Button>
+         
             <h2 className="text-xl font-semibold text-foreground">QR Kodni Skanerlash</h2>
             <div className="w-full h-64 bg-black rounded-lg overflow-hidden">
               <div id="qr-reader" ref={qrReaderRef} className="w-full h-full"></div>
