@@ -241,7 +241,7 @@
 
 //   if (loading) {
 //     return (
-//       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+//       <div className="flex min-h-screen items-center justify-center ">
 //         <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
 //       </div>
 //     );
@@ -249,14 +249,14 @@
 
 //   if (error || !productData) {
 //     return (
-//       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+//       <div className="flex min-h-screen items-center justify-center ">
 //         <p className="text-red-600 text-lg">{error || "Mahsulot topilmadi"}</p>
 //       </div>
 //     );
 //   }
 
 //   return (
-//     <div className="bg-gradient-to-br from-gray-50 to-blue-50 flex min-h-screen">
+//     <div className=" flex min-h-screen">
 //       {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> */}
 //       <main className="w-full p-4 sm:p-6 md:p-8 lg:p-10">
 //         <div className="container mx-auto space-y-6">
@@ -638,7 +638,7 @@ export default function ProductDetailsPage(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="flex min-h-screen items-center justify-center ">
         <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
       </div>
     );
@@ -646,14 +646,14 @@ export default function ProductDetailsPage(): JSX.Element {
 
   if (error || !productData) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="flex min-h-screen items-center justify-center ">
         <p className="text-red-600 text-lg">{error || "Mahsulot topilmadi"}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-blue-50 flex min-h-screen">
+    <div className=" flex min-h-screen">
       {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> */}
       <main className="w-full p-4 sm:p-6 md:p-8 lg:p-10">
         <div className="container mx-auto space-y-6">
