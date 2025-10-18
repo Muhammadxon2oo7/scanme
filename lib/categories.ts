@@ -70,6 +70,7 @@ export const categories: Record<string, Category> = {
   },
 "2": {
     name: "Maishiy texnika",
+    model:"MaishiyTexnikaProduct",
     sections: {
       "2.1": {
         title: "Umumiy ma’lumotlar",
@@ -165,6 +166,7 @@ export const categories: Record<string, Category> = {
   },
   "4": {
     name: "Oziq-ovqat",
+    model:"FoodProduct",
     sections: {
       "4.1": {
         title: "Umumiy ma’lumotlar",
@@ -254,6 +256,7 @@ export const categories: Record<string, Category> = {
   },
   "6": {
     name: "Aksessuarlar",
+    model:"AksessuarProduct",
     sections: {
       "6.1": {
         title: "Umumiy ma’lumotlar",
@@ -295,6 +298,7 @@ export const categories: Record<string, Category> = {
   },
   "7": {
     name: "Salomatlik",
+    model:"SalomatlikProduct",
     sections: {
       "7.1": {
         title: "Umumiy ma’lumotlar",
@@ -336,6 +340,7 @@ export const categories: Record<string, Category> = {
   },
   "8": {
     name: "Uy-ro‘zg‘or buyumlari",
+    model:"UyBuyumProduct",
     sections: {
       "8.1": {
         title: "Umumiy ma’lumotlar",
@@ -376,6 +381,7 @@ export const categories: Record<string, Category> = {
   },
   "9": {
     name: "Kanselyariya",
+    model:"KanselyariyaProduct",
     sections: {
       "9.1": {
         title: "Umumiy ma’lumotlar",

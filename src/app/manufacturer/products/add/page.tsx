@@ -401,7 +401,13 @@ import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
 import { CheckCircle, ChevronDown, Plus } from "lucide-react";
 import { categories } from "@/lib/categories";
 import { getPartners, createProduct } from "@/lib/api";
@@ -433,7 +439,7 @@ export default function AddProductPage() {
       try {
         setLoadingPartners(true);
         const data = await getPartners();
-        const myId = Cookies.get('myid');
+        const myId = Cookies.get("myid");
         if (!myId) return;
         const partnerSet = new Set<string>();
         const mappedPartners: Partner[] = [];
@@ -453,7 +459,7 @@ export default function AddProductPage() {
         });
         setPartners(mappedPartners);
       } catch (error: any) {
-        setErrorPartners(error.message || 'Ta\'minotchilarni yuklashda xato');
+        setErrorPartners(error.message || "Ta'minotchilarni yuklashda xato");
         console.error(error);
       } finally {
         setLoadingPartners(false);
@@ -499,7 +505,7 @@ export default function AddProductPage() {
       return newSuppliers;
     });
     if (value) {
-      setFormData(prev => ({ ...prev, [questionId]: '' })); // Ta'minotchi tanlanganda maydonni tozalash
+      setFormData((prev) => ({ ...prev, [questionId]: "" })); // Ta'minotchi tanlanganda maydonni tozalash
     }
   };
 
@@ -512,16 +518,43 @@ export default function AddProductPage() {
   };
 
   const isSupplierSection = (sectionId: string) => {
-    return !["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "6.1", "6.2", "7.1", "7.2", "8.1", "8.2", "9.1", "9.2"].includes(sectionId);
+    return ![
+      "1.1",
+      "1.2",
+      "2.1",
+      "2.2",
+      "3.1",
+      "3.2",
+      "4.1",
+      "4.2",
+      "5.1",
+      "5.2",
+      "6.1",
+      "6.2",
+      "7.1",
+      "7.2",
+      "8.1",
+      "8.2",
+      "9.1",
+      "9.2",
+      "1.4",
+      "2.4",
+      "4.4",
+      "6.4",
+      "7.4",
+      "9.4"
+    ].includes(sectionId);
   };
 
   const handleSubmit = async () => {
     if (!selectedCategory || submitting) return;
     const categoryConfig = categories[selectedCategory];
-    if (!categoryConfig) return alert('Kategoriya topilmadi');
+    if (!categoryConfig) return alert("Kategoriya topilmadi");
 
-    const nameQuestionId = Object.values(categoryConfig.sections).flatMap(sec => sec.questions)[0]?.id;
-    if (!formData[nameQuestionId]) return alert('Mahsulot nomi kiritilmadi');
+    const nameQuestionId = Object.values(categoryConfig.sections).flatMap(
+      (sec) => sec.questions
+    )[0]?.id;
+    if (!formData[nameQuestionId]) return alert("Mahsulot nomi kiritilmadi");
 
     setSubmitting(true);
     const payload: Record<string, any> = {
@@ -529,13 +562,15 @@ export default function AddProductPage() {
     };
 
     const fieldMap = categoryFieldMap[selectedCategory] || {};
-    const allQuestions = Object.values(categoryConfig.sections).flatMap(sec => sec.questions.map(q => q.id));
+    const allQuestions = Object.values(categoryConfig.sections).flatMap((sec) =>
+      sec.questions.map((q) => q.id)
+    );
 
-    allQuestions.forEach(qid => {
+    allQuestions.forEach((qid) => {
       const apiField = fieldMap[qid];
       if (!apiField) return;
 
-      const sectionId = qid.split('.').slice(0, 2).join('.');
+      const sectionId = qid.split(".").slice(0, 2).join(".");
       const isSupplierSec = isSupplierSection(sectionId);
 
       if (isSupplierSec) {
@@ -545,31 +580,31 @@ export default function AddProductPage() {
           payload[apiField] = formData[qid];
         }
       } else {
-        payload[apiField] = formData[qid] || '';
+        payload[apiField] = formData[qid] || "";
       }
     });
 
     try {
       const formDataToSend = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && value !== '') {
+        if (value !== null && value !== undefined && value !== "") {
           formDataToSend.append(key, value);
         }
       });
       if (imageFiles.length > 0) {
         imageFiles.forEach((file) => {
-          formDataToSend.append('images', file);
+          formDataToSend.append("images", file);
         });
       }
 
       await createProduct(selectedCategory, formDataToSend);
       setIsSubmitted(true);
       setTimeout(() => {
-        router.push('/manufacturer/products');
+        router.push("/manufacturer/products");
       }, 3000);
     } catch (error: any) {
-      console.error('Yaratishda xato:', error);
-      alert(`Xato: ${error.message || 'Mahsulot qo‘shilmadi'}`);
+      console.error("Yaratishda xato:", error);
+      alert(`Xato: ${error.message || "Mahsulot qo‘shilmadi"}`);
     } finally {
       setSubmitting(false);
     }
@@ -620,7 +655,11 @@ export default function AddProductPage() {
                   </SelectTrigger>
                   <SelectContent className="bg-white shadow-md">
                     {Object.entries(categories).map(([key, category]) => (
-                      <SelectItem key={key} value={key} className="hover:bg-blue-50">
+                      <SelectItem
+                        key={key}
+                        value={key}
+                        className="hover:bg-blue-50"
+                      >
                         {category.name}
                       </SelectItem>
                     ))}
@@ -631,7 +670,10 @@ export default function AddProductPage() {
               {selectedCategory && (
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="images" className="text-gray-700 font-medium">
+                    <Label
+                      htmlFor="images"
+                      className="text-gray-700 font-medium"
+                    >
                       Mahsulot Rasmlari (maksimum 5 ta)
                     </Label>
                     <Input
@@ -662,119 +704,161 @@ export default function AddProductPage() {
                         </div>
                       ))}
                       {imageFiles.length < 5 && (
-  <div
-    className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer 
+                        <div
+                          className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer 
                transition-all duration-300 hover:bg-blue-200/60 hover:shadow-md hover:shadow-blue-300/50 
                group"
-    onClick={() => {
-      console.log("bosildi------------------")
-      fileInputRef.current?.click()
-    }}
-  >
-    <Plus className="h-6 w-6 text-gray-600 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-125" />
-  </div>
-)}
+                          onClick={() => {
+                            console.log("bosildi------------------");
+                            fileInputRef.current?.click();
+                          }}
+                        >
+                          <Plus className="h-6 w-6 text-gray-600 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-125" />
+                        </div>
+                      )}
 
-<input
-  type="file"
-  accept="image/*"
-  ref={fileInputRef}
-  onChange={handleImageChange}
-  className="hidden"
-/>
-
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
                     </div>
                   </div>
-                  {loadingPartners && <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p>}
-                  {errorPartners && <p className="text-red-500">{errorPartners}</p>}
-                  {Object.entries(categories[selectedCategory].sections).map(([sectionId, section]) => (
-                    <Card
-                      key={sectionId}
-                      className="bg-gradient-to-br from-blue-50 to-white/90 border-blue-100 shadow-sm hover:shadow-md transition-all duration-300"
-                    >
-                      <CardHeader
-                        className="flex items-center justify-between p-4 cursor-pointer bg-blue-100/50 hover:bg-blue-200/50 rounded-t-lg"
-                        onClick={() => toggleSection(sectionId)}
+                  {loadingPartners && (
+                    <p className="text-gray-500">
+                      Ta'minotchilar yuklanmoqda...
+                    </p>
+                  )}
+                  {errorPartners && (
+                    <p className="text-red-500">{errorPartners}</p>
+                  )}
+                  {Object.entries(categories[selectedCategory].sections).map(
+                    ([sectionId, section]) => (
+                      <Card
+                        key={sectionId}
+                        className="bg-gradient-to-br from-blue-50 to-white/90 border-blue-100 shadow-sm hover:shadow-md transition-all duration-300"
                       >
-                        <h3 className="text-lg font-medium text-gray-800">{section.title}</h3>
-                        <ChevronDown
-                          className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
-                            openSections.has(sectionId) ? "rotate-180" : ""
-                          }`}
-                        />
-                      </CardHeader>
-                      {openSections.has(sectionId) && (
-                        <CardContent className="p-4 space-y-4 bg-white/80">
-                          {section.questions.map((question) => (
-                            <div key={question.id} className="space-y-2">
-                              {isSupplierSection(sectionId) ? (
-                                <div className="flex gap-4 items-end">
-                                  <div className="flex-1 space-y-2">
-                                    <Label htmlFor={question.id} className="text-gray-700">
+                        <CardHeader
+                          className="flex items-center justify-between p-4 cursor-pointer bg-blue-100/50 hover:bg-blue-200/50 rounded-t-lg"
+                          onClick={() => toggleSection(sectionId)}
+                        >
+                          <h3 className="text-lg font-medium text-gray-800">
+                            {section.title}
+                          </h3>
+                          <ChevronDown
+                            className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
+                              openSections.has(sectionId) ? "rotate-180" : ""
+                            }`}
+                          />
+                        </CardHeader>
+                        {openSections.has(sectionId) && (
+                          <CardContent className="p-4 space-y-4 bg-white/80">
+                            {section.questions.map((question) => (
+                              <div key={question.id} className="space-y-2">
+                                {isSupplierSection(sectionId) ? (
+                                  <div className="flex gap-4 items-end">
+                                    <div className="flex-1 space-y-2">
+                                      <Label
+                                        htmlFor={question.id}
+                                        className="text-gray-700"
+                                      >
+                                        {question.label}
+                                      </Label>
+                                      <Input
+                                        id={question.id}
+                                        value={formData[question.id] || ""}
+                                        onChange={(e) =>
+                                          handleInputChange(
+                                            question.id,
+                                            e.target.value
+                                          )
+                                        }
+                                        placeholder={question.placeholder}
+                                        className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white"
+                                        disabled={!!suppliers[question.id]}
+                                      />
+                                      {suppliers[question.id] && (
+                                        <p className="text-xs text-gray-500 mt-1">
+                                          Bu maydon{" "}
+                                          {partners.find(
+                                            (p) =>
+                                              p.id === suppliers[question.id]
+                                          )?.name ||
+                                            suppliers[question.id]}{" "}
+                                          tomonidan to'ldiriladi
+                                        </p>
+                                      )}
+                                    </div>
+                                    <div className="w-48 space-y-2">
+                                      <Label className="text-gray-700 font-medium text-xs">
+                                        Ta'minotchi
+                                      </Label>
+                                      <Select
+                                        onValueChange={(value) => {
+                                          handleSupplierChange(
+                                            question.id,
+                                            value === "none" ? "" : value
+                                          );
+                                        }}
+                                        value={suppliers[question.id] || "none"} // agar hech narsa tanlanmagan bo‘lsa — "none"
+                                        disabled={loadingPartners}
+                                      >
+                                        <SelectTrigger className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white/80 h-10">
+                                          <SelectValue placeholder="Tanlang" />
+                                        </SelectTrigger>
+
+                                        <SelectContent className="bg-white shadow-md">
+                                          <SelectItem
+                                            value="none"
+                                            className="hover:bg-blue-50"
+                                          >
+                                            Ta'minotchi tanlamaslik
+                                          </SelectItem>
+
+                                          {partners.map((partner) => (
+                                            <SelectItem
+                                              key={partner.id}
+                                              value={partner.id.toString()}
+                                              className="hover:bg-blue-50"
+                                            >
+                                              {partner.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <Label
+                                      htmlFor={question.id}
+                                      className="text-gray-700"
+                                    >
                                       {question.label}
                                     </Label>
                                     <Input
                                       id={question.id}
                                       value={formData[question.id] || ""}
-                                      onChange={(e) => handleInputChange(question.id, e.target.value)}
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          question.id,
+                                          e.target.value
+                                        )
+                                      }
                                       placeholder={question.placeholder}
-                                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white"
-                                      disabled={!!suppliers[question.id]}
+                                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base w-full bg-white"
                                     />
-                                    {suppliers[question.id] && (
-                                      <p className="text-xs text-gray-500 mt-1">
-                                        Bu maydon {partners.find(p => p.id === suppliers[question.id])?.name || suppliers[question.id]} tomonidan to'ldiriladi
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="w-48 space-y-2">
-                                    <Label className="text-gray-700 font-medium text-xs">Ta'minotchi</Label>
-                                    <Select
-  onValueChange={(value) => {
-    handleSupplierChange(question.id, value === "none" ? "" : value)
-  }}
-  value={suppliers[question.id] || "none"} // agar hech narsa tanlanmagan bo‘lsa — "none"
-  disabled={loadingPartners}
->
-  <SelectTrigger className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white/80 h-10">
-    <SelectValue placeholder="Tanlang" />
-  </SelectTrigger>
-
-  <SelectContent className="bg-white shadow-md">
-    <SelectItem value="none" className="hover:bg-blue-50">
-      Ta'minotchi tanlamaslik
-    </SelectItem>
-
-    {partners.map((partner) => (
-      <SelectItem key={partner.id} value={partner.id.toString()} className="hover:bg-blue-50">
-        {partner.name}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-
-                                  </div>
-                                </div>
-                              ) : (
-                                <>
-                                  <Label htmlFor={question.id} className="text-gray-700">
-                                    {question.label}
-                                  </Label>
-                                  <Input
-                                    id={question.id}
-                                    value={formData[question.id] || ""}
-                                    onChange={(e) => handleInputChange(question.id, e.target.value)}
-                                    placeholder={question.placeholder}
-                                    className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base w-full bg-white"
-                                  />
-                                </>
-                              )}
-                            </div>
-                          ))}
-                        </CardContent>
-                      )}
-                    </Card>
-                  ))}
+                                  </>
+                                )}
+                              </div>
+                            ))}
+                          </CardContent>
+                        )}
+                      </Card>
+                    )
+                  )}
                 </div>
               )}
 

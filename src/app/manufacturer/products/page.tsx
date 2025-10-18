@@ -1192,34 +1192,54 @@ export default function ManufacturerProductsPage() {
     };
   }, [products]);
 
-  const fetchPartners = async () => {
-    try {
-      setLoadingPartners(true);
-      const data = await getPartners();
-      const myId = Cookies.get("myid");
-      const map: Record<string, string> = {};
-      if (myId) {
-        data.forEach((item: any) => {
-          let partnerId, partnerName;
+const fetchPartners = async () => {
+  try {
+    setLoadingPartners(true);
+    const data = await getPartners();
+    const myId = Cookies.get("myid");
+    const isStaff = Cookies.get("is_staff") === "true";
+    const map: Record<string, string> = {};
+
+    if (Array.isArray(data)) {
+      data.forEach((item: any) => {
+        // Tekshirish: item.owner va item.partner mavjudligi
+        if (!item.owner || !item.partner) {
+          console.warn("Noto'g'ri partner ma'lumoti:", item);
+          return;
+        }
+
+        // Xodim bo'lsa, barcha ta'minotchilarni qo'shish
+        if (isStaff) {
+          // owner va partner ni map ga qo'shish
+          map[item.owner.id] = item.owner.name || "Noma'lum ta'minotchi";
+          map[item.partner.id] = item.partner.name || "Noma'lum ta'minotchi";
+        } else {
+          // Xodim bo'lmasa, faqat myId ga nisbatan ta'minotchilarni qo'shish
+          let partnerId: string, partnerName: string;
           if (item.owner.id === myId) {
             partnerId = item.partner.id;
-            partnerName = item.partner.name;
+            partnerName = item.partner.name || "Noma'lum ta'minotchi";
           } else {
             partnerId = item.owner.id;
-            partnerName = item.owner.name;
+            partnerName = item.owner.name || "Noma'lum ta'minotchi";
           }
           if (partnerId && partnerId !== myId) {
             map[partnerId] = partnerName;
           }
-        });
-      }
-      setPartnersMap(map);
-    } catch (error) {
-      console.error("Ta'minotchilarni yuklashda xato:", error);
-    } finally {
-      setLoadingPartners(false);
+        }
+      });
+    } else {
+      console.warn("Data massiv emas:", data);
     }
-  };
+
+    setPartnersMap(map);
+    console.log("Yaratilgan partnersMap:", map);
+  } catch (error) {
+    console.error("Ta'minotchilarni yuklashda xato:", error);
+  } finally {
+    setLoadingPartners(false);
+  }
+};
 
   const fetchProducts = async () => {
     try {

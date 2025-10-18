@@ -38,7 +38,7 @@ export function ManufacturerLoginForm() {
       const response = await manufacturerLogin(loginData)
       if (response.tokens?.access) {
         setSuccess(true)
-        setTimeout(() => router.push("/manufacturer/dashboard"), 1500)
+        setTimeout(() => router.push("/manufacturer/profile"), 1500)
       } else {
         setError(response.message || "Kirishda xatolik yuz berdi")
       }
