@@ -999,6 +999,7 @@ import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
 import { Input } from "@/src/components/ui/input";
+import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -1829,9 +1830,10 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
                               <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
                               <p className="text-sm text-gray-600">{product.category}</p>
                               {isStaff && product.created_at && (
-                                <p className="text-xs text-gray-500">
-                                  Yaratilgan: {new Date(product.created_at).toLocaleDateString('uz-UZ')}
-                                </p>
+                                
+                                 <p className="flex gap-[2px] items-center"><p className="text-gray-500 text-xs">Yaratilgan: </p>  <p className="text-xs text-gray-500 ">
+                                  {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
+                                </p></p>
                               )}
                             </div>
                           </div>
@@ -1909,7 +1911,9 @@ const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
     <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
     <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
     {isStaff && product.created_at && (
-      <p><strong className="text-gray-700">Yaratilgan:</strong> {new Date(product.created_at).toLocaleDateString('uz-UZ')}</p>
+      <p className="flex gap-[2px] items-center"><strong className="text-gray-700">Yaratilgan: </strong>  <p className="text-xs text-gray-500 ">
+                                  {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
+                                </p></p>
     )}
   </div>
 
