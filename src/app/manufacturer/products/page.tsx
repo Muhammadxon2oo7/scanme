@@ -52,47 +52,7 @@
 //   AlertDialogTitle,
 //   AlertDialogTrigger,
 // } from "@/src/components/ui/alert-dialog";
-
-// const categoryFieldMap: Record<string, Record<string, string>> = {
-//   // 1. Gadjetlar
-//   "1": {
-//     "1.1.1": "name",
-//     "1.1.2": "turi",
-//     "1.1.3": "ishlab_chiqarilgan_davlat",
-//     "1.1.4": "ishlab_chiqaruvchi_tashkilot",
-//     "1.1.5": "kafolat_muddati",
-//     "1.1.6": "ishlash_muddati",
-//     "1.2.1": "olchami",
-//     "1.2.2": "ogirligi",
-//     "1.2.3": "batareya_sigimi",
-//     "1.2.4": "quvvati",
-//     "1.2.5": "energiya_sarfi",
-//     "1.2.6": "ekran_olchami",
-//     "1.2.7": "protsessor_turi",
-//     "1.2.8": "operativ_xotira",
-//     "1.2.9": "doimiy_xotira",
-//     "1.2.10": "operatsion_tizim",
-//     "1.2.11": "kamera_korsatkichlari",
-//     "1.2.12": "yangi_texnologiyalar",
-//     "1.3.1": "materiallar",
-//     "1.3.2": "qadoqlash_materiali",
-//     "1.3.3": "qayta_ishlash_imkoniyati",
-//     "1.4.1": "sertifikatlari",
-//     "1.4.2": "maxsus_xavfsizlik_sertifikati",
-//     "1.4.3": "saqlash_yoriqnoma",
-//     "1.4.4": "tamirlash_imkoniyati",
-//   },
-//   // ...
-// };
-
-// const getReverseFieldMap = (categoryKey: string): Record<string, string> => {
-//   const map: Record<string, string> = {};
-//   const fieldMap = categoryFieldMap[categoryKey] || {};
-//   Object.entries(fieldMap).forEach(([uiId, apiField]) => {
-//     map[apiField] = uiId;
-//   });
-//   return map;
-// };
+// import { categoryFieldMap, getReverseFieldMap } from "./note";
 
 // const modelToKey: Record<string, string> = {
 //   GadgetProduct: "1",
@@ -363,7 +323,10 @@
 //     setReplaceImages(true);
 //     setKeptOriginalImages([]);
 //     setEditImageFiles([]);
-//     if (fileInputRef.current) fileInputRef.current.value = "";
+//     if (fileInputRef.current) {
+//       fileInputRef.current.value = "";
+//       fileInputRef.current.click();
+//     }
 //   };
 
 //   const handleDeleteProduct = async (productId: string, categoryKey: string) => {
@@ -417,7 +380,6 @@
 //         payload.append('images', file);
 //         hasPatchData = true;
 //       });
-
 //       if (hasPatchData) {
 //         await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
 //       }
@@ -473,6 +435,7 @@
 
 //       let images: string[] = [];
 //       if (fullDetails.images) {
+//         // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : [] 
 //         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
 //       } else if (fullDetails.image) {
 //         images = [fullDetails.image];
@@ -592,7 +555,7 @@
 //                       accept="image/*"
 //                       multiple
 //                       onChange={handleImageChange}
-//                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
+//                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden "
 //                       ref={fileInputRef}
 //                     />
 //                     <div className="flex flex-wrap gap-4">
@@ -606,18 +569,33 @@
 //                           <Button
 //                             variant="destructive"
 //                             size="sm"
-//                             className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-//                             onClick={() => handleRemoveNewImage(index)}
-//                           >
+//                             className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-429 "
+//                             onClick={() => handleRemoveNewImage(index)}>
 //                             <X className="h-4 w-4" />
 //                           </Button>
 //                         </div>
 //                       ))}
-//                       {editImageFiles.length === 0 && (
-//                         <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
-//                           <Plus className="h-6 w-6 text-gray-600" />
-//                         </div>
-//                       )}
+//                       <div>
+//       {/* Plus tugma */}
+//       <div
+//         className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
+//         onClick={() => {
+//           console.log("bosildi------------------")
+//           fileInputRef.current?.click()
+//         }}
+//       >
+//         <Plus className="h-6 w-6 text-gray-600" />
+//       </div>
+
+//       {/* Yashirin fayl input */}
+//       <input
+//         type="file"
+//         accept="image/*"
+//         ref={fileInputRef}
+//         onChange={handleImageChange}
+//         className="hidden"
+//       />
+//     </div>
 //                     </div>
 //                   </>
 //                 )}
@@ -1045,6 +1023,7 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  QrCode,
 } from "lucide-react";
 import { categories } from "@/lib/categories";
 import {
@@ -1098,6 +1077,7 @@ interface Product {
   blockchain_hash?: string;
   qr_code?: string;
   categoryModel?: string;
+  created_at?: string;
 }
 
 const getStatusText = (status: Product["status"]) => {
@@ -1159,6 +1139,8 @@ export default function ManufacturerProductsPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [replaceImages, setReplaceImages] = useState(false);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [selectedQrCode, setSelectedQrCode] = useState<string | null>(null);
 
   useEffect(() => {
     const staffStatus = Cookies.get('is_staff') === 'true';
@@ -1238,7 +1220,7 @@ export default function ManufacturerProductsPage() {
             
             Object.entries(item).forEach(([apiField, value]) => {
               if (typeof value !== 'string' && typeof value !== 'number') return;
-              if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
+              if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name', 'created_at'].includes(apiField)) return;
               
               const cleanField = apiField.replace('_org', '');
               const uiId = reverseMap[cleanField];
@@ -1275,6 +1257,7 @@ export default function ManufacturerProductsPage() {
               blockchain_hash: item.blockchain_hash,
               qr_code: item.qr_code,
               categoryModel: cat.model,
+              created_at: item.created_at,
             });
           });
         });
@@ -1431,7 +1414,7 @@ export default function ManufacturerProductsPage() {
       
       Object.entries(fullDetails).forEach(([apiField, value]) => {
         if (typeof value !== 'string' && typeof value !== 'number') return;
-        if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code'].includes(apiField)) return;
+        if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'created_at'].includes(apiField)) return;
         
         const cleanField = apiField.replace('_org', '');
         const uiId = reverseMap[cleanField];
@@ -1449,7 +1432,6 @@ export default function ManufacturerProductsPage() {
 
       let images: string[] = [];
       if (fullDetails.images) {
-        // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : [] 
         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
       } else if (fullDetails.image) {
         images = [fullDetails.image];
@@ -1459,7 +1441,8 @@ export default function ManufacturerProductsPage() {
         ...product, 
         details, 
         suppliers, 
-        images 
+        images,
+        created_at: fullDetails.created_at,
       };
       setSelectedProduct(updatedProduct);
       setCurrentImages(images);
@@ -1477,6 +1460,18 @@ export default function ManufacturerProductsPage() {
       setOriginalFormData(product.details || {});
     }
   };
+const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
+  const proxyUrl = `/api/proxy?url=${encodeURIComponent(qrCodeUrl)}`;
+  const link = document.createElement("a");
+  link.href = proxyUrl;
+  link.download = `${productName}_qr_code.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
+
 
   const renderSuppliersList = (suppliers: Record<string, string> | undefined) => {
     if (!suppliers || Object.keys(suppliers).length === 0) return null;
@@ -1569,7 +1564,7 @@ export default function ManufacturerProductsPage() {
                       accept="image/*"
                       multiple
                       onChange={handleImageChange}
-                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden "
+                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden"
                       ref={fileInputRef}
                     />
                     <div className="flex flex-wrap gap-4">
@@ -1583,33 +1578,19 @@ export default function ManufacturerProductsPage() {
                           <Button
                             variant="destructive"
                             size="sm"
-                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-429 "
-                            onClick={() => handleRemoveNewImage(index)}>
+                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
+                            onClick={() => handleRemoveNewImage(index)}
+                          >
                             <X className="h-4 w-4" />
                           </Button>
                         </div>
                       ))}
-                      <div>
-      {/* Plus tugma */}
-      <div
-        className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
-        onClick={() => {
-          console.log("bosildi------------------")
-          fileInputRef.current?.click()
-        }}
-      >
-        <Plus className="h-6 w-6 text-gray-600" />
-      </div>
-
-      {/* Yashirin fayl input */}
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputRef}
-        onChange={handleImageChange}
-        className="hidden"
-      />
-    </div>
+                      <div
+                        className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Plus className="h-6 w-6 text-gray-600" />
+                      </div>
                     </div>
                   </>
                 )}
@@ -1675,10 +1656,7 @@ export default function ManufacturerProductsPage() {
           <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
             <CardHeader
               className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${!isViewOnly ? 'cursor-pointer hover:bg-blue-200/50' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                !isViewOnly && toggleSection(sectionId)
-              }}
+              onClick={() => !isViewOnly && toggleSection(sectionId)}
             >
               <h4 className="text-lg font-medium text-gray-800">{section.title}</h4>
               {!isViewOnly && (
@@ -1830,6 +1808,8 @@ export default function ManufacturerProductsPage() {
                         setOpenSections(new Set());
                         setIsDeleted(false);
                         setLightboxOpen(false);
+                        setQrModalOpen(false);
+                        setSelectedQrCode(null);
                       } else {
                         setSelectedProduct(product);
                         fetchSelectedProductDetails(product);
@@ -1848,6 +1828,11 @@ export default function ManufacturerProductsPage() {
                             <div>
                               <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
                               <p className="text-sm text-gray-600">{product.category}</p>
+                              {isStaff && product.created_at && (
+                                <p className="text-xs text-gray-500">
+                                  Yaratilgan: {new Date(product.created_at).toLocaleDateString('uz-UZ')}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
@@ -1864,6 +1849,20 @@ export default function ManufacturerProductsPage() {
                             >
                               {getStatusText(product.status)}
                             </Badge>
+                            {isStaff && product.status === "active" && product.qr_code && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedQrCode(product.qr_code!);
+                                  setQrModalOpen(true);
+                                }}
+                                className="hover:bg-blue-100"
+                              >
+                                <QrCode className="h-4 w-4 text-blue-600" />
+                              </Button>
+                            )}
                           </div>
                           {!isStaff && product.status === "in-progress" && (
                             <div onClick={(e) => e.stopPropagation()}>
@@ -1902,18 +1901,40 @@ export default function ManufacturerProductsPage() {
                           <DialogTitle className="text-2xl font-semibold text-gray-800">
                             {product.name} tafsilotlar
                           </DialogTitle>
+                          
                         </DialogHeader>
                         <div className="space-y-6 mt-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-                            <div>
-                              <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
-                              <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
-                            </div>
-                            <div>
-                              <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
-                              <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
-                            </div>
-                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+  <div>
+    <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
+    <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
+    {isStaff && product.created_at && (
+      <p><strong className="text-gray-700">Yaratilgan:</strong> {new Date(product.created_at).toLocaleDateString('uz-UZ')}</p>
+    )}
+  </div>
+
+  <div>
+    <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
+    <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
+  </div>
+
+  {isStaff && product.status === "active" && product.qr_code && (
+    <div className="flex justify-end items-center">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => {
+          setSelectedQrCode(product.qr_code!);
+          setQrModalOpen(true);
+        }}
+        className="hover:bg-blue-100 h-[40px] w-[40px]"
+      >
+        <QrCode className="h-5 w-5 text-blue-600" />
+      </Button>
+    </div>
+  )}
+</div>
+
                           {isDeleted && (
                             <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
                               <CheckCircle className="h-5 w-5 text-green-600" />
@@ -1999,6 +2020,30 @@ export default function ManufacturerProductsPage() {
               )}
             </div>
           </Card>
+          <Dialog open={qrModalOpen} onOpenChange={setQrModalOpen}>
+            <DialogContent className="max-w-md p-6 bg-white/95 rounded-xl shadow-2xl border border-blue-200/50">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-semibold text-gray-800">
+                  QR Kod
+                </DialogTitle>
+              </DialogHeader>
+              {selectedQrCode && (
+                <div className="flex flex-col items-center gap-4">
+                  <img
+                    src={selectedQrCode}
+                    alt="Mahsulot QR kodi"
+                    className="w-64 h-64 object-contain"
+                  />
+                  <Button
+                    onClick={() => handleDownloadQrCode(selectedQrCode, selectedProduct?.name || "product")}
+                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
+                  >
+                    QR Kodni Yuklab Olish
+                  </Button>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       </main>
     </div>
