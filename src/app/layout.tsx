@@ -26,16 +26,15 @@ export const metadata: Metadata = {
   authors: [{ name: "E-Investment Team", url: "https://e-investment.uz" }],
   creator: "E-Investment",
   publisher: "E-Investment",
-  // metadataBase: new URL("https://scanme.uz"), // agar domening bo‘lsa shu yerga yoz
   openGraph: {
     title: "ScanMe – QR kod orqali tezkor mahsulot tekshiruvi",
     description:
       "Mahsulotni QR kod orqali tekshiring. E-Investment tomonidan ishlab chiqilgan ScanMe platformasi bilan ishonchli natijalarga ega bo‘ling.",
-    url: "https://scanme.uz",
+    url: "https://scan-tech.netlify.app",
     siteName: "ScanMe",
     images: [
       {
-        url: "https://scanme.uz/og-image.png", // Open Graph uchun rasm (og:image)
+        url: "https://scan-tech.netlify.app/og-image.png", // Open Graph uchun rasm (og:image)
         width: 1200,
         height: 630,
         alt: "ScanMe platformasi",
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
     title: "ScanMe – QR kod orqali mahsulot tekshiruvi",
     description:
       "ScanMe orqali QR kodni skanerlab mahsulot haqidagi ma'lumotni tezda oling. Ishonchli. Tezkor. Zamonaviy.",
-    images: ["https://scanme.uz/og-image.png"],
+    images: ["https://scan-tech.netlify.app/og-image.png"],
     creator: "@einvestment_uz", // agar Twitter akkaunting bo‘lsa shu yerda yoz
   },
   icons: {
@@ -58,7 +57,7 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   alternates: {
-    canonical: "https://scanme.uz",
+    canonical: "https://scan-tech.netlify.app",
   },
 };
 
