@@ -4,11 +4,11 @@
 // import { useRouter, useParams } from "next/navigation";
 // import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
 // import { Button } from "@/src/components/ui/button";
-// import { Sidebar } from "@/src/components/manufacturer/Sidebar";
-// import { ChevronDown, ChevronUp, Building2, Star } from "lucide-react";
+// import { ChevronDown, ChevronUp, Building2, Star, StarHalf, StarOff, Vote } from "lucide-react";
 // import { categoryFieldMap, getReverseFieldMap } from "../../../manufacturer/products/note";
 // import { categories } from "@/lib/categories";
 // import { Label } from "@/src/components/ui/label";
+// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 
 // type Question = {
 //   id: string;
@@ -43,6 +43,8 @@
 //   images: string[];
 //   details: ProductDetails;
 //   suppliers: SuppliersMap;
+//   model: string;
+//   user_rating: number | null;
 // };
 
 // const modelToKey: Record<string, string> = {
@@ -79,14 +81,38 @@
 //   }
 // };
 
+// const submitRating = async (rating: number, productId: string, category: string) => {
+//   try {
+//     const response = await fetch(`https://api.e-investment.uz/api/v1/products/rating/`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         rating,
+//         product_id: parseInt(productId),
+//         category,
+//       }),
+//     });
+//     if (!response.ok) {
+//       throw new Error("Reyting yuborishda xatolik yuz berdi");
+//     }
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Reyting API xatosi:", error);
+//     throw error;
+//   }
+// };
+
 // export default function ProductDetailsPage(): JSX.Element {
-//   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 //   const [isMobile, setIsMobile] = useState<boolean>(false);
 //   const [openSections, setOpenSections] = useState<Set<string>>(() => new Set());
 //   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 //   const [productData, setProductData] = useState<ProductData | null>(null);
 //   const [loading, setLoading] = useState<boolean>(true);
 //   const [error, setError] = useState<string | null>(null);
+//   const [ratingFeedback, setRatingFeedback] = useState<string | null>(null);
+//   const [isRatingModalOpen, setIsRatingModalOpen] = useState<boolean>(false);
 //   const router = useRouter();
 //   const params = useParams();
 //   const token = params.id as string;
@@ -97,7 +123,6 @@
 //         setLoading(true);
 //         const data = await fetchProductByToken(token);
         
-//         // Modeldan categoryKey ni aniqlash
 //         const model = data.model;
 //         const categoryKey = modelToKey[model] || 
 //                           modelToKeyLower[model.toLowerCase()] || 
@@ -147,6 +172,8 @@
 //           images,
 //           details,
 //           suppliers,
+//           model: data.model,
+//           user_rating: data.user_rating,
 //         });
 //       } catch (err) {
 //         setError("Mahsulot ma'lumotlarini olishda xatolik yuz berdi");
@@ -167,8 +194,6 @@
 //   useEffect(() => {
 //     const handleResize = () => {
 //       setIsMobile(window.innerWidth < 768);
-//       if (window.innerWidth >= 768) setIsSidebarOpen(true);
-//       else setIsSidebarOpen(false);
 //     };
 //     handleResize();
 //     window.addEventListener("resize", handleResize);
@@ -247,23 +272,57 @@
 //   };
 
 //   const renderRatingStars = (rating: number) => {
-//     const stars = [];
-//     for (let i = 1; i <= 5; i++) {
-//       const filled = i <= Math.floor(rating);
-//       stars.push(
-//         <Star
-//           key={i}
-//           aria-hidden
-//           className={`h-4 w-4 sm:h-5 sm:w-5 ${filled ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-//         />
-//       );
+//     return (
+//       <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+//         {Array.from({ length: 5 }, (_, i) => {
+//           const starValue = i + 1;
+//           if (rating >= starValue) {
+//             return (
+//               <Star
+//                 key={i}
+//                 className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+//               />
+//             );
+//           } else if (rating >= starValue - 0.5) {
+//             return (
+//               <StarHalf
+//                 key={i}
+//                 className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
+//               />
+//             );
+//           } else {
+//             return (
+//               <StarOff
+//                 key={i}
+//                 className="h-3.5 w-3.5 text-gray-300"
+//               />
+//             );
+//           }
+//         })}
+//       </p>
+//     );
+//   };
+
+//   const handleUserRating = async (newRating: number) => {
+//     if (!productData || productData.user_rating !== null) return;
+//     try {
+//       setRatingFeedback(null);
+//       await submitRating(newRating, productData.id, productData.model);
+//       setProductData((prev) => prev ? { ...prev, user_rating: newRating, rating: newRating } : prev);
+//       setRatingFeedback("Sizning fikringiz biz uchun muhim, rahmat!");
+//       setTimeout(() => {
+//         setIsRatingModalOpen(false);
+//         setRatingFeedback(null);
+//       }, 2000);
+//     } catch (err) {
+//       setRatingFeedback("Reyting yuborishda xatolik yuz berdi");
+//       setTimeout(() => setRatingFeedback(null), 5000);
 //     }
-//     return stars;
 //   };
 
 //   if (loading) {
 //     return (
-//       <div className="flex min-h-screen items-center justify-center ">
+//       <div className="flex min-h-screen items-center justify-center">
 //         <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
 //       </div>
 //     );
@@ -271,15 +330,14 @@
 
 //   if (error || !productData) {
 //     return (
-//       <div className="flex min-h-screen items-center justify-center ">
+//       <div className="flex min-h-screen items-center justify-center">
 //         <p className="text-red-600 text-lg">{error || "Mahsulot topilmadi"}</p>
 //       </div>
 //     );
 //   }
 
 //   return (
-//     <div className=" flex min-h-screen">
-//       {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> */}
+//     <div className="flex min-h-screen">
 //       <main className="w-full p-4 sm:p-6 md:p-8 lg:p-10">
 //         <div className="container mx-auto space-y-6">
 //           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -293,7 +351,54 @@
 //               <div className="flex items-center gap-2 mt-2">
 //                 <span className="text-sm text-gray-700">Reyting:</span>
 //                 <div className="flex items-center">{renderRatingStars(productData.rating)}</div>
-//                 <span className="text-sm font-medium text-gray-700">{productData.rating}/5</span>
+//                 <span className="text-sm font-medium text-gray-700">{productData.rating.toFixed(1)}/5.0</span>
+//                 <Dialog open={isRatingModalOpen} onOpenChange={setIsRatingModalOpen}>
+//                   <DialogTrigger asChild>
+//                     <button className="focus:outline-none">
+//                       <Vote className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 hover:text-blue-600 transition-colors" />
+//                     </button>
+//                   </DialogTrigger>
+//                   <DialogContent className="sm:max-w-md">
+//                     <DialogHeader>
+//                       <DialogTitle>Mahsulotni baholang</DialogTitle>
+//                     </DialogHeader>
+//                     <div className="flex flex-col items-center gap-4 py-4">
+//                       <div className="flex items-center gap-2">
+//                         {Array.from({ length: 5 }, (_, i) => {
+//                           const starValue = i + 1;
+//                           return (
+//                             <button
+//                               key={i}
+//                               onClick={() => handleUserRating(starValue)}
+//                               className={`focus:outline-none ${productData.user_rating !== null ? "cursor-not-allowed" : ""}`}
+//                               disabled={productData.user_rating !== null}
+//                             >
+//                               {productData.user_rating && productData.user_rating >= starValue ? (
+//                                 <Star
+//                                   className="h-6 w-6 text-yellow-500 fill-yellow-500"
+//                                 />
+//                               ) : (
+//                                 <StarOff
+//                                   className={`h-6 w-6 ${productData.user_rating !== null ? "text-gray-300" : "text-gray-300 hover:text-yellow-400 hover:scale-110 transition-transform"}`}
+//                                 />
+//                               )}
+//                             </button>
+//                           );
+//                         })}
+//                       </div>
+//                       {ratingFeedback && (
+//                         <span className={`text-sm ${ratingFeedback.includes("xatolik") ? "text-red-600" : "text-green-600"}`}>
+//                           {ratingFeedback}
+//                         </span>
+//                       )}
+//                       {productData.user_rating !== null && !ratingFeedback && (
+//                         <span className="text-sm text-gray-600">
+//                           Siz allaqachon {productData.user_rating} baho qo'ygansiz
+//                         </span>
+//                       )}
+//                     </div>
+//                   </DialogContent>
+//                 </Dialog>
 //               </div>
 //               <div className="mt-2 flex items-center gap-2">
 //                 <span className="text-sm text-gray-700">To‘ldirilganlik:</span>
@@ -364,28 +469,28 @@
 //                     </CardHeader>
 //                     {openSections.has(sectionId) && (
 //                       <CardContent className="p-4 bg-white/80">
-//   <div className="space-y-3">
-//     {section.questions.map((question) => {
-//       const value = productData.details[question.id];
-//       const supplierId = productData.suppliers[question.id];
-//       return (
-//         <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
-//           <div className="flex justify-between items-start">
-//             <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
-//             {supplierId && (
-//               <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
-//                 Hamkor: {supplierId || "Noma'lum"}
-//               </span>
-//             )}
-//           </div>
-//           <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
-//             {value && String(value).trim() !== "" ? value : "Ma'lumot kiritilmagan"}
-//           </p>
-//         </div>
-//       );
-//     })}
-//   </div>
-// </CardContent>
+//                         <div className="space-y-3">
+//                           {section.questions.map((question) => {
+//                             const value = productData.details[question.id];
+//                             const supplierId = productData.suppliers[question.id];
+//                             return (
+//                               <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
+//                                 <div className="flex justify-between items-start">
+//                                   <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
+//                                   {supplierId && (
+//                                     <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
+//                                       Hamkor: {supplierId || "Noma'lum"}
+//                                     </span>
+//                                   )}
+//                                 </div>
+//                                 <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
+//                                   {value && String(value).trim() !== "" ? value : "Ma'lumot kiritilmagan"}
+//                                 </p>
+//                               </div>
+//                             );
+//                           })}
+//                         </div>
+//                       </CardContent>
 //                     )}
 //                   </Card>
 //                 );
@@ -401,9 +506,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import { ChevronDown, ChevronUp, Building2, Star, StarHalf, StarOff, Vote } from "lucide-react";
+import { ChevronDown, ChevronUp, Building2, Star, StarHalf, StarOff, Vote, Package, Home } from "lucide-react";
 import { categoryFieldMap, getReverseFieldMap } from "../../../manufacturer/products/note";
 import { categories } from "@/lib/categories";
 import { Label } from "@/src/components/ui/label";
@@ -471,7 +577,7 @@ const fetchProductByToken = async (token: string) => {
       },
     });
     if (!response.ok) {
-      throw new Error("Mahsulotni olishda xatolik yuz berdi");
+      throw new Error("Mahsulot topilmadi");
     }
     return await response.json();
   } catch (error) {
@@ -512,6 +618,7 @@ export default function ProductDetailsPage(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [ratingFeedback, setRatingFeedback] = useState<string | null>(null);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState<boolean>(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const params = useParams();
   const token = params.id as string;
@@ -575,7 +682,7 @@ export default function ProductDetailsPage(): JSX.Element {
           user_rating: data.user_rating,
         });
       } catch (err) {
-        setError("Mahsulot ma'lumotlarini olishda xatolik yuz berdi");
+        setError("Bunday mahsulot mavjud emas, qayta skanerlang");
       } finally {
         setLoading(false);
       }
@@ -721,16 +828,44 @@ export default function ProductDetailsPage(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
+      <div className="bg-gradient-to-b from-background to-background/90 flex min-h-screen items-center justify-center p-4 md:p-8">
+        <Card className="w-full max-w-md bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-2 border-primary/20 shadow-lg">
+          <div className="p-8 text-center space-y-6">
+            <p className="text-gray-600 text-lg">Yuklanmoqda...</p>
+          </div>
+        </Card>
       </div>
     );
   }
 
   if (error || !productData) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-red-600 text-lg">{error || "Mahsulot topilmadi"}</p>
+      <div className="bg-gradient-to-b from-background to-background/90 flex min-h-screen items-center justify-center p-4 md:p-8">
+        <Card className="w-full max-w-md bg-gradient-to-br from-card to-card/80 backdrop-blur-md border-2 border-primary/20 shadow-lg">
+          <div className="p-8 text-center space-y-6">
+            <div className="flex justify-center">
+              <Package className="h-16 w-16 text-primary/80 animate-bounce" />
+            </div>
+            <h1 className="text-4xl font-semibold text-balance tracking-tight text-foreground">
+              Mahsulot topilmadi
+            </h1>
+            <p className="text-muted-foreground text-base">
+              {error || "Bunday mahsulot mavjud emas, qayta skanerlang"}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                variant="outline"
+                className="bg-transparent hover:border-transparent transition-all duration-200 w-full sm:w-auto"
+                asChild
+              >
+                <Link href="/">
+                  <Home className="mr-2 h-4 w-4" />
+                  Asosiy sahifaga qaytish
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -822,11 +957,22 @@ export default function ProductDetailsPage(): JSX.Element {
                 onMouseUp={handleTouchEnd}
                 onMouseLeave={handleTouchEnd}
               >
-                <img
-                  src={productData.images[currentImageIndex] || "/placeholder.png"}
-                  alt={`${productData.name} - ${currentImageIndex + 1}`}
-                  className="w-full h-56 sm:h-64 lg:h-80 object-cover rounded-lg shadow-md cursor-grab"
-                />
+                <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
+                  <DialogTrigger asChild>
+                    <img
+                      src={productData.images[currentImageIndex] || "/placeholder.png"}
+                      alt={`${productData.name} - ${currentImageIndex + 1}`}
+                      className="w-full h-56 sm:h-64 lg:h-80 object-cover rounded-lg shadow-md cursor-pointer hover:opacity-90 transition-opacity"
+                    />
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-3xl p-0 border-0 bg-transparent">
+                    <img
+                      src={productData.images[currentImageIndex] || "/placeholder.png"}
+                      alt={`${productData.name} - ${currentImageIndex + 1}`}
+                      className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                    />
+                  </DialogContent>
+                </Dialog>
                 <div className="mt-4 grid grid-cols-3 sm:grid-cols-3 gap-2">
                   {productData.images.map((img, idx) => (
                     <img
