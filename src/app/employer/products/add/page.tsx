@@ -677,103 +677,209 @@ export default function AddProductPage() {
   };
 
   // === SUBMIT WITH VALIDATION ===
+  // const handleSubmit = async () => {
+  //   setError("");
+  //   setIsSuccess(false);
+
+  //   // 1. Kategoriya tanlanganmi?
+  //   if (!selectedCategory) {
+  //     setError("Kategoriya tanlang");
+  //     return;
+  //   }
+
+  //   // 2. Umumiy ma’lumotlar bo‘limi
+  //   const generalSection = sections.find(s => s.id === "general");
+  //   if (!generalSection || generalSection.questions.length === 0) {
+  //     setError("Mahsulot nomi kiritilishi shart");
+  //     return;
+  //   }
+
+  //   const productName = generalSection.questions[0]?.value.trim();
+  //   if (!productName) {
+  //     setError("Mahsulot nomi kiritilishi shart");
+  //     return;
+  //   }
+
+  //   // 3. Yaroqli savol funksiyasi
+  //   const isValidQuestion = (q: Question): boolean => {
+  //     const hasLabel = q.label.trim() !== "";
+  //     const hasValue = q.value.trim() !== "";
+  //     const hasSupplier = !!q.supplierId;
+  //     return hasLabel && (hasValue || hasSupplier);
+  //   };
+
+  //   // 4. Bo'sh bo'lim nomlari (faqat to'ldirilgan bo'limlar uchun)
+  //   const hasEmptySectionTitle = sections.some(s =>
+  //     s.id !== "general" &&
+  //     s.title.trim() === "" &&
+  //     s.questions.some(isValidQuestion)
+  //   );
+  //   if (hasEmptySectionTitle) {
+  //     setError("Bo‘lim nomi bo‘sh bo‘lmasin");
+  //     return;
+  //   }
+
+  //   // 5. Tozalash: Umumiy bo'lim (faqat nomi olinadi, qolganlari filter)
+  //   const cleanGeneralSection = {
+  //     title: "Umumiy ma’lumotlar",
+  //     questions: generalSection.questions
+  //       .filter(isValidQuestion)
+  //       .map(q => ({
+  //         label: q.label,
+  //         ...(q.supplierId ? { supplierId: q.supplierId } : { value: q.value }),
+  //       })),
+  //   };
+
+  //   // 6. Boshqa bo'limlar
+  //   const otherSections = sections
+  //     .filter(s => s.id !== "general")
+  //     .map(s => ({
+  //       title: s.title,
+  //       questions: s.questions
+  //         .filter(isValidQuestion)
+  //         .map(q => ({
+  //           label: q.label,
+  //           ...(q.supplierId ? { supplierId: q.supplierId } : { value: q.value }),
+  //         })),
+  //     }))
+  //     .filter(s => s.questions.length > 0 && s.title.trim() !== "");
+
+  //   // 7. Final sections
+  //   const finalSections = [];
+  //   if (cleanGeneralSection.questions.length > 0) finalSections.push(cleanGeneralSection);
+  //   finalSections.push(...otherSections);
+
+  //   // 8. Hech bo'lmaganda bitta to'ldirilgan maydon bo'lishi kerak
+  //   if (finalSections.length === 0) {
+  //     setError("Hech bo'lmaganda bitta to‘ldirilgan maydon bo‘lishi kerak");
+  //     return;
+  //   }
+
+  //   // 9. FormData
+  //   const formData = new FormData();
+  //   formData.append("category", selectedCategory);
+  //   formData.append("sections", JSON.stringify(finalSections));
+  //   imageFiles.forEach(f => formData.append("images", f));
+  //   documentFiles.forEach(f => formData.append("documents", f));
+
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     await createProduct(selectedCategory, formData);
+  //     setIsSuccess(true);
+  //     setTimeout(() => router.push("/employer/products"), 2000);
+  //   } catch (err: any) {
+  //     setError(err.message || "Mahsulot qo‘shishda xatolik yuz berdi");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    setError("");
-    setIsSuccess(false);
+  setError("");
+  setIsSuccess(false);
 
-    // 1. Kategoriya tanlanganmi?
-    if (!selectedCategory) {
-      setError("Kategoriya tanlang");
-      return;
-    }
+  // 1. Kategoriya tanlanganmi?
+  if (!selectedCategory) {
+    setError("Kategoriya tanlang");
+    return;
+  }
 
-    // 2. Umumiy ma’lumotlar bo‘limi
-    const generalSection = sections.find(s => s.id === "general");
-    if (!generalSection || generalSection.questions.length === 0) {
-      setError("Mahsulot nomi kiritilishi shart");
-      return;
-    }
+  // 2. Umumiy ma’lumotlar bo‘limi
+  const generalSection = sections.find((s) => s.id === "general");
+  if (!generalSection || generalSection.questions.length === 0) {
+    setError("Mahsulot nomi kiritilishi shart");
+    return;
+  }
 
-    const productName = generalSection.questions[0]?.value.trim();
-    if (!productName) {
-      setError("Mahsulot nomi kiritilishi shart");
-      return;
-    }
+  const productName = generalSection.questions[0]?.value.trim();
+  if (!productName) {
+    setError("Mahsulot nomi kiritilishi shart");
+    return;
+  }
 
-    // 3. Yaroqli savol funksiyasi
-    const isValidQuestion = (q: Question): boolean => {
-      const hasLabel = q.label.trim() !== "";
-      const hasValue = q.value.trim() !== "";
-      const hasSupplier = !!q.supplierId;
-      return hasLabel && (hasValue || hasSupplier);
-    };
+  // 3. Yaroqli savol funksiyasi
+  const isValidQuestion = (q: Question): boolean => {
+    const hasLabel = q.label.trim() !== "";
+    const hasSupplier = !!q.supplierId;
+    const hasValue = q.value?.trim() !== "";
+    // label bo‘lishi shart, supplier yoki value bo‘lishi mumkin
+    return hasLabel && (hasSupplier || hasValue);
+  };
 
-    // 4. Bo'sh bo'lim nomlari (faqat to'ldirilgan bo'limlar uchun)
-    const hasEmptySectionTitle = sections.some(s =>
+  // 4. Bo‘lim nomi yozilmagan bo‘lsa — xato
+  const hasEmptySectionTitle = sections.some(
+    (s) =>
       s.id !== "general" &&
       s.title.trim() === "" &&
-      s.questions.some(isValidQuestion)
-    );
-    if (hasEmptySectionTitle) {
-      setError("Bo‘lim nomi bo‘sh bo‘lmasin");
-      return;
-    }
+      s.questions.some((q) => isValidQuestion(q))
+  );
 
-    // 5. Tozalash: Umumiy bo'lim (faqat nomi olinadi, qolganlari filter)
-    const cleanGeneralSection = {
-      title: "Umumiy ma’lumotlar",
-      questions: generalSection.questions
-        .filter(isValidQuestion)
-        .map(q => ({
-          label: q.label,
-          ...(q.supplierId ? { supplierId: q.supplierId } : { value: q.value }),
-        })),
-    };
+  if (hasEmptySectionTitle) {
+    setError("Bo‘lim nomi yozilmagan. Iltimos, to‘ldiring.");
+    return;
+  }
 
-    // 6. Boshqa bo'limlar
-    const otherSections = sections
-      .filter(s => s.id !== "general")
-      .map(s => ({
-        title: s.title,
-        questions: s.questions
-          .filter(isValidQuestion)
-          .map(q => ({
-            label: q.label,
-            ...(q.supplierId ? { supplierId: q.supplierId } : { value: q.value }),
-          })),
-      }))
-      .filter(s => s.questions.length > 0 && s.title.trim() !== "");
-
-    // 7. Final sections
-    const finalSections = [];
-    if (cleanGeneralSection.questions.length > 0) finalSections.push(cleanGeneralSection);
-    finalSections.push(...otherSections);
-
-    // 8. Hech bo'lmaganda bitta to'ldirilgan maydon bo'lishi kerak
-    if (finalSections.length === 0) {
-      setError("Hech bo'lmaganda bitta to‘ldirilgan maydon bo‘lishi kerak");
-      return;
-    }
-
-    // 9. FormData
-    const formData = new FormData();
-    formData.append("category", selectedCategory);
-    formData.append("sections", JSON.stringify(finalSections));
-    imageFiles.forEach(f => formData.append("images", f));
-    documentFiles.forEach(f => formData.append("documents", f));
-
-    setIsSubmitting(true);
-
-    try {
-      await createProduct(selectedCategory, formData);
-      setIsSuccess(true);
-      setTimeout(() => router.push("/employer/products"), 2000);
-    } catch (err: any) {
-      setError(err.message || "Mahsulot qo‘shishda xatolik yuz berdi");
-    } finally {
-      setIsSubmitting(false);
-    }
+  // 5. Umumiy ma’lumotlar bo‘limi — faqat to‘ldirilgan inputlar
+  const cleanGeneralSection = {
+    name: "Umumiy ma’lumotlar",
+    questions: generalSection.questions
+      .filter(isValidQuestion)
+      .map((q) => ({
+        question_label: q.label.trim(),
+        value: q.value?.trim() || "",
+        supplier: q.supplierId || null,
+      })),
   };
+
+  // 6. Boshqa bo‘limlar
+  const otherSections = sections
+    .filter((s) => s.id !== "general")
+    .map((s) => ({
+      name: s.title.trim(),
+      questions: s.questions
+        .filter((q) => q.label.trim() !== "") // label bo‘sh bo‘lmasin
+        .map((q) => ({
+          question_label: q.label.trim(),
+          value: q.value?.trim() || "", // value bo‘sh bo‘lsa ham ketadi
+          supplier: q.supplierId || null,
+        }))
+        .filter((q) => q.question_label !== ""), // label yo‘q inputlar ketmasin
+    }))
+    .filter((s) => s.name !== "" && s.questions.length > 0); // nomi bo‘sh yoki savolsiz bo‘limlar ketmasin
+
+  // 7. Final sections
+  const finalSections = [];
+  if (cleanGeneralSection.questions.length > 0)
+    finalSections.push(cleanGeneralSection);
+  finalSections.push(...otherSections);
+
+  if (finalSections.length === 0) {
+    setError("Hech bo‘lmaganda bitta to‘ldirilgan maydon bo‘lishi kerak");
+    return;
+  }
+
+  // 8. FormData tayyorlash
+  const formData = new FormData();
+  formData.append("category", selectedCategory);
+  formData.append("name", productName); // umumiy ma’lumotlardan olinadi
+  formData.append("sections", JSON.stringify(finalSections));
+  imageFiles.forEach((f) => formData.append("images", f));
+  documentFiles.forEach((f) => formData.append("documents", f));
+
+  setIsSubmitting(true);
+
+  try {
+    await createProduct(selectedCategory, formData);
+    setIsSuccess(true);
+    setTimeout(() => router.push("/employer/products"), 2000);
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || "Mahsulot qo‘shishda xatolik yuz berdi");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="min-h-screen w-full p-4 md:p-0">
