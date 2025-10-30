@@ -822,13 +822,13 @@ export default function AddProductPage() {
 
   // 5. Umumiy ma’lumotlar bo‘limi — faqat to‘ldirilgan inputlar
   const cleanGeneralSection = {
-    name: "Umumiy ma’lumotlar",
+    title: "Umumiy ma’lumotlar",
     questions: generalSection.questions
       .filter(isValidQuestion)
       .map((q) => ({
-        question_label: q.label.trim(),
+        label: q.label.trim(),
         value: q.value?.trim() || "",
-        supplier: q.supplierId || null,
+        ...(q.supplierId ? { supplierId: q.supplierId } : {}),
       })),
   };
 
@@ -836,17 +836,17 @@ export default function AddProductPage() {
   const otherSections = sections
     .filter((s) => s.id !== "general")
     .map((s) => ({
-      name: s.title.trim(),
+      title: s.title.trim(),
       questions: s.questions
         .filter((q) => q.label.trim() !== "") // label bo‘sh bo‘lmasin
         .map((q) => ({
-          question_label: q.label.trim(),
+          label: q.label.trim(),
           value: q.value?.trim() || "", // value bo‘sh bo‘lsa ham ketadi
-          supplier: q.supplierId || null,
+          ...(q.supplierId ? { supplierId: q.supplierId } : {})
         }))
-        .filter((q) => q.question_label !== ""), // label yo‘q inputlar ketmasin
+        .filter((q) => q.label !== ""), // label yo‘q inputlar ketmasin
     }))
-    .filter((s) => s.name !== "" && s.questions.length > 0); // nomi bo‘sh yoki savolsiz bo‘limlar ketmasin
+    .filter((s) => s.title !== "" && s.questions.length > 0); // nomi bo‘sh yoki savolsiz bo‘limlar ketmasin
 
   // 7. Final sections
   const finalSections = [];
@@ -862,7 +862,7 @@ export default function AddProductPage() {
   // 8. FormData tayyorlash
   const formData = new FormData();
   formData.append("category", selectedCategory);
-  formData.append("name", productName); // umumiy ma’lumotlardan olinadi
+  // formData.append("name", productName); // umumiy ma’lumotlardan olinadi
   formData.append("sections", JSON.stringify(finalSections));
   imageFiles.forEach((f) => formData.append("images", f));
   documentFiles.forEach((f) => formData.append("documents", f));

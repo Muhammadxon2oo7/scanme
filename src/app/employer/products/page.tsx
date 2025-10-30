@@ -76,6 +76,7 @@ interface Section {
   title: string;
   questions: Question[];
 }
+import { QrCode, Download } from "lucide-react";
 
 interface Product {
   id: string;
@@ -132,7 +133,8 @@ export default function ProductsPage() {
   const [saveAlert, setSaveAlert] = useState<{ type: "error" | "success"; message: string } | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const documentInputRef = useRef<HTMLInputElement>(null);
-
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [selectedQrProduct, setSelectedQrProduct] = useState<Product | null>(null);
   // PARTNERLAR YUKLASH
   useEffect(() => {
     const load = async () => {
@@ -354,14 +356,7 @@ export default function ProductsPage() {
       return;
     }
 
-    // const cleanSections = editSections
-    //   .map(s => ({
-    //     title: s.title,
-    //     questions: s.questions
-    //       .filter(q => q.label.trim() !== "")
-    //       .map(q => q.supplierId ? { label: q.label, supplierId: q.supplierId } : { label: q.label, value: q.value }),
-    //   }))
-    //   .filter(s => s.title.trim() && s.questions.length > 0);
+  
     const cleanSections = editSections
   .map(s => ({
     title: s.title,
@@ -369,14 +364,14 @@ export default function ProductsPage() {
       .filter(q => q.label.trim() !== "")
       .map(q => {
         if (q.supplierId) {
-          // supplierId bor → value ham yuboriladi
+          
           return {
             label: q.label,
             supplierId: q.supplierId,
-            value: q.value || "", // bo‘sh bo‘lsa ham yuboramiz
+            value: q.value || "", 
           };
         } else {
-          // supplier yo‘q → faqat value
+         
           return {
             label: q.label,
             value: q.value || "",
@@ -496,7 +491,32 @@ const filteredProducts = useMemo(() => {
       setSelectedProduct(product);
     }
   };
+const downloadQR = async () => {
+  if (!selectedQrProduct?.qr_code) return;
 
+  const productName = selectedQrProduct.sections[0]?.questions[0]?.value?.trim() || "mahsulot";
+  const safeFileName = productName
+    .replace(/[^a-zA-Z0-9а-яА-ЯёЁўЎқҚғҒҳҲ ]/g, "")
+    .replace(/\s+/g, "_")
+    .trim()
+    .substring(0, 50);
+  const fileName = safeFileName ? `${safeFileName}.png` : `${selectedQrProduct.id}.png`;
+
+  try {
+    const response = await fetch(`/api/proxy?url=${encodeURIComponent(selectedQrProduct.qr_code)}`);
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    toast({ description: "QR yuklanmadi", variant: "destructive" });
+  }
+};
   return (
     <div className="flex min-h-screen">
       <main className="flex-1 md:p-8 p-4">
@@ -543,7 +563,7 @@ const filteredProducts = useMemo(() => {
                       }
                     }}>
                       <DialogTrigger asChild>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 cursor-pointer">
+                        {/* <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 cursor-pointer">
                           <div className="flex items-center gap-4 flex-1">
                             <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
                               {displayImg ? <img src={displayImg} alt="" className="w-full h-full object-cover" /> : <Package className="h-6 w-6" />}
@@ -594,7 +614,93 @@ const filteredProducts = useMemo(() => {
                               </div>
                             )}
                           </div>
-                        </div>
+                        </div> */}
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 cursor-pointer">
+  <div className="flex items-center gap-4 flex-1">
+    <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+      {displayImg ? (
+        <img src={displayImg} alt="" className="w-full h-full object-cover" />
+      ) : (
+        <Package className="h-6 w-6" />
+      )}
+    </div>
+    <div>
+      <h3 className="font-semibold text-lg">
+        {product.sections[0]?.questions[0]?.value || product.name}
+      </h3>
+      <p className="text-sm text-gray-600">{product.category.name}</p>
+      <p className="text-xs text-gray-500">
+        {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
+        {product.activated_at && ` | ${format(new Date(product.activated_at), "HH:mm")}`}
+      </p>
+    </div>
+  </div>
+
+  <div className="flex items-center gap-4">
+    {/* REYTING + SKAN + QR */}
+    {product.status === "active" && (
+      <>
+        <div className="flex items-center gap-1">
+          {Array.from({ length: 5 }, (_, i) => {
+            const starValue = i + 1;
+            if (product.rating >= starValue)
+              return <Star key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />;
+            if (product.rating >= starValue - 0.5)
+              return <StarHalf key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />;
+            return <StarOff key={i} className="h-3.5 w-3.5 text-gray-300" />;
+          })}
+        </div>
+        <p className="text-sm font-medium flex items-center gap-[2px]">
+          <ScanEyeIcon className="h-3 w-3" /> {product.all_scan}
+        </p>
+      </>
+    )}
+
+    <Badge variant={getStatusVariant(product.status)}>
+      {getStatusText(product.status)}
+    </Badge>
+
+    {/* QR IKONKA */}
+    {product.status === "active" && product.qr_code && (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedQrProduct(product);
+          setQrModalOpen(true);
+        }}
+      >
+        <QrCode className="h-4 w-4 text-blue-600" />
+      </Button>
+    )}
+
+    {/* O‘CHIRISH (faqat draft) */}
+    {product.status === "draft" && (
+      <div onClick={e => e.stopPropagation()}>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="sm" disabled={deletingId === product.id}>
+              {deletingId === product.id ? "..." : <Trash2 className="h-4 w-4" />}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>O‘chirish</AlertDialogTitle>
+              <AlertDialogDescription>
+                "{product.sections[0]?.questions[0]?.value || product.name}" ni o‘chirishni xohlaysizmi?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Bekor</AlertDialogCancel>
+              <AlertDialogAction onClick={() => handleDelete(product.id)}>Ha</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    )}
+  </div>
+</div>
                       </DialogTrigger>
                       <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
@@ -706,29 +812,7 @@ const filteredProducts = useMemo(() => {
                                               <Label>Nomi</Label>
                                               <Input value={q.label} onChange={e => updateQuestion(sec.id, i, "label", e.target.value)} placeholder="Nom" />
                                             </div>
-                                            {/* <div className="flex-1">
-                                              <Label>Qiymati</Label>
-                                              {q.supplierId ? (
-                                                <div className="flex items-center gap-2">
-                                                  <Input
-                                                    value={partners.find(p => p.id === q.supplierId)?.name || "Yuklanmoqda..."}
-                                                    disabled
-                                                    className="bg-gray-100"
-                                                  />
-                                                  {q.value ? (
-                                                    <CheckCircle className="h-5 w-5 text-green-600" />
-                                                  ) : (
-                                                    <Clock className="h-5 w-5 text-orange-500"  />
-                                                  )}
-                                                </div>
-                                              ) : (
-                                                <Input
-                                                  value={q.value || ""}
-                                                  onChange={e => updateQuestion(sec.id, i, "value", e.target.value)}
-                                                  placeholder="Qiymat"
-                                                />
-                                              )}
-                                            </div> */}
+                                        
 <div className="flex-1 relative">
   <Label>Qiymati</Label>
   {q.supplierId ? (
@@ -816,9 +900,7 @@ const filteredProducts = useMemo(() => {
                                     {sec.questions.map((q, qIdx) => (
                                       <div key={qIdx} className="bg-white/50 p-3 rounded-md border border-blue-100">
                                         <Label className="text-sm font-medium">{q.label}</Label>
-                                        {/* <p className="text-sm pl-3 border-l-2 border-blue-200">
-                                          {q.supplierId ? `"${partners.find(p => p.id === q.supplierId)?.name || "Yuklanmoqda..."}" tomonidan to‘ldiriladi` : (q.value || "Kiritilmagan")}
-                                        </p> */}
+                                       
                                         <p className="text-sm pl-3 border-l-2 border-blue-200 flex items-center justify-between">
   <span>
     {q.value ? (
