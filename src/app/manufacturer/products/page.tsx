@@ -521,45 +521,41 @@ export default function AdminProductsPage() {
   //   link.download = ""
   //   link.click()
   // }
-  const downloadQR = async () => {
-  if (!selectedProduct?.qr_code) return
+const downloadQR = async () => {
+  if (!selectedProduct?.qr_code) return;
 
-  const productName = selectedProduct.sections[0]?.questions[0]?.value?.trim() || "mahsulot"
-  
-  // Fayl nomini tozalash: faqat harf, raqam, bo'shliq, chiziqcha
+  const productName = selectedProduct.sections[0]?.questions[0]?.value?.trim() || "mahsulot";
+
   const safeFileName = productName
-    .replace(/[^a-zA-Z0-9а-яА-ЯёЁўЎқҚғҒҳҲ ]/g, "") // faqat ruxsat etilgan belgilarni qoldirish
-    .replace(/\s+/g, "_") // bo'shliqlarni _ bilan almashtirish
+    .replace(/[^a-zA-Z0-9а-яА-ЯёЁўЎқҚғҒҳҲ ]/g, "")
+    .replace(/\s+/g, "_")
     .trim()
-    .substring(0, 50) // uzunligini cheklash
+    .substring(0, 50);
 
-  const fileName = safeFileName ? `${safeFileName}.png` : `${selectedProduct.id}.png`
+  const fileName = safeFileName ? `${safeFileName}.png` : `${selectedProduct.id}.png`;
+  const proxyUrl = `/api/proxy?url=${encodeURIComponent(selectedProduct.qr_code)}&t=${Date.now()}`;
 
-  const proxyUrl = `/api/proxy?url=${encodeURIComponent(selectedProduct.qr_code)}`
-  
   try {
-    // Rasimni yuklab olish
-    const response = await fetch(proxyUrl)
-    const blob = await response.blob()
-    
-    // Blob dan URL yaratish
-    const blobUrl = window.URL.createObjectURL(blob)
-    
-    // <a> elementi yaratish
-    const link = document.createElement("a")
-    link.href = blobUrl
-    link.download = fileName // Bu yerda to'g'ri nom!
-    document.body.appendChild(link)
-    link.click()
-    
-    // Tozalash
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
+    const response = await fetch(proxyUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error("Failed to fetch image");
+
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
   } catch (error) {
-    console.error("QR yuklashda xato:", error)
-    alert("QR kodni yuklashda xato yuz berdi.")
+    console.error("QR yuklashda xato:", error);
+    alert("QR kodni yuklashda xato yuz berdi.");
   }
-}
+};
+
 
   // RASMLAR
   const renderImages = (images: string[]) => (

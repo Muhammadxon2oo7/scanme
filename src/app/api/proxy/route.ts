@@ -44,12 +44,17 @@ export async function GET(request: Request) {
       return new Response(JSON.stringify({ error: "Invalid URL" }), { status: 400 });
     }
 
-    const response = await fetch(sanitizedUrl, {
+    // 🔥 CACHENI BUZISH uchun har safar so‘rovga unique param qo‘shamiz
+    const uniqueUrl = `${sanitizedUrl}?t=${Date.now()}`;
+
+    const response = await fetch(uniqueUrl, {
       redirect: "follow",
       referrerPolicy: "no-referrer",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Accept": "*/*",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
       },
     });
 
@@ -62,14 +67,15 @@ export async function GET(request: Request) {
     const contentType = response.headers.get("content-type") || "application/octet-stream";
     const filename = sanitizedUrl.split("/").pop() || "file.png";
 
+    // 🚫 Brauzer va CDN keshini butunlay o‘chirib tashlash
     return new Response(arrayBuffer, {
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
-        // 🔥 CACHE O‘CHIRILDI
         "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
         "Pragma": "no-cache",
         "Expires": "0",
+        "Surrogate-Control": "no-store",
       },
     });
   } catch (error) {
