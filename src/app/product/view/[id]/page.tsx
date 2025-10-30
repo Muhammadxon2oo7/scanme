@@ -99,7 +99,7 @@ export default function ProductDetailsPage(): JSX.Element {
 
         setProductData({
           id: data.id,
-          name: data.name || "Noma'lum",
+          name: data.sections[0].questions[0].value || "Noma'lum",
           category: data.category,
           created_by: data.created_by || "Noma'lum",
           rating: data.rating || 0,
