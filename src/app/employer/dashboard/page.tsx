@@ -37,7 +37,7 @@ const getStatusVariant = (status: Product["status"]) => {
   }
 }
 
-export default function ManufacturerDashboardPage() {
+export default function EmployerDashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
@@ -138,7 +138,7 @@ export default function ManufacturerDashboardPage() {
                     asChild
                     className="bg-transparent hover:border-transparent transition-all duration-200"
                   >
-                    <Link href="/manufacturer/products">
+                    <Link href="/employer/products">
                       <Eye className="mr-2 h-4 w-4" />
                       Barchasini ko'rish
                     </Link>
@@ -216,7 +216,7 @@ export default function ManufacturerDashboardPage() {
                     className="w-full justify-start bg-transparent hover:border-transparent transition-all duration-200"
                     asChild
                   >
-                    <Link href="/manufacturer/products/add">
+                    <Link href="/employer/products/add">
                       <Plus className="mr-2 h-4 w-4" />
                       Mahsulot qo'shish
                     </Link>
@@ -226,7 +226,7 @@ export default function ManufacturerDashboardPage() {
                     className="w-full justify-start bg-transparent hover:border-transparent transition-all duration-200"
                     asChild
                   >
-                    <Link href="/manufacturer/analytics">
+                    <Link href="/employer/analytics">
                       <BarChart3 className="mr-2 h-4 w-4" />
                       Statistika ko'rish
                     </Link>
@@ -236,7 +236,7 @@ export default function ManufacturerDashboardPage() {
                     className="w-full justify-start bg-transparent hover:border-transparent transition-all duration-200"
                     asChild
                   >
-                    <Link href="/manufacturer/collaborators">
+                    <Link href="/employer/collaborators">
                       <Building2 className="mr-2 h-4 w-4" />
                       Ta'minotchilar
                     </Link>

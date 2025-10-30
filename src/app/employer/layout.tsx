@@ -1,10 +1,11 @@
 "use client"
 
+
 import { useState, useEffect } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ManufacturerSidebar } from "@/src/components/manufacturer/ManufacturerSidebar.tsx"
+import { EmployeeSidebar } from "@/src/components/employee/EmployeeSidebar"
 
 export default function ManufacturerLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -51,7 +52,7 @@ export default function ManufacturerLayout({ children }: { children: React.React
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/90 flex relative overflow-hidden">
       {/* Sidebar */}
-      <ManufacturerSidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />
+      <EmployeeSidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
       {/* Overlay for mobile when sidebar is open */}
       <AnimatePresence>

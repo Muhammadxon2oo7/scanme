@@ -1,12 +1,11 @@
-// "use client";
+// "use client"
 
-// import { useState, useEffect, useRef } from "react";
-// import Link from "next/link";
-// import Cookies from "js-cookie";
-// import { Button } from "@/src/components/ui/button";
-// import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
-// import { Badge } from "@/src/components/ui/badge";
-// import { Input } from "@/src/components/ui/input";
+// import { useState, useEffect } from "react"
+// import { Button } from "@/src/components/ui/button"
+// import { Card, CardContent, CardHeader } from "@/src/components/ui/card"
+// import { Badge } from "@/src/components/ui/badge"
+// import { Input } from "@/src/components/ui/input"
+// import { format } from "date-fns"
 // import {
 //   Dialog,
 //   DialogContent,
@@ -14,45 +13,21 @@
 //   DialogTitle,
 //   DialogTrigger,
 //   DialogFooter,
-// } from "@/src/components/ui/dialog";
-// import { Label } from "@/src/components/ui/label";
+// } from "@/src/components/ui/dialog"
+// import { Label } from "@/src/components/ui/label"
 // import {
-//   Clock,
-//   Check,
 //   Package,
-//   Plus,
-//   Star,
-//   ChevronDown,
-//   Edit3,
-//   Save,
-//   X,
 //   CheckCircle,
 //   RotateCcw,
-//   Trash2,
-//   ChevronLeft,
-//   ChevronRight,
-// } from "lucide-react";
-// import { categories } from "@/lib/categories";
-// import {
-//   deleteProduct,
-//   getAllProductsByStatus,
-//   getPartners,
-//   getProductById,
-//   updateProduct,
-//   updateProductStatus,
-// } from "@/lib/api";
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger,
-// } from "@/src/components/ui/alert-dialog";
-// import { categoryFieldMap, getReverseFieldMap } from "./note";
+//   QrCode,
+//   Star,
+//   StarHalf,
+//   StarOff,
+//   ScanEyeIcon,
+// } from "lucide-react"
+// import { categories } from "@/lib/categories"
+// import { getAllProductsByStatus, updateProductStatus } from "@/lib/api"
+// import { getReverseFieldMap } from "./note"
 
 // const modelToKey: Record<string, string> = {
 //   GadgetProduct: "1",
@@ -64,456 +39,160 @@
 //   SalomatlikProduct: "7",
 //   UyBuyumProduct: "8",
 //   KanselyariyaProduct: "9",
-// };
+// }
 
-// const modelToKeyLower: Record<string, string> = Object.fromEntries(
+// const modelToKeyLower = Object.fromEntries(
 //   Object.entries(modelToKey).map(([k, v]) => [k.toLowerCase(), v])
-// );
+// )
 
 // interface Product {
-//   id: string;
-//   name: string;
-//   category: string;
-//   categoryKey: string;
-//   scans: number;
-//   rating: number;
-//   status: "active" | "in-progress" | "pending";
-//   details?: Record<string, string>;
-//   suppliers?: Record<string, string>;
-//   images?: string[];
-//   blockchain_hash?: string;
-//   qr_code?: string;
-//   categoryModel?: string;
+//   id: string
+//   name: string
+//   category: string
+//   categoryKey: string
+//   scans: number
+//   rating: number
+//   status: "active" | "in-progress" | "pending"
+//   details?: Record<string, string>
+//   images?: string[]
+//   qr_code?: string
+//   categoryModel?: string
+//   created_at?: string
 // }
 
 // const getStatusText = (status: Product["status"]) => {
 //   switch (status) {
-//     case "active": return "Faol";
-//     case "in-progress": return "To'ldirilmoqda";
-//     case "pending": return "Tasdiqlanishi kutilmoqda";
-//     default: return "Noma'lum";
+//     case "active": return "Faol"
+//     case "in-progress": return "To'ldirilmoqda"
+//     case "pending": return "Tasdiqlanishi kutilmoqda"
+//     default: return "Noma'lum"
 //   }
-// };
+// }
 
 // const getStatusVariant = (status: Product["status"]) => {
 //   switch (status) {
-//     case "active": return "default";
-//     case "in-progress": return "outline";
-//     case "pending": return "secondary";
-//     default: return "secondary";
+//     case "active": return "default"
+//     case "in-progress": return "outline"
+//     case "pending": return "secondary"
+//     default: return "secondary"
 //   }
-// };
+// }
 
 // const mapApiStatusToLocal = (apiStatus: string): Product["status"] => {
 //   switch (apiStatus) {
-//     case "active": return "active";
-//     case "draft": return "in-progress";
-//     case "pending": return "pending";
-//     default: return "in-progress";
+//     case "active": return "active"
+//     case "draft": return "in-progress"
+//     case "pending": return "pending"
+//     default: return "in-progress"
 //   }
-// };
+// }
 
 // const mapLocalStatusToApi = (localStatus: Product["status"], categoryModel: string) => {
 //   switch (localStatus) {
-//     case "active": return { status: "active", category: categoryModel };
-//     case "in-progress": return { status: "draft", category: categoryModel };
-//     case "pending": return { status: "pending", category: categoryModel };
-//     default: return { status: "draft", category: categoryModel };
+//     case "active": return { status: "active", category: categoryModel }
+//     case "in-progress": return { status: "draft", category: categoryModel }
+//     case "pending": return { status: "pending", category: categoryModel }
+//     default: return { status: "draft", category: categoryModel }
 //   }
-// };
+// }
 
 // export default function ManufacturerProductsPage() {
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [editFormData, setEditFormData] = useState<Record<string, string>>({});
-//   const [originalFormData, setOriginalFormData] = useState<Record<string, string>>({});
-//   const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
-//   const [originalImages, setOriginalImages] = useState<string[]>([]);
-//   const [keptOriginalImages, setKeptOriginalImages] = useState<string[]>([]);
-//   const [currentImages, setCurrentImages] = useState<string[]>([]);
-//   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
-//   const [isStaff, setIsStaff] = useState<boolean>(false);
-//   const fileInputRef = useRef<HTMLInputElement>(null);
-//   const [partnersMap, setPartnersMap] = useState<Record<string, string>>({});
-//   const [loadingPartners, setLoadingPartners] = useState(true);
-//   const [loadingProducts, setLoadingProducts] = useState(true);
-//   const [deletingId, setDeletingId] = useState<string | null>(null);
-//   const [isDeleted, setIsDeleted] = useState(false);
-//   const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>({});
-//   const [lightboxOpen, setLightboxOpen] = useState(false);
-//   const [lightboxIndex, setLightboxIndex] = useState(0);
-//   const [replaceImages, setReplaceImages] = useState(false);
-
-//   useEffect(() => {
-//     const staffStatus = Cookies.get('is_staff') === 'true';
-//     setIsStaff(staffStatus);
-//   }, []);
-
-//   useEffect(() => {
-//     const intervals: Record<string, NodeJS.Timeout> = {};
-//     products.forEach(product => {
-//       if (product.images && product.images.length > 1) {
-//         intervals[product.id] = setInterval(() => {
-//           setCarouselIndex(prev => ({
-//             ...prev,
-//             [product.id]: ((prev[product.id] || 0) + 1) % product.images!.length
-//           }));
-//         }, 3000);
-//       }
-//     });
-//     return () => {
-//       Object.values(intervals).forEach(clearInterval);
-//     };
-//   }, [products]);
-
-//   const fetchPartners = async () => {
-//     try {
-//       setLoadingPartners(true);
-//       const data = await getPartners();
-//       const myId = Cookies.get('myid');
-//       const map: Record<string, string> = {};
-//       if (myId) {
-//         data.forEach((item: any) => {
-//           let partnerId, partnerName;
-//           if (item.owner.id === myId) {
-//             partnerId = item.partner.id;
-//             partnerName = item.partner.name;
-//           } else {
-//             partnerId = item.owner.id;
-//             partnerName = item.owner.name;
-//           }
-//           if (partnerId && partnerId !== myId) {
-//             map[partnerId] = partnerName;
-//           }
-//         });
-//       }
-//       setPartnersMap(map);
-//     } catch (error) {
-//       console.error('Ta\'minotchilarni yuklashda xato:', error);
-//     } finally {
-//       setLoadingPartners(false);
-//     }
-//   };
+//   const [searchTerm, setSearchTerm] = useState("")
+//   const [products, setProducts] = useState<Product[]>([])
+//   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+//   const [loadingProducts, setLoadingProducts] = useState(true)
 
 //   const fetchProducts = async () => {
 //     try {
-//       setLoadingProducts(true);
-//       const activeData = await getAllProductsByStatus('active');
-//       const draftData = await getAllProductsByStatus('draft');
-//       const pendingData = await getAllProductsByStatus('pending');
+//       setLoadingProducts(true)
+//       const activeData = await getAllProductsByStatus("active")
+//       const pendingData = await getAllProductsByStatus("pending")
 
-//       const mappedProducts: Product[] = [];
+//       const mappedProducts: Product[] = []
 
-//       [activeData, draftData, pendingData].forEach((data, index) => {
-//         const apiStatus = index === 0 ? 'active' : index === 1 ? 'draft' : 'pending';
-
+//       ;[activeData, pendingData].forEach((data, index) => {
+//         const apiStatus = index === 0 ? "active" : "pending"
 //         data.product_categories.forEach((cat: any) => {
-//           const lowerModel = cat.model.toLowerCase();
-//           const key = modelToKey[cat.model] || modelToKeyLower[lowerModel] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()];
-//           if (!key) return;
+//           const key = modelToKey[cat.model] || modelToKeyLower[cat.model.toLowerCase()] || modelToKey[cat.model.charAt(0).toUpperCase() + cat.model.slice(1).toLowerCase()]
+//           if (!key) return
 
-//           const categoryName = categories[key].name;
-//           const reverseMap = getReverseFieldMap(key);
-//           const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id));
+//           const categoryName = categories[key].name
+//           const reverseMap = getReverseFieldMap(key)
+//           const allQuestions = Object.values(categories[key].sections).flatMap(sec => sec.questions.map(q => q.id))
 
 //           cat.items.forEach((item: any) => {
-//             const details: Record<string, string> = {};
-//             const suppliers: Record<string, string> = {};
-
+//             const details: Record<string, string> = {}
 //             Object.entries(item).forEach(([apiField, value]) => {
-//               if (typeof value !== 'string' && typeof value !== 'number') return;
-//               if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code', 'name'].includes(apiField)) return;
+//               if (typeof value !== "string" && typeof value !== "number") return
+//               if (["id", "status", "scans", "rating", "blockchain_hash", "qr_code", "name", "created_at"].includes(apiField)) return
 
-//               const cleanField = apiField.replace('_org', '');
-//               const uiId = reverseMap[cleanField];
-
+//               const cleanField = apiField.replace("_org", "")
+//               const uiId = reverseMap[cleanField]
 //               if (uiId && allQuestions.includes(uiId)) {
-//                 if (apiField.endsWith('_org')) {
-//                   suppliers[uiId] = value as string;
-//                 } else {
-//                   details[uiId] = value as string;
-//                 }
+//                 details[uiId] = value as string
 //               }
-//             });
+//             })
 
-//             details[allQuestions[0]] = item.name || '';
+//             details[allQuestions[0]] = item.name || ""
 
-//             let images: string[] = [];
+//             let images: string[] = []
 //             if (item.images) {
-//               images = Array.isArray(item.images) ? item.images : (item.image ? [item.image] : []);
+//               images = Array.isArray(item.images) ? item.images : item.image ? [item.image] : []
 //             } else if (item.image) {
-//               images = [item.image];
+//               images = [item.image]
 //             }
 
 //             mappedProducts.push({
 //               id: item.id.toString(),
-//               name: item.name || 'Noma\'lum',
+//               name: item.name || "Noma'lum",
 //               category: categoryName,
 //               categoryKey: key,
-//               scans: item.scans || 0,
+//               scans: item.all_scan || 0,
 //               rating: item.rating || 0,
 //               status: mapApiStatusToLocal(item.status || apiStatus),
 //               details,
-//               suppliers,
 //               images,
-//               blockchain_hash: item.blockchain_hash,
 //               qr_code: item.qr_code,
 //               categoryModel: cat.model,
-//             });
-//           });
-//         });
-//       });
+//               created_at: item.created_at,
+//             })
+//           })
+//         })
+//       })
 
-//       setProducts(mappedProducts);
+//       setProducts(mappedProducts)
 //     } catch (error) {
-//       console.error('Mahsulotlarni yuklashda xato:', error);
+//       console.error("Mahsulotlarni yuklashda xato:", error)
 //     } finally {
-//       setLoadingProducts(false);
+//       setLoadingProducts(false)
 //     }
-//   };
+//   }
 
 //   useEffect(() => {
-//     fetchPartners();
-//   }, []);
-
-//   useEffect(() => {
-//     fetchProducts();
-//   }, []);
+//     fetchProducts()
+//   }, [])
 
 //   const handleStatusChange = async (productId: string, newStatus: Product["status"]) => {
-//     if (!selectedProduct) return;
+//     if (!selectedProduct) return
 //     try {
-//       const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!);
-//       await updateProductStatus(productId, apiPayload.status, apiPayload.category);
-//       await fetchProducts();
-//       const updatedProduct = products.find(p => p.id === productId);
-//       if (updatedProduct) {
-//         setSelectedProduct({ ...updatedProduct, status: newStatus });
-//         fetchSelectedProductDetails(updatedProduct);
-//       }
+//       const apiPayload = mapLocalStatusToApi(newStatus, selectedProduct.categoryModel!)
+//       await updateProductStatus(productId, apiPayload.status, apiPayload.category)
+//       await fetchProducts()
+//       const updatedProduct = products.find(p => p.id === productId)
+//       if (updatedProduct) setSelectedProduct({ ...updatedProduct, status: newStatus })
 //     } catch (error) {
-//       console.error('Status o\'zgartirishda xato:', error);
+//       console.error("Status o'zgartirishda xato:", error)
 //     }
-//   };
+//   }
 
-//   const handleInputChange = (id: string, value: string) => {
-//     setEditFormData((prev) => ({ ...prev, [id]: value }));
-//   };
+//   const filteredProducts = products.filter(product =>
+//     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//     product.category.toLowerCase().includes(searchTerm.toLowerCase())
+//   )
 
-//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const files = e.target.files;
-//     if (files) {
-//       const newFiles = Array.from(files);
-//       const totalImages = editImageFiles.length + newFiles.length;
-//       if (totalImages > 5) {
-//         alert("Maksimum 5 ta rasm qo'shish mumkin");
-//         return;
-//       }
-//       setEditImageFiles((prev) => [...prev, ...newFiles]);
-//     }
-//   };
-
-//   const handleRemoveNewImage = (index: number) => {
-//     setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
-//   };
-
-//   const handleReplaceImages = () => {
-//     setReplaceImages(true);
-//     setKeptOriginalImages([]);
-//     setEditImageFiles([]);
-//     if (fileInputRef.current) {
-//       fileInputRef.current.value = "";
-//       fileInputRef.current.click();
-//     }
-//   };
-
-//   const handleDeleteProduct = async (productId: string, categoryKey: string) => {
-//     setDeletingId(productId);
-//     try {
-//       await deleteProduct(categoryKey, productId);
-//       await fetchProducts();
-//       setIsDeleted(true);
-//       setTimeout(() => setIsDeleted(false), 3000);
-//       if (selectedProduct?.id === productId) {
-//         setSelectedProduct(null);
-//         setIsEditing(false);
-//         setEditFormData({});
-//         setEditImageFiles([]);
-//         setOpenSections(new Set());
-//       }
-//     } catch (error) {
-//       console.error('Mahsulotni o\'chirishda xato:', error);
-//       alert("Mahsulotni o'chirishda xatolik yuz berdi.");
-//     } finally {
-//       setDeletingId(null);
-//     }
-//   };
-
-//   const hasChanges = () => {
-//     if (!selectedProduct) return false;
-//     const detailsChanged = Object.keys(editFormData).some(key => editFormData[key] !== originalFormData[key]);
-//     const imagesChanged = editImageFiles.length > 0 || keptOriginalImages.length !== originalImages.length;
-//     return detailsChanged || imagesChanged;
-//   };
-
-//   const handleSaveEdit = async () => {
-//     if (!selectedProduct || !hasChanges()) return;
-
-//     try {
-//       const fieldMap = categoryFieldMap[selectedProduct.categoryKey] || {};
-//       const payload = new FormData();
-//       let hasPatchData = false;
-
-//       Object.entries(editFormData).forEach(([uiId, value]) => {
-//         if (originalFormData[uiId] !== value) {
-//           const apiField = fieldMap[uiId];
-//           if (apiField) {
-//             payload.append(apiField, value);
-//             hasPatchData = true;
-//           }
-//         }
-//       });
-
-//       editImageFiles.forEach((file) => {
-//         payload.append('images', file);
-//         hasPatchData = true;
-//       });
-//       if (hasPatchData) {
-//         await updateProduct(selectedProduct.categoryKey, selectedProduct.id, payload);
-//       }
-//       await fetchProducts();
-
-//       const updatedProduct = products.find(p => p.id === selectedProduct.id);
-//       if (updatedProduct) {
-//         setSelectedProduct(updatedProduct);
-//         setCurrentImages(updatedProduct.images || []);
-//         fetchSelectedProductDetails(updatedProduct);
-//       }
-//       setIsEditing(false);
-//       setEditImageFiles([]);
-//       setKeptOriginalImages([]);
-//       setReplaceImages(false);
-//       if (fileInputRef.current) fileInputRef.current.value = "";
-//     } catch (error) {
-//       console.error("Saqlashda xatolik yuz berdi:", error);
-//     }
-//   };
-
-//   const filteredProducts = products.filter(
-//     (product) =>
-//       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       product.category.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   const fetchSelectedProductDetails = async (product: Product) => {
-//     try {
-//       const fullDetails = await getProductById(product.categoryKey, product.id);
-//       const reverseMap = getReverseFieldMap(product.categoryKey);
-//       const allQuestions = Object.values(categories[product.categoryKey].sections).flatMap(sec => sec.questions.map(q => q.id));
-//       const details: Record<string, string> = {};
-//       const suppliers: Record<string, string> = {};
-
-//       Object.entries(fullDetails).forEach(([apiField, value]) => {
-//         if (typeof value !== 'string' && typeof value !== 'number') return;
-//         if (['id', 'status', 'scans', 'rating', 'blockchain_hash', 'qr_code'].includes(apiField)) return;
-
-//         const cleanField = apiField.replace('_org', '');
-//         const uiId = reverseMap[cleanField];
-
-//         if (uiId && allQuestions.includes(uiId)) {
-//           if (apiField.endsWith('_org')) {
-//             suppliers[uiId] = value as string;
-//           } else {
-//             details[uiId] = value as string;
-//           }
-//         }
-//       });
-
-//       details[allQuestions[0]] = fullDetails.name || '';
-
-//       let images: string[] = [];
-//       if (fullDetails.images) {
-//         // images = Array.isArray(fullDetails.images) ? fullDetails.image ? [fullDetails.image] : []
-//         images = Array.isArray(fullDetails.images) ? fullDetails.images : (fullDetails.image ? [fullDetails.image] : []);
-//       } else if (fullDetails.image) {
-//         images = [fullDetails.image];
-//       }
-
-//       const updatedProduct = {
-//         ...product,
-//         details,
-//         suppliers,
-//         images
-//       };
-//       setSelectedProduct(updatedProduct);
-//       setCurrentImages(images);
-//       setOriginalImages(images);
-//       setKeptOriginalImages(images);
-//       setEditFormData(details);
-//       setOriginalFormData(details);
-//     } catch (error) {
-//       console.error('Tafsilotlarni yuklashda xato:', error);
-//       setSelectedProduct(product);
-//       setCurrentImages(product.images || []);
-//       setOriginalImages(product.images || []);
-//       setKeptOriginalImages(product.images || []);
-//       setEditFormData(product.details || {});
-//       setOriginalFormData(product.details || {});
-//     }
-//   };
-
-//   const renderSuppliersList = (suppliers: Record<string, string> | undefined) => {
-//     if (!suppliers || Object.keys(suppliers).length === 0) return null;
-
-//     return (
-//       <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
-//         <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-//           <h4 className="text-lg font-medium text-gray-800">Biriktirilgan Ta'minotchilar</h4>
-//         </CardHeader>
-//         <CardContent className="p-4 space-y-3">
-//           {Object.entries(suppliers).map(([questionId, supplierId]) => {
-//             const question = Object.values(categories[selectedProduct?.categoryKey || "1"].sections)
-//               .flatMap((section) => section.questions)
-//               .find((q) => q.id === questionId);
-//             const isCompleted = selectedProduct?.details?.[questionId];
-//             const supplierName = partnersMap[supplierId] || "Noma'lum ta'minotchi";
-//             return (
-//               <div key={questionId} className="flex justify-between items-center bg-white/50 p-3 rounded-md border border-blue-100">
-//                 <div>
-//                   <p className="text-sm font-medium text-gray-700">{question?.label}</p>
-//                   <p className="text-xs text-gray-500">
-//                     {supplierName}
-//                   </p>
-//                 </div>
-//                 {isCompleted ? (
-//                   <Check className="h-5 w-5 text-green-600" />
-//                 ) : (
-//                   <Clock className="h-5 w-5 text-yellow-600" />
-//                 )}
-//               </div>
-//             );
-//           })}
-//         </CardContent>
-//       </Card>
-//     );
-//   };
-
-//   const getDisplayImages = () => {
-//     if (!isEditing) return currentImages;
-//     if (replaceImages) {
-//       return editImageFiles.map(f => URL.createObjectURL(f));
-//     }
-//     return currentImages;
-//   };
-
-//   const renderProductDetails = (product: Product, isViewOnly: boolean = false) => {
-//     if (!product.categoryKey || !categories[product.categoryKey]) return null;
-
-//     const category = categories[product.categoryKey];
-//     const currentDetails = isEditing ? editFormData : product.details || {};
-//     const displayImages = getDisplayImages();
+//   const renderProductDetails = (product: Product) => {
+//     if (!product.categoryKey || !categories[product.categoryKey]) return null
+//     const category = categories[product.categoryKey]
 
 //     return (
 //       <div className="space-y-6">
@@ -522,464 +201,141 @@
 //             <h4 className="text-lg font-medium text-gray-800">Mahsulot Rasmlari</h4>
 //           </CardHeader>
 //           <CardContent className="p-4">
-//             {isEditing ? (
-//               <div className="space-y-3">
-//                 {!replaceImages && displayImages.length > 0 ? (
-//                   <div className="space-y-3">
-//                     <div className="flex flex-wrap gap-4">
-//                       {displayImages.map((image, index) => (
-//                         <img
-//                           key={index}
-//                           src={`${image}`}
-//                           alt={`Mahsulot rasmi ${index + 1}`}
-//                           className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
-//                         />
-//                       ))}
-//                     </div>
-//                     <Button
-//                       variant="outline"
-//                       onClick={handleReplaceImages}
-//                       className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                     >
-//                       Rasmlarni almashtirish
-//                     </Button>
-//                   </div>
-//                 ) : (
-//                   <>
-//                     <Label htmlFor="images" className="text-gray-700 font-medium">
-//                       Rasmlar (maksimum 5 ta)
-//                     </Label>
-//                     <Input
-//                       id="images"
-//                       type="file"
-//                       accept="image/*"
-//                       multiple
-//                       onChange={handleImageChange}
-//                       className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden "
-//                       ref={fileInputRef}
-//                     />
-//                     <div className="flex flex-wrap gap-4">
-//                       {editImageFiles.map((file, index) => (
-//                         <div key={index} className="relative group">
-//                           <img
-//                             src={URL.createObjectURL(file)}
-//                             alt={`Yangi rasm ${index + 1}`}
-//                             className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
-//                           />
-//                           <Button
-//                             variant="destructive"
-//                             size="sm"
-//                             className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-429 "
-//                             onClick={() => handleRemoveNewImage(index)}>
-//                             <X className="h-4 w-4" />
-//                           </Button>
-//                         </div>
-//                       ))}
-//                       <div>
-//       {/* Plus tugma */}
-//       <div
-//         className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
-//         onClick={() => {
-//           console.log("bosildi------------------")
-//           fileInputRef.current?.click()
-//         }}
-//       >
-//         <Plus className="h-6 w-6 text-gray-600" />
-//       </div>
-
-//       {/* Yashirin fayl input */}
-//       <input
-//         type="file"
-//         accept="image/*"
-//         ref={fileInputRef}
-//         onChange={handleImageChange}
-//         className="hidden"
-//       />
-//     </div>
-//                     </div>
-//                   </>
-//                 )}
-//               </div>
-//             ) : (
-//               <div className="flex flex-wrap gap-4">
-//                 {displayImages.length > 0 ? (
-//                   displayImages.map((image, index) => (
-//                     <img
-//                       key={index}
-//                       src={`${image}`}
-//                       alt={`Mahsulot rasmi ${index + 1}`}
-//                       className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105 cursor-pointer"
-//                       onClick={() => {
-//                         setLightboxIndex(index);
-//                         setLightboxOpen(true);
-//                       }}
-//                     />
-//                   ))
-//                 ) : (
-//                   <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
-//                     <Plus className="h-6 w-6 text-gray-600" />
-//                   </div>
-//                 )}
-//               </div>
-//             )}
+//             <div className="flex flex-wrap gap-4">
+//               {product.images && product.images.length > 0 ? product.images.map((image, index) => (
+//                 <img key={index} src={image} alt={`Rasm ${index + 1}`} className="w-24 h-24 object-cover rounded-md border border-blue-200" />
+//               )) : (
+//                 <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
+//                   <Package className="h-6 w-6 text-gray-600" />
+//                 </div>
+//               )}
+//             </div>
 //           </CardContent>
 //         </Card>
-//         {lightboxOpen && (
-//           <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-//             <DialogContent className="max-w-4xl p-0 overflow-hidden">
-//               <div className="relative">
-//                 <img
-//                   src={`${displayImages[lightboxIndex]}`}
-//                   alt="Kattalashtirilgan rasm"
-//                   className="w-full h-auto"
-//                 />
-//                 {displayImages.length > 1 && (
-//                   <>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className="absolute left-2 top-1/2 -translate-y-1/2"
-//                       onClick={() => setLightboxIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length)}
-//                     >
-//                       <ChevronLeft className="h-4 w-4" />
-//                     </Button>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className="absolute right-2 top-1/2 -translate-y-1/2"
-//                       onClick={() => setLightboxIndex((prev) => (prev + 1) % displayImages.length)}
-//                     >
-//                       <ChevronRight className="h-4 w-4" />
-//                     </Button>
-//                   </>
-//                 )}
-//               </div>
-//             </DialogContent>
-//           </Dialog>
-//         )}
+
 //         {Object.entries(category.sections).map(([sectionId, section]) => (
 //           <Card key={sectionId} className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
-//             <CardHeader
-//               className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${!isViewOnly ? 'cursor-pointer hover:bg-blue-200/50' : ''}`}
-//               onClick={(e) => {
-//                 e.stopPropagation();
-//                 !isViewOnly && toggleSection(sectionId)
-//               }}
-//             >
+//             <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
 //               <h4 className="text-lg font-medium text-gray-800">{section.title}</h4>
-//               {!isViewOnly && (
-//                 <ChevronDown
-//                   className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
-//                     openSections.has(sectionId) ? "rotate-180" : ""
-//                   }`}
-//                 />
-//               )}
 //             </CardHeader>
-//             {(isViewOnly || openSections.has(sectionId)) && (
-//               <CardContent className="p-4 space-y-4 bg-white/90">
-//                 {section.questions.map((question) => {
-//                   const value = currentDetails[question.id] || "";
-//                   const supplierId = product.suppliers?.[question.id];
-//                   const isSupplierSection = !["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "4.1", "4.2", "5.1", "5.2", "6.1", "6.2", "7.1", "7.2", "8.1", "8.2", "9.1", "9.2"].includes(sectionId);
-
-//                   if (isViewOnly || (!isEditing && !isSupplierSection)) {
-//                     return (
-//                       <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
-//                         <div className="flex justify-between items-start">
-//                           <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
-//                           {supplierId && (
-//                             <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
-//                               {partnersMap[supplierId] || "Noma'lum"}
-//                             </span>
-//                           )}
-//                         </div>
-//                         <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">{value || "Ma'lumot kiritilmagan"}</p>
-//                       </div>
-//                     );
-//                   }
-
-//                   return (
-//                     <div key={question.id} className="space-y-2">
-//                       <Label htmlFor={question.id} className="text-gray-700 font-medium">{question.label}</Label>
-//                       <Input
-//                         id={question.id}
-//                         value={value}
-//                         onChange={(e) => handleInputChange(question.id, e.target.value)}
-//                         placeholder={question.placeholder}
-//                         className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-//                         disabled={(!isEditing) || (!!(isSupplierSection && supplierId))}
-//                       />
-//                       {isSupplierSection && supplierId && (
-//                         <p className="text-xs text-gray-500 mt-1 bg-blue-50 px-2 py-1 rounded-full inline-block">
-//                           Bu maydon {partnersMap[supplierId] || "ta'minotchi"} tomonidan to'ldiriladi
-//                         </p>
-//                       )}
-//                     </div>
-//                   );
-//                 })}
-//               </CardContent>
-//             )}
+//             <CardContent className="p-4 space-y-4 bg-white/90">
+//               {section.questions.map(question => {
+//                 const value = product.details?.[question.id] || ""
+//                 return (
+//                   <div key={question.id} className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100">
+//                     <Label className="text-sm font-medium text-gray-700">{question.label}</Label>
+//                     <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
+//                       {value || "Ma'lumot kiritilmagan"}
+//                     </p>
+//                   </div>
+//                 )
+//               })}
+//             </CardContent>
 //           </Card>
 //         ))}
-//         {renderSuppliersList(product.suppliers)}
 //       </div>
-//     );
-//   };
-
-//   const toggleSection = (sectionId: string) => {
-//     setOpenSections((prev) => {
-//       const newSet = new Set(prev);
-//       if (newSet.has(sectionId)) newSet.delete(sectionId);
-//       else newSet.add(sectionId);
-//       return newSet;
-//     });
-//   };
-
-//   const startEditing = () => {
-//     if (selectedProduct) {
-//       setEditFormData(selectedProduct.details || {});
-//       setOriginalFormData(selectedProduct.details || {});
-//       setEditImageFiles([]);
-//       setKeptOriginalImages([]);
-//       setReplaceImages(true);
-//       setOpenSections(new Set(Object.keys(categories[selectedProduct.categoryKey]?.sections || {})));
-//       setIsEditing(true);
-//     }
-//   };
-
-//   const cancelEditing = () => {
-//     setIsEditing(false);
-//     setEditFormData(originalFormData);
-//     setEditImageFiles([]);
-//     setKeptOriginalImages(originalImages);
-//     setCurrentImages(originalImages);
-//     setReplaceImages(false);
-//     if (fileInputRef.current) fileInputRef.current.value = "";
-//   };
+//     )
+//   }
 
 //   return (
 //     <div className="flex min-h-screen">
 //       <main className="flex-1 md:p-8 p-4">
 //         <div className="container mx-auto space-y-6 max-w-5xl">
-//           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-//             <div>
-//               <h1 className="text-3xl md:text-4xl font-semibold text-balance tracking-tight text-gray-800">
-//                 Mahsulotlar
-//               </h1>
-//               <p className="text-gray-600 mt-2 text-sm md:text-base">
-//                 Barcha mahsulotlaringizni ko‘ring va boshqaring
-//               </p>
-//             </div>
-//             <div className="flex items-center gap-4">
-//               {!isStaff && (
-//                 <Button
-//                   className="text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                   asChild
-//                 >
-//                   <Link href="/manufacturer/products/add">
-//                     <Plus className="mr-2 h-4 w-4" />
-//                     Yangi mahsulot
-//                   </Link>
-//                 </Button>
-//               )}
-//             </div>
+//           <div>
+//             <h1 className="text-3xl md:text-4xl font-semibold text-gray-800">Mahsulotlar</h1>
+//             <p className="text-gray-600 mt-2">Tasdiqlash uchun mahsulotlarni ko‘ring</p>
 //           </div>
 
-//           <div className="flex items-center gap-4">
-//             <Input
-//               placeholder="Mahsulot yoki kategoriya bo‘yicha qidirish..."
-//               value={searchTerm}
-//               onChange={(e) => setSearchTerm(e.target.value)}
-//               className="max-w-sm border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
-//             />
-//           </div>
+//           <Input
+//             placeholder="Mahsulot yoki kategoriya bo‘yicha qidirish..."
+//             value={searchTerm}
+//             onChange={e => setSearchTerm(e.target.value)}
+//             className="max-w-sm border-blue-200 focus:ring-blue-400 bg-white"
+//           />
 
 //           <Card className="p-6 bg-gradient-to-br from-white to-blue-50/80 backdrop-blur-md border border-blue-200/50 shadow-lg rounded-lg">
 //             <div className="space-y-4 overflow-y-scroll max-h-[70vh]">
 //               {loadingProducts ? (
 //                 <p className="text-center text-gray-600 py-6">Yuklanmoqda...</p>
 //               ) : filteredProducts.length > 0 ? (
-//                 filteredProducts.map((product) => {
-//                   const currentIdx = carouselIndex[product.id] || 0;
-//                   const hasImages = product.images && product.images.length > 0;
-//                   const displayImg = hasImages ? product.images?.[currentIdx] : null;
-//                   return (
-//                     <Dialog key={product.id} onOpenChange={(open) => {
-//                       if (!open) {
-//                         setIsEditing(false);
-//                         setSelectedProduct(null);
-//                         setEditImageFiles([]);
-//                         setEditFormData({});
-//                         setOriginalFormData({});
-//                         setKeptOriginalImages([]);
-//                         setReplaceImages(false);
-//                         setOpenSections(new Set());
-//                         setIsDeleted(false);
-//                         setLightboxOpen(false);
-//                       } else {
-//                         setSelectedProduct(product);
-//                         fetchSelectedProductDetails(product);
-//                       }
-//                     }}>
-//                       <DialogTrigger asChild>
-//                         <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
-//                           <div className="flex items-center gap-4 flex-1">
-//                             <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
-//                               {hasImages ? (
-//                                 <img src={`${displayImg}`} alt={product.name} className="w-full h-full object-cover" />
-//                               ) : (
-//                                 <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
-//                               )}
-//                             </div>
-//                             <div>
-//                               <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
-//                               <p className="text-sm text-gray-600">{product.category}</p>
-//                             </div>
+//                 filteredProducts.map(product => (
+//                   <Dialog key={product.id} onOpenChange={open => open ? setSelectedProduct(product) : setSelectedProduct(null)}>
+//                     <DialogTrigger asChild>
+//                       <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
+//                         <div className="flex items-center gap-4 flex-1">
+//                           <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+//                             {product.images?.[0] ? (
+//                               <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+//                             ) : (
+//                               <Package className="h-6 w-6 text-gray-600" />
+//                             )}
 //                           </div>
-//                           <div className="flex items-center gap-4">
-//                             <div className="text-right">
-//                               <p className="text-sm font-medium text-gray-700">{product.scans} skan</p>
-//                               <div className="flex items-center gap-1">
-//                                 <Star className="h-3 w-3 text-yellow-500" />
-//                                 <span className="text-sm text-gray-700">{product.rating}</span>
-//                               </div>
-//                             </div>
-//                             <Badge
-//                               variant={getStatusVariant(product.status)}
-//                               className="transition-all duration-200 px-3 py-1 rounded-full"
-//                             >
-//                               {getStatusText(product.status)}
-//                             </Badge>
+//                           <div>
+//                             <h3 className="font-semibold text-gray-800 text-lg">{product.name}</h3>
+//                             <p className="text-sm text-gray-600">{product.category}</p>
+//                             {product.created_at && (
+//                               <p className="text-xs text-gray-500">
+//                                 Yaratilgan: {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
+//                               </p>
+//                             )}
 //                           </div>
-//                           {!isStaff && product.status === "in-progress" && (
-//                             <div onClick={(e) => e.stopPropagation()}>
-//                               <AlertDialog>
-//                                 <AlertDialogTrigger asChild>
-//                                   <Button
-//                                     variant="destructive"
-//                                     size="sm"
-//                                     className="ml-2"
-//                                     disabled={deletingId === product.id}
-//                                   >
-//                                     {deletingId === product.id ? "O'chirilmoqda..." : <Trash2 className="h-4 w-4" />}
-//                                   </Button>
-//                                 </AlertDialogTrigger>
-//                                 <AlertDialogContent>
-//                                   <AlertDialogHeader>
-//                                     <AlertDialogTitle>Mahsulotni o'chirish</AlertDialogTitle>
-//                                     <AlertDialogDescription>
-//                                       Siz haqiqatan ham "{product.name}" mahsulotini o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
-//                                     </AlertDialogDescription>
-//                                   </AlertDialogHeader>
-//                                   <AlertDialogFooter>
-//                                     <AlertDialogCancel>Bekor qilish</AlertDialogCancel>
-//                                     <AlertDialogAction onClick={() => handleDeleteProduct(product.id, product.categoryKey)}>
-//                                       Ha, o'chirish
-//                                     </AlertDialogAction>
-//                                   </AlertDialogFooter>
-//                                 </AlertDialogContent>
-//                               </AlertDialog>
-//                             </div>
-//                           )}
 //                         </div>
-//                       </DialogTrigger>
-//                       <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
-//                         <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
-//                           <DialogTitle className="text-2xl font-semibold text-gray-800">
-//                             {product.name} tafsilotlar
-//                           </DialogTitle>
-//                         </DialogHeader>
-//                         <div className="space-y-6 mt-4">
-//                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-//                             <div>
-//                               <p><strong className="text-gray-700">Kategoriya:</strong> {product.category}</p>
-//                               <p><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</p>
-//                             </div>
-//                             <div>
-//                               <p><strong className="text-gray-700">Skanlar soni:</strong> {product.scans}</p>
-//                               <p><strong className="text-gray-700">Reyting:</strong> {product.rating}</p>
-//                             </div>
-//                           </div>
-//                           {isDeleted && (
-//                             <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
-//                               <CheckCircle className="h-5 w-5 text-green-600" />
-//                               <p className="text-sm text-green-700">
-//                                 Mahsulot muvaffaqiyatli o'chirildi va QR kod o'chirildi!
+//                         <div className="flex items-center gap-4">
+//                           {product.status === "active" && (
+//                             <div className="flex items-center gap-1">
+//                               <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+//                                 {Array.from({ length: 5 }, (_, i) => {
+//                                   const starValue = i + 1
+//                                   if (product.rating >= starValue) return <Star key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+//                                   if (product.rating >= starValue - 0.5) return <StarHalf key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+//                                   return <StarOff key={i} className="h-3.5 w-3.5 text-gray-300" />
+//                                 })}
+//                               </p>
+//                               <p className="text-sm font-medium text-gray-700 flex items-center gap-[2px]">
+//                                 <ScanEyeIcon className="h-3 w-3" /> {product.scans}
 //                               </p>
 //                             </div>
 //                           )}
-//                           {loadingPartners ? <p className="text-gray-500">Ta'minotchilar yuklanmoqda...</p> : renderProductDetails(selectedProduct || product, isStaff || (!isEditing && product.status !== "in-progress"))}
-//                         </div>
-//                         <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
-//                           {isStaff && product.status === "pending" ? (
-//                             <>
-//                               <Button
-//                                 variant="outline"
-//                                 onClick={() => handleStatusChange(product.id, "in-progress")}
-//                                 className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                               >
-//                                 <RotateCcw className="mr-2 h-4 w-4" />
-//                                 Qaytarib yuborish
-//                               </Button>
-//                               <Button
-//                                 onClick={() => handleStatusChange(product.id, "active")}
-//                                 className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                               >
-//                                 <CheckCircle className="mr-2 h-4 w-4" />
-//                                 Tasdiqlash
-//                               </Button>
-//                             </>
-//                           ) : (
-//                             !isStaff && (
-//                               <>
-//                                 {isEditing ? (
-//                                   <>
-//                                     <Button
-//                                       variant="outline"
-//                                       onClick={cancelEditing}
-//                                       className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                                     >
-//                                       Bekor qilish
-//                                     </Button>
-//                                     <Button
-//                                       onClick={handleSaveEdit}
-//                                       className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                                       disabled={!hasChanges()}
-//                                     >
-//                                       <Save className="mr-2 h-4 w-4" />
-//                                       Saqlash
-//                                     </Button>
-//                                   </>
-//                                 ) : (
-//                                   <>
-//                                     {product.status === "in-progress" && (
-//                                       <>
-//                                         <Button
-//                                           variant="outline"
-//                                           onClick={startEditing}
-//                                           className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-//                                         >
-//                                           <Edit3 className="mr-2 h-4 w-4" />
-//                                           Tahrirlash
-//                                         </Button>
-//                                         <Button
-//                                           onClick={() => handleStatusChange(product.id, "pending")}
-//                                           className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-//                                         >
-//                                           Tasdiqlash uchun yuborish
-//                                         </Button>
-//                                       </>
-//                                     )}
-//                                   </>
-//                                 )}
-//                               </>
-//                             )
+//                           <Badge variant={getStatusVariant(product.status)} className="px-3 py-1 rounded-full">
+//                             {getStatusText(product.status)}
+//                           </Badge>
+//                           {product.status === "active" && product.qr_code && (
+//                             <Button variant="ghost" size="sm" onClick={e => { e.stopPropagation(); alert("QR kod yuklab olindi") }}>
+//                               <QrCode className="h-4 w-4 text-blue-600" />
+//                             </Button>
 //                           )}
+//                         </div>
+//                       </div>
+//                     </DialogTrigger>
+//                     <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
+//                       <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
+//                         <DialogTitle className="text-2xl font-semibold text-gray-800">
+//                           {product.name} tafsilotlari
+//                         </DialogTitle>
+//                       </DialogHeader>
+//                       <div className="space-y-6 mt-4">
+//                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+//                           <div><strong className="text-gray-700">Kategoriya:</strong> {product.category}</div>
+//                           <div><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</div>
+//                           {product.created_at && (
+//                             <div><strong className="text-gray-700">Yaratilgan:</strong> {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}</div>
+//                           )}
+//                         </div>
+//                         {renderProductDetails(product)}
+//                       </div>
+//                       {product.status === "pending" && (
+//                         <DialogFooter className="flex gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
+//                           <Button variant="outline" onClick={() => handleStatusChange(product.id, "in-progress")} className="border-blue-300 hover:bg-blue-100">
+//                             <RotateCcw className="mr-2 h-4 w-4" /> Qaytarib yuborish
+//                           </Button>
+//                           <Button onClick={() => handleStatusChange(product.id, "active")} className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg">
+//                             <CheckCircle className="mr-2 h-4 w-4" /> Tasdiqlash
+//                           </Button>
 //                         </DialogFooter>
-//                       </DialogContent>
-//                     </Dialog>
-//                   );
-//                 })
+//                       )}
+//                     </DialogContent>
+//                   </Dialog>
+//                 ))
 //               ) : (
 //                 <p className="text-center text-gray-600 py-6">Mahsulotlar topilmadi.</p>
 //               )}
@@ -988,18 +344,17 @@
 //         </div>
 //       </main>
 //     </div>
-//   );
+//   )
 // }
-"use client";
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import Cookies from "js-cookie";
-import { Button } from "@/src/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/src/components/ui/card";
-import { Badge } from "@/src/components/ui/badge";
-import { Input } from "@/src/components/ui/input";
-import { format } from "date-fns";
+"use client"
+
+import { useState, useEffect, useMemo } from "react"
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/src/components/ui/card"
+import { Badge } from "@/src/components/ui/badge"
+import { Input } from "@/src/components/ui/input"
+import { format } from "date-fns"
 import {
   Dialog,
   DialogContent,
@@ -1007,967 +362,255 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@/src/components/ui/dialog";
-import { Label } from "@/src/components/ui/label";
+} from "@/src/components/ui/dialog"
+import { Label } from "@/src/components/ui/label"
 import {
-  Clock,
-  Check,
   Package,
-  Plus,
-  Star,
-  ChevronDown,
-  Edit3,
-  Save,
-  X,
   CheckCircle,
   RotateCcw,
-  Trash2,
-  ChevronLeft,
-  ChevronRight,
   QrCode,
-  ScanEyeIcon,
+  Star,
   StarHalf,
   StarOff,
-} from "lucide-react";
-import { categories } from "@/lib/categories";
-import {
-  deleteProduct,
-  getAllProductsByStatus,
-  getPartners,
-  getProductById,
-  updateProduct,
-  updateProductStatus,
-} from "@/lib/api";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/src/components/ui/alert-dialog";
-import { categoryFieldMap, getReverseFieldMap } from "./note";
+  ScanEyeIcon,
+  X,
+  Download,
+  Clock,
+} from "lucide-react"
+import Cookies from "js-cookie"
+import { getAllProducts, updateProductStatus, getPartners } from "@/lib/api"
 
-const modelToKey: Record<string, string> = {
-  GadgetProduct: "1",
-  MaishiyTexnikaProduct: "2",
-  KiyimProduct: "3",
-  FoodProduct: "4",
-  QurilishProduct: "5",
-  AksessuarProduct: "6",
-  SalomatlikProduct: "7",
-  UyBuyumProduct: "8",
-  KanselyariyaProduct: "9",
-};
+interface Question {
+  label: string
+  value?: string
+  supplierId?: string
+}
 
-const modelToKeyLower: Record<string, string> = Object.fromEntries(
-  Object.entries(modelToKey).map(([k, v]) => [k.toLowerCase(), v])
-);
+interface Section {
+  title: string
+  questions: Question[]
+}
 
 interface Product {
-  id: string;
-  name: string;
-  category: string;
-  categoryKey: string;
-  scans: number;
-  rating: number;
-  status: "active" | "in-progress" | "pending";
-  details?: Record<string, string>;
-  suppliers?: Record<string, string>;
-  images?: string[];
-  blockchain_hash?: string;
-  qr_code?: string;
-  categoryModel?: string;
-  created_at?: string;
+  id: string
+  name: string
+  category: { id: string; name: string }
+  status: "draft" | "pending" | "active"
+  created_by: string
+  qr_code?: string
+  created_at: string
+  activated_at?: string
+  images: string[]
+  documents: string[]
+  rating: number
+  all_scan: number
+  sections: Section[]
 }
 
 const getStatusText = (status: Product["status"]) => {
   switch (status) {
-    case "active":
-      return "Faol";
-    case "in-progress":
-      return "To'ldirilmoqda";
-    case "pending":
-      return "Tasdiqlanishi kutilmoqda";
-    default:
-      return "Noma'lum";
+    case "draft": return "To‘ldirilmoqda"
+    case "pending": return "Tasdiqlanishi kutilmoqda"
+    case "active": return "Faol"
+    default: return status
   }
-};
+}
 
 const getStatusVariant = (status: Product["status"]) => {
   switch (status) {
-    case "active":
-      return "default";
-    case "in-progress":
-      return "outline";
-    case "pending":
-      return "secondary";
-    default:
-      return "secondary";
+    case "draft": return "secondary"
+    case "pending": return "outline"
+    case "active": return "default"
+    default: return "secondary"
   }
-};
+}
 
-const mapApiStatusToLocal = (apiStatus: string): Product["status"] => {
-  switch (apiStatus) {
-    case "active":
-      return "active";
-    case "draft":
-      return "in-progress";
-    case "pending":
-      return "pending";
-    default:
-      return "in-progress";
-  }
-};
+export default function AdminProductsPage() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [products, setProducts] = useState<Product[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [loadingProducts, setLoadingProducts] = useState(true)
+  const [partners, setPartners] = useState<{ id: string; name: string }[]>([])
+  const [imageModalOpen, setImageModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState("")
+  const [qrModalOpen, setQrModalOpen] = useState(false)
 
-const mapLocalStatusToApi = (
-  localStatus: Product["status"],
-  categoryModel: string
-) => {
-  switch (localStatus) {
-    case "active":
-      return { status: "active", category: categoryModel };
-    case "in-progress":
-      return { status: "draft", category: categoryModel };
-    case "pending":
-      return { status: "pending", category: categoryModel };
-    default:
-      return { status: "draft", category: categoryModel };
-  }
-};
-
-export default function ManufacturerProductsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editFormData, setEditFormData] = useState<Record<string, string>>({});
-  const [originalFormData, setOriginalFormData] = useState<
-    Record<string, string>
-  >({});
-  const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
-  const [originalImages, setOriginalImages] = useState<string[]>([]);
-  const [keptOriginalImages, setKeptOriginalImages] = useState<string[]>([]);
-  const [currentImages, setCurrentImages] = useState<string[]>([]);
-  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
-  const [isStaff, setIsStaff] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [partnersMap, setPartnersMap] = useState<Record<string, string>>({});
-  const [loadingPartners, setLoadingPartners] = useState(true);
-  const [loadingProducts, setLoadingProducts] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [isDeleted, setIsDeleted] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>(
-    {}
-  );
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [replaceImages, setReplaceImages] = useState(false);
-  const [qrModalOpen, setQrModalOpen] = useState(false);
-  const [selectedQrCode, setSelectedQrCode] = useState<string | null>(null);
-
+  // PARTNERLAR — TO‘G‘RI YUKLASH (myid + owner/partner)
   useEffect(() => {
-    const staffStatus = Cookies.get("is_staff") === "true";
-    setIsStaff(staffStatus);
-  }, []);
+    const load = async () => {
+      const myId = Cookies.get("myid")
+      if (!myId) return
 
-  useEffect(() => {
-    const intervals: Record<string, NodeJS.Timeout> = {};
-    products.forEach((product) => {
-      if (product.images && product.images.length > 1) {
-        intervals[product.id] = setInterval(() => {
-          setCarouselIndex((prev) => ({
-            ...prev,
-            [product.id]:
-              ((prev[product.id] || 0) + 1) % product.images!.length,
-          }));
-        }, 3000);
-      }
-    });
-    return () => {
-      Object.values(intervals).forEach(clearInterval);
-    };
-  }, [products]);
+      try {
+        const data = await getPartners()
+        const partnerSet = new Set<string>()
+        const mapped: { id: string; name: string }[] = []
 
-const fetchPartners = async () => {
-  try {
-    setLoadingPartners(true);
-    const data = await getPartners();
-    const myId = Cookies.get("myid");
-    const isStaff = Cookies.get("is_staff") === "true";
-    const map: Record<string, string> = {};
-
-    if (Array.isArray(data)) {
-      data.forEach((item: any) => {
-        // Tekshirish: item.owner va item.partner mavjudligi
-        if (!item.owner || !item.partner) {
-          console.warn("Noto'g'ri partner ma'lumoti:", item);
-          return;
-        }
-
-        // Xodim bo'lsa, barcha ta'minotchilarni qo'shish
-        if (isStaff) {
-          // owner va partner ni map ga qo'shish
-          map[item.owner.id] = item.owner.name || "Noma'lum ta'minotchi";
-          map[item.partner.id] = item.partner.name || "Noma'lum ta'minotchi";
-        } else {
-          // Xodim bo'lmasa, faqat myId ga nisbatan ta'minotchilarni qo'shish
-          let partnerId: string, partnerName: string;
+        data.forEach((item: any) => {
+          let id, name
           if (item.owner.id === myId) {
-            partnerId = item.partner.id;
-            partnerName = item.partner.name || "Noma'lum ta'minotchi";
-          } else {
-            partnerId = item.owner.id;
-            partnerName = item.owner.name || "Noma'lum ta'minotchi";
+            id = item.partner.id
+            name = item.partner.name
+          } else if (item.partner.id === myId) {
+            id = item.owner.id
+            name = item.owner.name
           }
-          if (partnerId && partnerId !== myId) {
-            map[partnerId] = partnerName;
+          if (id && id !== myId && !partnerSet.has(id)) {
+            partnerSet.add(id)
+            mapped.push({ id, name })
           }
-        }
-      });
-    } else {
-      console.warn("Data massiv emas:", data);
+        })
+        setPartners(mapped)
+      } catch (err) {
+        console.error("Hamkorlar yuklanmadi:", err)
+      }
     }
+    load()
+  }, [])
 
-    setPartnersMap(map);
-    console.log("Yaratilgan partnersMap:", map);
-  } catch (error) {
-    console.error("Ta'minotchilarni yuklashda xato:", error);
-  } finally {
-    setLoadingPartners(false);
-  }
-};
-
+  // MAHSULOTLAR
   const fetchProducts = async () => {
     try {
-      setLoadingProducts(true);
-      const activeData = await getAllProductsByStatus("active");
-      const draftData = await getAllProductsByStatus("draft");
-      const pendingData = await getAllProductsByStatus("pending");
-
-      const mappedProducts: Product[] = [];
-
-      [activeData, draftData, pendingData].forEach((data, index) => {
-        const apiStatus =
-          index === 0 ? "active" : index === 1 ? "draft" : "pending";
-
-        data.product_categories.forEach((cat: any) => {
-          const lowerModel = cat.model.toLowerCase();
-          const key =
-            modelToKey[cat.model] ||
-            modelToKeyLower[lowerModel] ||
-            modelToKey[
-              cat.model.charAt(0).toUpperCase() +
-                cat.model.slice(1).toLowerCase()
-            ];
-          if (!key) return;
-
-          const categoryName = categories[key].name;
-          const reverseMap = getReverseFieldMap(key);
-          const allQuestions = Object.values(categories[key].sections).flatMap(
-            (sec) => sec.questions.map((q) => q.id)
-          );
-
-          cat.items.forEach((item: any) => {
-            const details: Record<string, string> = {};
-            const suppliers: Record<string, string> = {};
-
-            Object.entries(item).forEach(([apiField, value]) => {
-              if (typeof value !== "string" && typeof value !== "number")
-                return;
-              if (
-                [
-                  "id",
-                  "status",
-                  "scans",
-                  "rating",
-                  "blockchain_hash",
-                  "qr_code",
-                  "name",
-                  "created_at",
-                ].includes(apiField)
-              )
-                return;
-
-              const cleanField = apiField.replace("_org", "");
-              const uiId = reverseMap[cleanField];
-
-              if (uiId && allQuestions.includes(uiId)) {
-                if (apiField.endsWith("_org")) {
-                  suppliers[uiId] = value as string;
-                } else {
-                  details[uiId] = value as string;
-                }
-              }
-            });
-
-            details[allQuestions[0]] = item.name || "";
-
-            let images: string[] = [];
-            if (item.images) {
-              images = Array.isArray(item.images)
-                ? item.images
-                : item.image
-                ? [item.image]
-                : [];
-            } else if (item.image) {
-              images = [item.image];
-            }
-
-            mappedProducts.push({
-              id: item.id.toString(),
-              name: item.name || "Noma'lum",
-              category: categoryName,
-              categoryKey: key,
-              scans: item.all_scan || 0,
-              rating: item.rating || 0,
-              status: mapApiStatusToLocal(item.status || apiStatus),
-              details,
-              suppliers,
-              images,
-              blockchain_hash: item.blockchain_hash,
-              qr_code: item.qr_code,
-              categoryModel: cat.model,
-              created_at: item.created_at,
-            });
-          });
-        });
-      });
-
-      setProducts(mappedProducts);
+      setLoadingProducts(true)
+      const data = await getAllProducts()
+      setProducts(data)
     } catch (error) {
-      console.error("Mahsulotlarni yuklashda xato:", error);
+      console.error("Mahsulotlarni yuklashda xato:", error)
     } finally {
-      setLoadingProducts(false);
+      setLoadingProducts(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchPartners();
-  }, []);
+    fetchProducts()
+  }, [])
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const handleStatusChange = async (
-    productId: string,
-    newStatus: Product["status"]
-  ) => {
-    if (!selectedProduct) return;
+  // STATUS
+  const handleStatusChange = async (productId: string, newStatus: "active" | "draft") => {
     try {
-      const apiPayload = mapLocalStatusToApi(
-        newStatus,
-        selectedProduct.categoryModel!
-      );
-      await updateProductStatus(
-        productId,
-        apiPayload.status,
-        apiPayload.category
-      );
-      await fetchProducts();
-      const updatedProduct = products.find((p) => p.id === productId);
-      if (updatedProduct) {
-        setSelectedProduct({ ...updatedProduct, status: newStatus });
-        fetchSelectedProductDetails(updatedProduct);
-      }
+      await updateProductStatus(productId, newStatus)
+      await fetchProducts()
+      setSelectedProduct(prev => prev && prev.id === productId ? { ...prev, status: newStatus } : prev)
     } catch (error) {
-      console.error("Status o'zgartirishda xato:", error);
+      console.error("Status o'zgartirishda xato:", error)
     }
-  };
+  }
 
-  const handleInputChange = (id: string, value: string) => {
-    setEditFormData((prev) => ({ ...prev, [id]: value }));
-  };
+  // SEARCH — faqat name va category
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm.trim()) return products
+    const term = searchTerm.toLowerCase().trim()
+    return products.filter(p =>
+      p?.sections[0].questions[0].value?.toLowerCase().includes(term) ||
+      p?.category?.name?.toLowerCase().includes(term)
+    )
+  }, [products, searchTerm])
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const newFiles = Array.from(files);
-      const totalImages = editImageFiles.length + newFiles.length;
-      if (totalImages > 5) {
-        alert("Maksimum 5 ta rasm qo'shish mumkin");
-        return;
-      }
-      setEditImageFiles((prev) => [...prev, ...newFiles]);
-    }
-  };
+  // RASIM MODAL
+  const openImageModal = (url: string) => {
+    setSelectedImage(url)
+    setImageModalOpen(true)
+  }
 
-  const handleRemoveNewImage = (index: number) => {
-    setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  // QR YUKLASH
+  const downloadQR = async () => {
+    if (!selectedProduct?.qr_code) return
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(selectedProduct.qr_code)}`
+    const link = document.createElement("a")
+    link.href = proxyUrl
+    link.download = ""
+    link.click()
+  }
 
-  const handleReplaceImages = () => {
-    setReplaceImages(true);
-    setKeptOriginalImages([]);
-    setEditImageFiles([]);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-      fileInputRef.current.click();
-    }
-  };
+  // RASMLAR
+  const renderImages = (images: string[]) => (
+    <div className="flex flex-wrap gap-4">
+      {images.length > 0 ? (
+        images.map((img, i) => (
+          <img
+            key={i}
+            src={img}
+            alt={`Rasm ${i + 1}`}
+            className="w-24 h-24 object-cover rounded-md border cursor-pointer hover:opacity-80 transition"
+            onClick={() => openImageModal(img)}
+          />
+        ))
+      ) : (
+        <div className="w-24 h-24 bg-gray-100 rounded-md flex items-center justify-center">
+          <Package className="h-6 w-6 text-gray-500" />
+        </div>
+      )}
+    </div>
+  )
 
-  const handleDeleteProduct = async (
-    productId: string,
-    categoryKey: string
-  ) => {
-    setDeletingId(productId);
-    try {
-      await deleteProduct(categoryKey, productId);
-      await fetchProducts();
-      setIsDeleted(true);
-      setTimeout(() => setIsDeleted(false), 3000);
-      if (selectedProduct?.id === productId) {
-        setSelectedProduct(null);
-        setIsEditing(false);
-        setEditFormData({});
-        setEditImageFiles([]);
-        setOpenSections(new Set());
-      }
-    } catch (error) {
-      console.error("Mahsulotni o'chirishda xato:", error);
-      alert("Mahsulotni o'chirishda xatolik yuz berdi.");
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  const hasChanges = () => {
-    if (!selectedProduct) return false;
-    const detailsChanged = Object.keys(editFormData).some(
-      (key) => editFormData[key] !== originalFormData[key]
-    );
-    const imagesChanged =
-      editImageFiles.length > 0 ||
-      keptOriginalImages.length !== originalImages.length;
-    return detailsChanged || imagesChanged;
-  };
-
-  const handleSaveEdit = async () => {
-    if (!selectedProduct || !hasChanges()) return;
-
-    try {
-      const fieldMap = categoryFieldMap[selectedProduct.categoryKey] || {};
-      const payload = new FormData();
-      let hasPatchData = false;
-
-      Object.entries(editFormData).forEach(([uiId, value]) => {
-        if (originalFormData[uiId] !== value) {
-          const apiField = fieldMap[uiId];
-          if (apiField) {
-            payload.append(apiField, value);
-            hasPatchData = true;
-          }
-        }
-      });
-
-      editImageFiles.forEach((file) => {
-        payload.append("images", file);
-        hasPatchData = true;
-      });
-      if (hasPatchData) {
-        await updateProduct(
-          selectedProduct.categoryKey,
-          selectedProduct.id,
-          payload
-        );
-      }
-      await fetchProducts();
-
-      const updatedProduct = products.find((p) => p.id === selectedProduct.id);
-      if (updatedProduct) {
-        setSelectedProduct(updatedProduct);
-        setCurrentImages(updatedProduct.images || []);
-        fetchSelectedProductDetails(updatedProduct);
-      }
-      setIsEditing(false);
-      setEditImageFiles([]);
-      setKeptOriginalImages([]);
-      setReplaceImages(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (error) {
-      console.error("Saqlashda xatolik yuz berdi:", error);
-    }
-  };
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const fetchSelectedProductDetails = async (product: Product) => {
-    try {
-      const fullDetails = await getProductById(product.categoryKey, product.id);
-      const reverseMap = getReverseFieldMap(product.categoryKey);
-      const allQuestions = Object.values(
-        categories[product.categoryKey].sections
-      ).flatMap((sec) => sec.questions.map((q) => q.id));
-      const details: Record<string, string> = {};
-      const suppliers: Record<string, string> = {};
-
-      Object.entries(fullDetails).forEach(([apiField, value]) => {
-        if (typeof value !== "string" && typeof value !== "number") return;
-        if (
-          [
-            "id",
-            "status",
-            "scans",
-            "rating",
-            "blockchain_hash",
-            "qr_code",
-            "created_at",
-          ].includes(apiField)
-        )
-          return;
-
-        const cleanField = apiField.replace("_org", "");
-        const uiId = reverseMap[cleanField];
-
-        if (uiId && allQuestions.includes(uiId)) {
-          if (apiField.endsWith("_org")) {
-            suppliers[uiId] = value as string;
-          } else {
-            details[uiId] = value as string;
-          }
-        }
-      });
-
-      details[allQuestions[0]] = fullDetails.name || "";
-
-      let images: string[] = [];
-      if (fullDetails.images) {
-        images = Array.isArray(fullDetails.images)
-          ? fullDetails.images
-          : fullDetails.image
-          ? [fullDetails.image]
-          : [];
-      } else if (fullDetails.image) {
-        images = [fullDetails.image];
-      }
-
-      const updatedProduct = {
-        ...product,
-        details,
-        suppliers,
-        images,
-        created_at: fullDetails.created_at,
-      };
-      setSelectedProduct(updatedProduct);
-      setCurrentImages(images);
-      setOriginalImages(images);
-      setKeptOriginalImages(images);
-      setEditFormData(details);
-      setOriginalFormData(details);
-    } catch (error) {
-      console.error("Tafsilotlarni yuklashda xato:", error);
-      setSelectedProduct(product);
-      setCurrentImages(product.images || []);
-      setOriginalImages(product.images || []);
-      setKeptOriginalImages(product.images || []);
-      setEditFormData(product.details || {});
-      setOriginalFormData(product.details || {});
-    }
-  };
-  const handleDownloadQrCode = (qrCodeUrl: string, productName: string) => {
-    const proxyUrl = `/api/proxy?url=${encodeURIComponent(qrCodeUrl)}`;
-    const link = document.createElement("a");
-    link.href = proxyUrl;
-    link.download = `${productName}_qr_code.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const renderSuppliersList = (
-    suppliers: Record<string, string> | undefined
-  ) => {
-    if (!suppliers || Object.keys(suppliers).length === 0) return null;
-
-    return (
-      <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
-        <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-          <h4 className="text-lg font-medium text-gray-800">
-            Biriktirilgan Ta'minotchilar
-          </h4>
-        </CardHeader>
-        <CardContent className="p-4 space-y-3">
-          {Object.entries(suppliers).map(([questionId, supplierId]) => {
-            const question = Object.values(
-              categories[selectedProduct?.categoryKey || "1"].sections
-            )
-              .flatMap((section) => section.questions)
-              .find((q) => q.id === questionId);
-            const isCompleted = selectedProduct?.details?.[questionId];
-            const supplierName =
-              partnersMap[supplierId] || "Noma'lum ta'minotchi";
-            return (
-              <div
-                key={questionId}
-                className="flex justify-between items-center bg-white/50 p-3 rounded-md border border-blue-100"
-              >
-                <div>
-                  <p className="text-sm font-medium text-gray-700">
-                    {question?.label}
-                  </p>
-                  <p className="text-xs text-gray-500">{supplierName}</p>
-                </div>
-                {isCompleted ? (
-                  <Check className="h-5 w-5 text-green-600" />
-                ) : (
-                  <Clock className="h-5 w-5 text-yellow-600" />
-                )}
-              </div>
-            );
-          })}
-        </CardContent>
-      </Card>
-    );
-  };
-
-  const getDisplayImages = () => {
-    if (!isEditing) return currentImages;
-    if (replaceImages) {
-      return editImageFiles.map((f) => URL.createObjectURL(f));
-    }
-    return currentImages;
-  };
-
-  const renderProductDetails = (
-    product: Product,
-    isViewOnly: boolean = false
-  ) => {
-    if (!product.categoryKey || !categories[product.categoryKey]) return null;
-
-    const category = categories[product.categoryKey];
-    const currentDetails = isEditing ? editFormData : product.details || {};
-    const displayImages = getDisplayImages();
-
-    return (
-      <div className="space-y-6">
-        <Card className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg">
+  // BO‘LIMLAR
+  const renderSections = (sections: Section[]) => (
+    <div className="space-y-6">
+      {sections.map((section, sIdx) => (
+        <Card key={sIdx} className="border-blue-100">
           <CardHeader className="p-4 bg-blue-100/50 rounded-t-lg">
-            <h4 className="text-lg font-medium text-gray-800">
-              Mahsulot Rasmlari
-            </h4>
+            <h4 className="text-lg font-medium">{section.title}</h4>
           </CardHeader>
-          <CardContent className="p-4">
-            {isEditing ? (
-              <div className="space-y-3">
-                {!replaceImages && displayImages.length > 0 ? (
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap gap-4">
-                      {displayImages.map((image, index) => (
-                        <img
-                          key={index}
-                          src={`${image}`}
-                          alt={`Mahsulot rasmi ${index + 1}`}
-                          className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105"
-                        />
-                      ))}
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={handleReplaceImages}
-                      className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                    >
-                      Rasmlarni almashtirish
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    <Label
-                      htmlFor="images"
-                      className="text-gray-700 font-medium"
-                    >
-                      Rasmlar (maksimum 5 ta)
-                    </Label>
-                    <Input
-                      id="images"
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange}
-                      className="border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md hidden"
-                      ref={fileInputRef}
-                    />
-                    <div className="flex flex-wrap gap-4">
-                      {editImageFiles.map((file, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Yangi rasm ${index + 1}`}
-                            className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 group-hover:scale-105"
-                          />
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="absolute -top-2 -right-2 h-6 w-6 p-0 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-600"
-                            onClick={() => handleRemoveNewImage(index)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <div
-                        className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center cursor-pointer"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        <Plus className="h-6 w-6 text-gray-600" />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-4">
-                {displayImages.length > 0 ? (
-                  displayImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={`${image}`}
-                      alt={`Mahsulot rasmi ${index + 1}`}
-                      className="w-24 h-24 object-cover rounded-md border border-blue-200 transition-transform duration-200 hover:scale-105 cursor-pointer"
-                      onClick={() => {
-                        setLightboxIndex(index);
-                        setLightboxOpen(true);
-                      }}
-                    />
-                  ))
-                ) : (
-                  <div className="w-24 h-24 bg-blue-100/50 rounded-md flex items-center justify-center">
-                    <Plus className="h-6 w-6 text-gray-600" />
-                  </div>
-                )}
-              </div>
-            )}
+          <CardContent className="p-4 space-y-4">
+            {section.questions.map((q, qIdx) => {
+              const supplier = q.supplierId ? partners.find(p => p.id === q.supplierId) : null
+              return (
+                <div key={qIdx} className="bg-white/50 p-3 rounded-md border border-blue-100">
+                  <Label className="text-sm font-medium">{q.label}</Label>
+                  <p className="text-sm pl-3 border-l-2 border-blue-200 flex items-center justify-between">
+                    <span>
+                      {q.value ? (
+                        <span className="font-medium">{q.value}</span>
+                      ) : (
+                        <span className="text-orange-600 flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {supplier?.name || "Ta’minotchi"} tomonidan to‘ldiriladi
+                        </span>
+                      )}
+                    </span>
+                    {q.supplierId && q.value && supplier && (
+                      <span className="text-green-600 flex items-center gap-1 text-xs font-medium">
+                        <CheckCircle className="h-3 w-3" />
+                        <span className="hidden sm:inline">{supplier.name}</span>
+                      </span>
+                    )}
+                  </p>
+                </div>
+              )
+            })}
           </CardContent>
         </Card>
-        {lightboxOpen && (
-          <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-            <DialogContent className="max-w-4xl p-0 overflow-hidden">
-              <div className="relative">
-                <img
-                  src={`${displayImages[lightboxIndex]}`}
-                  alt="Kattalashtirilgan rasm"
-                  className="w-full h-auto"
-                />
-                {displayImages.length > 1 && (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="absolute left-2 top-1/2 -translate-y-1/2"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (prev) =>
-                            (prev - 1 + displayImages.length) %
-                            displayImages.length
-                        )
-                      }
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="absolute right-2 top-1/2 -translate-y-1/2"
-                      onClick={() =>
-                        setLightboxIndex(
-                          (prev) => (prev + 1) % displayImages.length
-                        )
-                      }
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
-        {Object.entries(category.sections).map(([sectionId, section]) => (
-          <Card
-            key={sectionId}
-            className="bg-gradient-to-br from-blue-50/80 to-white/90 border-blue-100 shadow-sm rounded-lg"
-          >
-            <CardHeader
-              className={`flex items-center justify-between p-4 bg-blue-100/50 rounded-t-lg transition-colors duration-200 ${
-                !isViewOnly ? "cursor-pointer hover:bg-blue-200/50" : ""
-              }`}
-              onClick={() => !isViewOnly && toggleSection(sectionId)}
-            >
-              <h4 className="text-lg font-medium text-gray-800">
-                {section.title}
-              </h4>
-              {!isViewOnly && (
-                <ChevronDown
-                  className={`h-5 w-5 text-gray-600 transition-transform duration-200 ${
-                    openSections.has(sectionId) ? "rotate-180" : ""
-                  }`}
-                />
-              )}
-            </CardHeader>
-            {(isViewOnly || openSections.has(sectionId)) && (
-              <CardContent className="p-4 space-y-4 bg-white/90">
-                {section.questions.map((question) => {
-                  const value = currentDetails[question.id] || "";
-                  const supplierId = product.suppliers?.[question.id];
-                  const isSupplierSection = ![
-                    "1.1",
-                    "1.2",
-                    "2.1",
-                    "2.2",
-                    "3.1",
-                    "3.2",
-                    "4.1",
-                    "4.2",
-                    "5.1",
-                    "5.2",
-                    "6.1",
-                    "6.2",
-                    "7.1",
-                    "7.2",
-                    "8.1",
-                    "8.2",
-                    "9.1",
-                    "9.2",
-                  ].includes(sectionId);
-
-                  if (isViewOnly || (!isEditing && !isSupplierSection)) {
-                    return (
-                      <div
-                        key={question.id}
-                        className="space-y-2 bg-white/50 p-3 rounded-md border border-blue-100"
-                      >
-                        <div className="flex justify-between items-start">
-                          <Label className="text-sm font-medium text-gray-700">
-                            {question.label}
-                          </Label>
-                          {supplierId && (
-                            <span className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full">
-                              {partnersMap[supplierId] || "Noma'lum"}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-900 pl-3 border-l-2 border-blue-200">
-                          {value || "Ma'lumot kiritilmagan"}
-                        </p>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div key={question.id} className="space-y-2">
-                      <Label
-                        htmlFor={question.id}
-                        className="text-gray-700 font-medium"
-                      >
-                        {question.label}
-                      </Label>
-                      <Input
-                        id={question.id}
-                        value={value}
-                        onChange={(e) =>
-                          handleInputChange(question.id, e.target.value)
-                        }
-                        placeholder={question.placeholder}
-                        className="border-blue-200 focus:ring-blue-400 transition-all duration-200 p-2 text-base bg-white rounded-md"
-                        disabled={
-                          !isEditing || !!(isSupplierSection && supplierId)
-                        }
-                      />
-                      {isSupplierSection && supplierId && (
-                        <p className="text-xs text-gray-500 mt-1 bg-blue-50 px-2 py-1 rounded-full inline-block">
-                          Bu maydon {partnersMap[supplierId] || "ta'minotchi"}{" "}
-                          tomonidan to'ldiriladi
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </CardContent>
-            )}
-          </Card>
-        ))}
-        {renderSuppliersList(product.suppliers)}
-      </div>
-    );
-  };
-
-  const toggleSection = (sectionId: string) => {
-    setOpenSections((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(sectionId)) newSet.delete(sectionId);
-      else newSet.add(sectionId);
-      return newSet;
-    });
-  };
-
-  const startEditing = () => {
-    if (selectedProduct) {
-      setEditFormData(selectedProduct.details || {});
-      setOriginalFormData(selectedProduct.details || {});
-      setEditImageFiles([]);
-      setKeptOriginalImages([]);
-      setReplaceImages(true);
-      setOpenSections(
-        new Set(
-          Object.keys(categories[selectedProduct.categoryKey]?.sections || {})
-        )
-      );
-      setIsEditing(true);
-    }
-  };
-
-  const cancelEditing = () => {
-    setIsEditing(false);
-    setEditFormData(originalFormData);
-    setEditImageFiles([]);
-    setKeptOriginalImages(originalImages);
-    setCurrentImages(originalImages);
-    setReplaceImages(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
+      ))}
+    </div>
+  )
 
   return (
     <div className="flex min-h-screen">
       <main className="flex-1 md:p-8 p-4">
         <div className="container mx-auto space-y-6 max-w-5xl">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-semibold text-balance tracking-tight text-gray-800">
-                Mahsulotlar
-              </h1>
-              <p className="text-gray-600 mt-2 text-sm md:text-base">
-                Barcha mahsulotlaringizni ko‘ring va boshqaring
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              {!isStaff && (
-                <Button
-                  className="text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                  asChild
-                >
-                  <Link href="/manufacturer/products/add">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Yangi mahsulot
-                  </Link>
-                </Button>
-              )}
-            </div>
+          <div>
+            <h1 className="text-3xl md:text-4xl font-semibold text-gray-800">Mahsulotlar (Admin)</h1>
+            <p className="text-gray-600 mt-2">Barcha mahsulotlarni ko‘ring va tasdiqlang</p>
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* SEARCH */}
+          <div className="relative max-w-md">
             <Input
-              placeholder="Mahsulot yoki kategoriya bo‘yicha qidirish..."
+              placeholder="Mahsulot yoki kategoriya bo‘yicha qidiring..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm border-blue-200 focus:ring-blue-400 transition-all duration-200 bg-white rounded-md"
+              onChange={e => setSearchTerm(e.target.value)}
+              className="pl-10 pr-10 border-blue-200 focus:ring-blue-400 bg-white"
             />
+            {searchTerm && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                onClick={() => setSearchTerm("")}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <Card className="p-6 bg-gradient-to-br from-white to-blue-50/80 backdrop-blur-md border border-blue-200/50 shadow-lg rounded-lg">
@@ -1975,422 +618,162 @@ const fetchPartners = async () => {
               {loadingProducts ? (
                 <p className="text-center text-gray-600 py-6">Yuklanmoqda...</p>
               ) : filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => {
-                  const currentIdx = carouselIndex[product.id] || 0;
-                  const hasImages = product.images && product.images.length > 0;
-                  const displayImg = hasImages
-                    ? product.images?.[currentIdx]
-                    : null;
-                  return (
-                    <Dialog
-                      key={product.id}
-                      onOpenChange={(open) => {
-                        if (!open) {
-                          setIsEditing(false);
-                          setSelectedProduct(null);
-                          setEditImageFiles([]);
-                          setEditFormData({});
-                          setOriginalFormData({});
-                          setKeptOriginalImages([]);
-                          setReplaceImages(false);
-                          setOpenSections(new Set());
-                          setIsDeleted(false);
-                          setLightboxOpen(false);
-                          setQrModalOpen(false);
-                          setSelectedQrCode(null);
-                        } else {
-                          setSelectedProduct(product);
-                          fetchSelectedProductDetails(product);
-                        }
-                      }}
-                    >
-                      <DialogTrigger asChild>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
-                              {hasImages ? (
-                                <img
-                                  src={`${displayImg}`}
-                                  alt={product.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <Package className="h-6 w-6 transition-transform duration-200 hover:scale-110" />
-                              )}
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-gray-800 text-lg">
-                                {product.name}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {product.category}
-                              </p>
-                              {isStaff && product.created_at && (
-                                <p className="flex gap-[2px] items-center">
-                                  <p className="text-gray-500 text-xs">
-                                    Yaratilgan:{" "}
-                                  </p>{" "}
-                                  <p className="text-xs text-gray-500 ">
-                                    {format(
-                                      new Date(product.created_at),
-                                      "dd.MM.yyyy HH:mm"
-                                    )}
-                                  </p>
-                                </p>
-                              )}
-                            </div>
+                filteredProducts.map(product => (
+                  <Dialog key={product.id} onOpenChange={open => open ? setSelectedProduct(product) : setSelectedProduct(null)}>
+                    <DialogTrigger asChild>
+                      <div className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-blue-200/50 hover:bg-blue-50/80 transition-all duration-200 hover:shadow-md cursor-pointer">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-12 h-12 bg-blue-100/50 rounded-lg flex items-center justify-center overflow-hidden">
+                            {product.images[0] ? (
+                              <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <Package className="h-6 w-6 text-gray-600" />
+                            )}
                           </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-right">
-                              {product.status === "active" && (
-                                <div className="flex items-center gap-1">
-                                  {/* <p className="text-sm font-medium text-gray-700 flex  items-center gap-[2px]">
-                                  <Star className="h-3 w-3 text-yellow-500" />
-                                <span className="text-sm text-gray-700">{product.rating}</span>
-                                </p> */}
-                                  <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                                    {Array.from({ length: 5 }, (_, i) => {
-                                      const starValue = i + 1;
-                                      if (product.rating >= starValue) {
-                                        return (
-                                          <Star
-                                            key={i}
-                                            className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
-                                          />
-                                        );
-                                      } else if (
-                                        product.rating >=
-                                        starValue - 0.5
-                                      ) {
-                                        return (
-                                          <StarHalf
-                                            key={i}
-                                            className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
-                                          />
-                                        );
-                                      } else {
-                                        return (
-                                          <StarOff
-                                            key={i}
-                                            className="h-3.5 w-3.5 text-gray-300"
-                                          />
-                                        );
-                                      }
-                                    })}
-                                    {/* <span className="text-xs text-gray-600 ml-1">{product.rating.toFixed(1)}</span> */}
-                                  </p>
-
-                                  <p className="text-sm font-medium text-gray-700 flex  items-center gap-[2px] ">
-                                    <ScanEyeIcon className="h-3 w-3" />{" "}
-                                    {product.scans}
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                            <Badge
-                              variant={getStatusVariant(product.status)}
-                              className="transition-all duration-200 px-3 py-1 rounded-full"
-                            >
-                              {getStatusText(product.status)}
-                            </Badge>
-                            {isStaff &&
-                              product.status === "active" &&
-                              product.qr_code && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSelectedQrCode(product.qr_code!);
-                                    setQrModalOpen(true);
-                                  }}
-                                  className="hover:bg-blue-100"
-                                >
-                                  <QrCode className="h-4 w-4 text-blue-600" />
-                                </Button>
-                              )}
-                          </div>
-                          {!isStaff && product.status === "in-progress" && (
-                            <div onClick={(e) => e.stopPropagation()}>
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button
-                                    variant="destructive"
-                                    size="sm"
-                                    className="ml-2"
-                                    disabled={deletingId === product.id}
-                                  >
-                                    {deletingId === product.id ? (
-                                      "O'chirilmoqda..."
-                                    ) : (
-                                      <Trash2 className="h-4 w-4" />
-                                    )}
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                      Mahsulotni o'chirish
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Siz haqiqatan ham "{product.name}"
-                                      mahsulotini o'chirishni xohlaysizmi? Bu
-                                      amalni ortga qaytarib bo'lmaydi.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                      Bekor qilish
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                      onClick={() =>
-                                        handleDeleteProduct(
-                                          product.id,
-                                          product.categoryKey
-                                        )
-                                      }
-                                    >
-                                      Ha, o'chirish
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          )}
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
-                        <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
-                          <DialogTitle className="text-2xl font-semibold text-gray-800">
-                            {product.name} tafsilotlar
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-6 mt-4">
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-                            <div>
-                              <p>
-                                <strong className="text-gray-700">
-                                  Kategoriya:
-                                </strong>{" "}
-                                {product.category}
-                              </p>
-                              <p>
-                                <strong className="text-gray-700">
-                                  Status:
-                                </strong>{" "}
-                                {getStatusText(product.status)}
-                              </p>
-                              {isStaff && product.created_at && (
-                                <p className="flex gap-[2px] items-center">
-                                  <strong className="text-gray-700">
-                                    Yaratilgan:{" "}
-                                  </strong>{" "}
-                                  <p className="text-xs text-gray-500 ">
-                                    {format(
-                                      new Date(product.created_at),
-                                      "dd.MM.yyyy HH:mm"
-                                    )}
-                                  </p>
-                                </p>
-                              )}
-                            </div>
-
-                            {product.status === "active" && <div>
-                              <p>
-                                <strong className="text-gray-700">
-                                  Skanlar soni:
-                                </strong>{" "}
-                                {product.scans}
-                              </p>
-                              <p className="flex">
-                                <strong className="text-gray-700">
-                                  Reyting:
-                                </strong>{" "}
-                                <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                                      {Array.from({ length: 5 }, (_, i) => {
-                                        const starValue = i + 1;
-                                        if (product.rating >= starValue) {
-                                          return (
-                                            <Star
-                                              key={i}
-                                              className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
-                                            />
-                                          );
-                                        } else if (
-                                          product.rating >=
-                                          starValue - 0.5
-                                        ) {
-                                          return (
-                                            <StarHalf
-                                              key={i}
-                                              className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500"
-                                            />
-                                          );
-                                        } else {
-                                          return (
-                                            <StarOff
-                                              key={i}
-                                              className="h-3.5 w-3.5 text-gray-300"
-                                            />
-                                          );
-                                        }
-                                      })}
-                                    </p>
-                              </p>
-
-                        
-                            </div>}
-
-                            {isStaff &&
-                              product.status === "active" &&
-                              product.qr_code && (
-                                <div className="flex justify-end items-center">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => {
-                                      setSelectedQrCode(product.qr_code!);
-                                      setQrModalOpen(true);
-                                    }}
-                                    className="hover:bg-blue-100 h-[40px] w-[40px]"
-                                  >
-                                    <QrCode className="h-5 w-5 text-blue-600" />
-                                  </Button>
-                                </div>
-                              )}
-                          </div>
-
-                          {isDeleted && (
-                            <div className="flex items-center gap-2 p-4 mb-6 bg-green-100/70 rounded-lg border border-green-200/50">
-                              <CheckCircle className="h-5 w-5 text-green-600" />
-                              <p className="text-sm text-green-700">
-                                Mahsulot muvaffaqiyatli o'chirildi va QR kod
-                                o'chirildi!
-                              </p>
-                            </div>
-                          )}
-                          {loadingPartners ? (
-                            <p className="text-gray-500">
-                              Ta'minotchilar yuklanmoqda...
+                          <div>
+                            <h3 className="font-semibold text-gray-800 text-lg">{product.sections.length > 0 ? product.sections[0]?.questions[0]?.value : product.category.name} </h3>
+                            <p className="text-sm text-gray-600">{product.category.name}</p>
+                            <p className="text-xs text-gray-500">
+                              Yaratilgan: {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}
+                              {product.activated_at && ` | Faollashtirilgan: ${format(new Date(product.activated_at), "HH:mm")}`}
                             </p>
-                          ) : (
-                            renderProductDetails(
-                              selectedProduct || product,
-                              isStaff ||
-                                (!isEditing && product.status !== "in-progress")
-                            )
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          {product.status === "active" && (
+                            <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-1">
+                                {Array.from({ length: 5 }, (_, i) => {
+                                  const starValue = i + 1
+                                  if (product.rating >= starValue) return <Star key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+                                  if (product.rating >= starValue - 0.5) return <StarHalf key={i} className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+                                  return <StarOff key={i} className="h-3.5 w-3.5 text-gray-300" />
+                                })}
+                              </div>
+                              <p className="text-sm font-medium text-gray-700 flex items-center gap-[2px]">
+                                <ScanEyeIcon className="h-3 w-3" /> {product.all_scan}
+                              </p>
+                            </div>
+                          )}
+                          <Badge variant={getStatusVariant(product.status)} className="px-3 py-1 rounded-full">
+                            {getStatusText(product.status)}
+                          </Badge>
+                          {product.status === "active" && product.qr_code && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={e => {
+                                e.stopPropagation()
+                                setSelectedProduct(product)
+                                setQrModalOpen(true)
+                              }}
+                            >
+                              <QrCode className="h-4 w-4 text-blue-600" />
+                            </Button>
                           )}
                         </div>
-                        <DialogFooter className="flex flex-col sm:flex-row gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
-                          {isStaff && product.status === "pending" ? (
-                            <>
-                              <Button
-                                variant="outline"
-                                onClick={() =>
-                                  handleStatusChange(product.id, "in-progress")
-                                }
-                                className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                              >
-                                <RotateCcw className="mr-2 h-4 w-4" />
-                                Qaytarib yuborish
-                              </Button>
-                              <Button
-                                onClick={() =>
-                                  handleStatusChange(product.id, "active")
-                                }
-                                className="bg-green-600 hover:bg-green-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                              >
-                                <CheckCircle className="mr-2 h-4 w-4" />
-                                Tasdiqlash
-                              </Button>
-                            </>
-                          ) : (
-                            !isStaff && (
-                              <>
-                                {isEditing ? (
-                                  <>
-                                    <Button
-                                      variant="outline"
-                                      onClick={cancelEditing}
-                                      className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                                    >
-                                      Bekor qilish
-                                    </Button>
-                                    <Button
-                                      onClick={handleSaveEdit}
-                                      className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                      disabled={!hasChanges()}
-                                    >
-                                      <Save className="mr-2 h-4 w-4" />
-                                      Saqlash
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    {product.status === "in-progress" && (
-                                      <>
-                                        <Button
-                                          variant="outline"
-                                          onClick={startEditing}
-                                          className="border-blue-300 hover:bg-blue-100 transition-all duration-200 rounded-md"
-                                        >
-                                          <Edit3 className="mr-2 h-4 w-4" />
-                                          Tahrirlash
-                                        </Button>
-                                        <Button
-                                          onClick={() =>
-                                            handleStatusChange(
-                                              product.id,
-                                              "pending"
-                                            )
-                                          }
-                                          className="bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                                        >
-                                          Tasdiqlash uchun yuborish
-                                        </Button>
-                                      </>
-                                    )}
-                                  </>
-                                )}
-                              </>
-                            )
-                          )}
+                      </div>
+                    </DialogTrigger>
+
+                    {/* ASOSIY MODAL */}
+                    <DialogContent className="max-w-[90vw] md:max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 p-6 rounded-xl shadow-2xl border border-blue-200/50">
+                      <DialogHeader className="flex flex-row items-center justify-between border-b border-blue-100 pb-4">
+                        <DialogTitle className="text-2xl font-semibold text-gray-800">
+                          {product.sections.length > 0 ? product.sections[0]?.questions[0]?.value : product.category.name} 
+                        </DialogTitle>
+                      </DialogHeader>
+
+                      <div className="space-y-6 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                          <div><strong className="text-gray-700">Kategoriya:</strong> {product.category.name}</div>
+                          <div><strong className="text-gray-700">Status:</strong> {getStatusText(product.status)}</div>
+                          <div>
+                            <strong className="text-gray-700">Vaqt:</strong><br />
+                            Yaratilgan: {format(new Date(product.created_at), "dd.MM.yyyy HH:mm")}<br />
+                            {product.activated_at && `Faollashtirilgan: ${format(new Date(product.activated_at), "dd.MM.yyyy HH:mm")}`}
+                          </div>
+                        </div>
+
+                        {/* RASMLAR */}
+                        <div>
+                          <Label className="text-lg font-medium">Rasmlar</Label>
+                          <div className="mt-2">{renderImages(product.images)}</div>
+                        </div>
+
+                        {/* HUJJATLAR */}
+                        {product.documents.length > 0 && (
+                          <div>
+                            <Label className="text-lg font-medium">Hujjatlar</Label>
+                            <div className="flex flex-wrap gap-3 mt-2">
+                              {product.documents.map((doc, i) => (
+                                <a
+                                  key={i}
+                                  href={`/api/proxy?url=${encodeURIComponent(doc)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline text-sm flex items-center gap-1"
+                                >
+                                  {doc.split('/').pop()} <Download className="h-3 w-3" />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* BO‘LIMLAR */}
+                        {renderSections(product.sections)}
+                      </div>
+
+                      {/* TUGMALAR */}
+                      {product.status === "pending" && (
+                        <DialogFooter className="flex gap-3 justify-end mt-6 border-t border-blue-100 pt-4">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleStatusChange(product.id, "draft")}
+                            className="border-blue-300 hover:bg-blue-100"
+                          >
+                            <RotateCcw className="mr-2 h-4 w-4" /> Qaytarib yuborish
+                          </Button>
+                          <Button
+                            onClick={() => handleStatusChange(product.id, "active")}
+                            className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg"
+                          >
+                            <CheckCircle className="mr-2 h-4 w-4" /> Tasdiqlash
+                          </Button>
                         </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  );
-                })
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                ))
               ) : (
-                <p className="text-center text-gray-600 py-6">
-                  Mahsulotlar topilmadi.
-                </p>
+                <p className="text-center text-gray-600 py-6">Mahsulotlar topilmadi.</p>
               )}
             </div>
           </Card>
-          <Dialog open={qrModalOpen} onOpenChange={setQrModalOpen}>
-            <DialogContent className="max-w-md p-6 bg-white/95 rounded-xl shadow-2xl border border-blue-200/50">
+
+          {/* RASIM MODAL — ODDIY, CHIROYLI */}
+          <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
+            <DialogContent className="max-w-lg p-6">
               <DialogHeader>
-                <DialogTitle className="text-xl font-semibold text-gray-800">
-                  QR Kod
-                </DialogTitle>
+                <DialogTitle>Rasm</DialogTitle>
               </DialogHeader>
-              {selectedQrCode && (
-                <div className="flex flex-col items-center gap-4">
-                  <img
-                    src={selectedQrCode}
-                    alt="Mahsulot QR kodi"
-                    className="w-64 h-64 object-contain"
-                  />
-                  <Button
-                    onClick={() =>
-                      handleDownloadQrCode(
-                        selectedQrCode,
-                        selectedProduct?.name || "product"
-                      )
-                    }
-                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg rounded-md"
-                  >
-                    QR Kodni Yuklab Olish
+              <div className="flex justify-center">
+                <img src={selectedImage} alt="Katta rasm" className="max-w-full max-h-96 object-contain rounded-lg" />
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* QR MODAL */}
+          <Dialog open={qrModalOpen} onOpenChange={setQrModalOpen}>
+            <DialogContent className="max-w-xs">
+              <DialogHeader>
+                <DialogTitle>QR Kod</DialogTitle>
+              </DialogHeader>
+              {selectedProduct?.qr_code && (
+                <div className="flex flex-col items-center space-y-4">
+                  <img src={selectedProduct.qr_code} alt="QR" className="w-48 h-48" />
+                  <Button onClick={downloadQR} className="w-full">
+                    <Download className="mr-2 h-4 w-4" /> Yuklab olish
                   </Button>
                 </div>
               )}
@@ -2399,5 +782,5 @@ const fetchPartners = async () => {
         </div>
       </main>
     </div>
-  );
+  )
 }

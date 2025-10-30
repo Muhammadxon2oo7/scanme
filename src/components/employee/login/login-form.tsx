@@ -31,8 +31,8 @@ export function EmployeeLoginForm({ onSubmit }: EmployeeLoginFormProps) {
       if (onSubmit) {
         onSubmit({ username, password })
       }
-      Cookies.set("is_staff", "false");
-      router.push('/manufacturer/profile')
+     
+      router.push('/employer/profile')
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Noma'lum xato yuz berdi"
       setError(errorMessage)

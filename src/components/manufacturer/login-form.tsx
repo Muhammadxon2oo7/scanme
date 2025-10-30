@@ -33,6 +33,21 @@ export function ManufacturerLoginForm() {
       district: "Chilonzor",
       address: "Islom Karimov 49",
     }
+    // const loginData: ManufacturerLoginData = {
+    //   password: "0906",
+    //   name: "MTL ",
+    //   description: "IT service ",
+    //   stir: "7777777",
+    //   ceo: "Muhmmadxon Toshpo'latov",
+    //   bank_number: "777777",
+    //   mfo: "77777",
+    //   email: "muhammadxon0709@gmail.com",
+    //   phone: "+998886888207",
+    //   ifut: "none",
+    //   region: "Toshkent",
+    //   district: "Chilonzor",
+    //   address: "Islom Karimov 99",
+    // }
 
     try {
       const response = await manufacturerLogin(loginData)
