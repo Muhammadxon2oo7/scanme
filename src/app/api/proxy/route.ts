@@ -66,7 +66,10 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
-        "Cache-Control": "public, max-age=31536000, immutable",
+        // 🔥 CACHE O‘CHIRILDI
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
       },
     });
   } catch (error) {
