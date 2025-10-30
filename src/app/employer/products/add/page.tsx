@@ -723,7 +723,7 @@ export default function AddProductPage() {
     const cleanGeneralSection = {
       title: "Umumiy ma’lumotlar",
       questions: generalSection.questions
-        .filter((q, i) => i !== 0 && isValidQuestion(q))
+        .filter(isValidQuestion)
         .map(q => ({
           label: q.label,
           ...(q.supplierId ? { supplierId: q.supplierId } : { value: q.value }),
