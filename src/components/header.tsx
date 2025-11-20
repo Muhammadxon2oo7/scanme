@@ -2,18 +2,20 @@ import Link from "next/link"
 import { Button } from "@/src/components/ui/button"
 import { QrCode, Building2 } from "lucide-react"
 import { AboutUsDialog } from "@/src/components/about-us-dialog"
+import Image from "next/image"
 
 export function Header() {
   return (
     <header className="border-b border-border/20 backdrop-blur-md bg-background/60 sticky top-0 z-50 modern-card">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary group">
-            <div className="relative">
+          <Link href="/" className="flex items-center gap-2  font-bold text-primary group">
+            {/* <div className="relative">
               <QrCode className="h-8 w-8 group-hover:rotate-12 transition-all duration-300" />
               <div className="absolute inset-0 bg-primary/20 blur-lg group-hover:blur-xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
             </div>
-            <span className="text-glow">ScanMe</span>
+            <span className="text-glow">Ekoiz</span> */}
+            <Image src={'/logo.png'} alt={"logo"} width={100} height={100} quality={100} className="w-[140px]"/>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

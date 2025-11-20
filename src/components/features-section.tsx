@@ -44,7 +44,7 @@ export function FeaturesSection() {
       <div className="container mx-auto ">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-balance mb-6">
-            Nima uchun <span className="text-primary">ScanMe</span>?
+            Nima uchun <span className="text-primary">Ekoiz</span>?
           </h2>
           <p className="text-xl text-muted-foreground text-balance max-w-2xl mx-auto">
             Zamonaviy texnologiyalar yordamida mahsulot ma'lumotlarini boshqarish va ulashning eng qulay usuli

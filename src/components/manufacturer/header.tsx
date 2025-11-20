@@ -28,7 +28,7 @@ export function ManufacturerHeader() {
             className="flex items-center gap-2 text-2xl font-bold text-primary"
           >
             <Building2 className="h-8 w-8" />
-            ScanMe
+            Ekoiz
             <span className="text-sm font-normal text-muted-foreground">
               Ishlab Chiqaruvchi
             </span>

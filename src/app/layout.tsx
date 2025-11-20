@@ -7,15 +7,15 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "ScanMe – QR kod orqali tezkor mahsulot tekshiruvi",
-    template: "%s | ScanMe",
+    default: "Ekoiz – QR kod orqali tezkor mahsulot tekshiruvi",
+    template: "%s | Ekoiz",
   },
   description:
-    "ScanMe — E-Investment tomonidan yaratilgan innovatsion platforma. Siz QR kodni skanerlab mahsulot haqidagi ma'lumotni tezkor va ishonchli tarzda tekshirishingiz mumkin.",
+    "Ekoiz — E-Investment tomonidan yaratilgan innovatsion platforma. Siz QR kodni skanerlab mahsulot haqidagi ma'lumotni tezkor va ishonchli tarzda tekshirishingiz mumkin.",
   generator: "E-Investment",
-  applicationName: "ScanMe",
+  applicationName: "Ekoiz",
   keywords: [
-    "ScanMe",
+    "Ekoiz",
     "E-Investment",
     "QR kod",
     "Mahsulot tekshiruvi",
@@ -27,17 +27,17 @@ export const metadata: Metadata = {
   creator: "E-Investment",
   publisher: "E-Investment",
   openGraph: {
-    title: "ScanMe – QR kod orqali tezkor mahsulot tekshiruvi",
+    title: "Ekoiz – QR kod orqali tezkor mahsulot tekshiruvi",
     description:
-      "Mahsulotni QR kod orqali tekshiring. E-Investment tomonidan ishlab chiqilgan ScanMe platformasi bilan ishonchli natijalarga ega bo‘ling.",
+      "Mahsulotni QR kod orqali tekshiring. E-Investment tomonidan ishlab chiqilgan Ekoiz platformasi bilan ishonchli natijalarga ega bo‘ling.",
     url: "https://scan-tech.netlify.app",
-    siteName: "ScanMe",
+    siteName: "Ekoiz",
     images: [
       {
         url: "https://scan-tech.netlify.app/og-image.png", // Open Graph uchun rasm (og:image)
         width: 1200,
         height: 630,
-        alt: "ScanMe platformasi",
+        alt: "Ekoiz platformasi",
       },
     ],
     locale: "uz_UZ",
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ScanMe – QR kod orqali mahsulot tekshiruvi",
+    title: "Ekoiz – QR kod orqali mahsulot tekshiruvi",
     description:
-      "ScanMe orqali QR kodni skanerlab mahsulot haqidagi ma'lumotni tezda oling. Ishonchli. Tezkor. Zamonaviy.",
+      "Ekoiz orqali QR kodni skanerlab mahsulot haqidagi ma'lumotni tezda oling. Ishonchli. Tezkor. Zamonaviy.",
     images: ["https://scan-tech.netlify.app/og-image.png"],
     creator: "@einvestment_uz", // agar Twitter akkaunting bo‘lsa shu yerda yoz
   },

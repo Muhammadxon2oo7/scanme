@@ -28,7 +28,7 @@ export default function AboutPage() {
             Biz haqimizda
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            ScanMe platformasi haqida to'liq ma'lumot
+            Ekoiz platformasi haqida to'liq ma'lumot
           </p>
         </div>
 
@@ -92,11 +92,11 @@ export default function AboutPage() {
                 <div className="p-3 rounded-xl bg-primary/20">
                   <Code className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-foreground">ScanMe platformasi</h2>
+                <h2 className="text-2xl font-bold text-foreground">Ekoiz platformasi</h2>
               </div>
               <div className="prose prose-invert max-w-none">
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  ScanMe - bu mahsulotlarni QR kod orqali tekshirish va ularning haqiqiyligini aniqlash uchun
+                  Ekoiz - bu mahsulotlarni QR kod orqali tekshirish va ularning haqiqiyligini aniqlash uchun
                   mo'ljallangan zamonaviy platforma. Bizning asosiy maqsadimiz iste'molchilar va ishlab chiqaruvchilar
                   o'rtasida ishonchli aloqa o'rnatish, soxta mahsulotlar bilan kurashish va bozorda halol raqobatni
                   ta'minlashdir.

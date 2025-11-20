@@ -30,7 +30,7 @@ export function AboutUsDialog({ children }: AboutUsDialogProps) {
             <Building2 className="h-6 w-6" />
             Biz haqimizda
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">ScanMe platformasi haqida ma'lumot</DialogDescription>
+          <DialogDescription className="text-muted-foreground">Ekoiz platformasi haqida ma'lumot</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
@@ -83,7 +83,7 @@ export function AboutUsDialog({ children }: AboutUsDialogProps) {
                 <h3 className="text-lg font-semibold text-foreground">Platforma haqida</h3>
               </div>
               <p className="text-muted-foreground leading-relaxed">
-                ScanMe - bu mahsulotlarni QR kod orqali tekshirish va ularning haqiqiyligini aniqlash uchun
+                Ekoiz - bu mahsulotlarni QR kod orqali tekshirish va ularning haqiqiyligini aniqlash uchun
                 mo'ljallangan zamonaviy platforma. Bizning maqsadimiz iste'molchilar va ishlab chiqaruvchilar o'rtasida
                 ishonchli aloqa o'rnatishdir.
               </p>

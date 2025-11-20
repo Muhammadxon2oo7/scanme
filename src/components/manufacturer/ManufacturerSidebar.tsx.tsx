@@ -63,7 +63,7 @@
 //           <Link href={isStaff ? "/manufacturer/dashboard" : "/employee/dashboard"} className="flex items-center gap-2">
 //             <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />
 //             <div>
-//               <span className="text-2xl font-bold text-primary">ScanMe</span>
+//               <span className="text-2xl font-bold text-primary">Ekoiz</span>
 //               <p className="text-sm text-muted-foreground">{isStaff ? "Ishlab Chiqaruvchi" : "xodim sahifasi"}</p>
 //             </div>
 //           </Link>
@@ -172,7 +172,7 @@ export function ManufacturerSidebar({
           <Link href="/manufacturer/dashboard" className="flex items-center gap-2">
             <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />
             <div>
-              <span className="text-2xl font-bold text-primary">ScanMe</span>
+              <span className="text-2xl font-bold text-primary">Ekoiz</span>
               <p className="text-sm text-muted-foreground">Ishlab Chiqaruvchi</p>
             </div>
           </Link>
