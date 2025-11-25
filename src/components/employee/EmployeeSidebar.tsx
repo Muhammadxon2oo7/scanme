@@ -15,6 +15,7 @@ import {
   X,
   Bell
 } from "lucide-react"
+import Image from "next/image"
 
 export function EmployeeSidebar({ 
   isMobile, 
@@ -53,13 +54,17 @@ export function EmployeeSidebar({
       }`}
     >
       <div className="flex flex-col h-screen">
-        <div className="flex items-center justify-between p-4 border-b border-border/40">
+        <div className="flex items-center justify-between p-2 border-b border-border/40">
           <Link href="/employer/dashboard" className="flex items-center gap-2">
-            <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" />
-            <div>
-              <span className="text-2xl font-bold text-primary">Ekoiz</span>
-              <p className="text-sm text-muted-foreground">Xodim sahifasi</p>
-            </div>
+            <Link href="/manufacturer/dashboard" className="flex w-full  gap-2 flex-wrap items-end ">
+            {/* <Building2 className="h-8 w-8 text-primary transition-transform duration-200 hover:scale-110" /> */}
+                        <Image src={'/logo.png'} alt={"logo"} width={100} height={100} quality={100} className="w-[140px]"/>
+            
+            
+              {/* <span className="text-2xl font-bold text-primary">Ekoiz</span> */}
+              {/* <p className="text-sm text-muted-foreground">Ishlab Chiqaruvchi</p> */}
+            
+          </Link>
           </Link>
           {isMobile && (
             <Button
