@@ -462,6 +462,8 @@
 //     </div>
 //   );
 // }
+
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -563,33 +565,44 @@ const submitRating = async (rating: number, productId: string) => {
 
 // YANGI: Hujjat yuklab olish komponenti
 const DocumentItem = ({ url }: { url: string }) => {
-  const filename = decodeURIComponent(url.split("/").pop() || "hujjat").split("?")[0];
+  const fullFilename = decodeURIComponent(url.split("/").pop() || "hujjat").split("?")[0];
+  
+  // Uzun nomni qisqartirish: maksimal 30 ta belgi (mobil uchun), desktopda 50 ta
+  const truncatedFilename = fullFilename.length > 38 
+    ? fullFilename.slice(0, 35) + "..." 
+    : fullFilename;
 
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = `/api/proxy?url=${encodeURIComponent(url)}`;
-    link.download = filename;
+    link.download = fullFilename; // Yuklanayotgan fayl nomi to‘liq bo‘ladi
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   const getIconColor = () => {
-    const ext = filename.toLowerCase().split(".").pop();
+    const ext = fullFilename.toLowerCase().split(".").pop();
     if (ext === "pdf") return "text-red-600";
-    if (["png", "jpg", "jpeg", "webp"].includes(ext || "")) return "text-blue-600";
+    if (["png", "jpg", "jpeg", "webp", "gif"].includes(ext || "")) return "text-blue-600";
     return "text-gray-600";
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3">
-        <Package className={`h-6 w-6 ${getIconColor()}`} />
-        <span className="text-sm font-medium text-gray-800 truncate max-w-xs">
-          {filename}
+   <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <Package className={`h-6 w-6 flex-shrink-0 ${getIconColor()}`} />
+        
+        {/* Bu joyda truncate ishlaydi */}
+        <span 
+          className="text-sm font-medium text-gray-800 truncate block"
+          title={fullFilename} // Hover qilganda to‘liq nomi ko‘rinadi
+        >
+          {truncatedFilename}
         </span>
       </div>
-      <Button size="sm" onClick={handleDownload}>
+
+      <Button size="sm" onClick={handleDownload} className="flex-shrink-0 ml-3">
         Yuklab olish
       </Button>
     </div>
