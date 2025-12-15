@@ -15,9 +15,9 @@ export default function ManufacturerLayout({ children }: { children: React.React
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768)
       if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true) // Desktopda doim ochiq
+        setIsSidebarOpen(true) 
       } else {
-        setIsSidebarOpen(false) // Mobilda dastlab yopiq
+        setIsSidebarOpen(false) 
       }
     }
 
@@ -26,7 +26,6 @@ export default function ManufacturerLayout({ children }: { children: React.React
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Prevent body scrolling when sidebar is open
   useEffect(() => {
     if (isSidebarOpen) {
       document.body.classList.add("overflow-hidden")
@@ -34,16 +33,16 @@ export default function ManufacturerLayout({ children }: { children: React.React
       document.body.classList.remove("overflow-hidden")
     }
     return () => {
-      document.body.classList.remove("overflow-hidden") // Cleanup on unmount
+      document.body.classList.remove("overflow-hidden")
     }
   }, [isSidebarOpen])
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => {
       const newState = !prev
-      // Vibration effekti (agar qurilma qo‘llab-quvvatlasa)
+      
       if (newState && "vibrate" in navigator) {
-        navigator.vibrate(50) // 50ms vibration
+        navigator.vibrate(50) 
       }
       return newState
     })
@@ -51,10 +50,9 @@ export default function ManufacturerLayout({ children }: { children: React.React
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/90 flex relative overflow-hidden">
-      {/* Sidebar */}
+    
       <EmployeeSidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
-      {/* Overlay for mobile when sidebar is open */}
       <AnimatePresence>
         {isMobile && isSidebarOpen && (
           <motion.div
@@ -68,7 +66,6 @@ export default function ManufacturerLayout({ children }: { children: React.React
         )}
       </AnimatePresence>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col relative z-10">
         {isMobile && (
           <motion.div

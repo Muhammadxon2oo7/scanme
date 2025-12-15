@@ -147,7 +147,7 @@ export interface AcceptPartnerRequestData {
 
 export const manufacturerLogin = async (data: ManufacturerLoginData): Promise<AuthResponse> => {
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/auth/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/auth/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ export const manufacturerLogin = async (data: ManufacturerLoginData): Promise<Au
 
 export const employeeLogin = async (data: EmployeeLoginData): Promise<AuthResponse> => {
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/login/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ export const getProfile = async (): Promise<ProfileData> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/organization/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/organization/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ export const getEmployeeProfile = async (): Promise<Employee> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/employee/me/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/employee/me/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -262,7 +262,7 @@ export const updateEmployeeProfile = async (id: number, data: Partial<EmployeeDa
   }
 
   try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/employee/${id}/`, {
+    const response = await fetch(`https://api.ekoiz.uz/api/v1/accounts/employee/${id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -291,7 +291,7 @@ export const updatePassword = async (password: string): Promise<void> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/update/password/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/update/password/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -317,7 +317,7 @@ export const updateProfile = async (data: Partial<ProfileData>): Promise<Profile
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/organization/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/organization/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -346,7 +346,7 @@ export const partialUpdateProfile = async (data: Partial<ProfileData>): Promise<
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/organization/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/organization/', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -375,7 +375,7 @@ export const deleteProfile = async (): Promise<void> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/organization/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/organization/', {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -399,7 +399,7 @@ export const getEmployees = async (): Promise<Employee[]> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/employee/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/employee/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -427,7 +427,7 @@ export const addEmployee = async (data: EmployeeData): Promise<Employee> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/employee/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/employee/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -456,7 +456,7 @@ export const deleteEmployee = async (id: number): Promise<void> => {
   }
 
   try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/employee/${id}/`, {
+    const response = await fetch(`https://api.ekoiz.uz/api/v1/accounts/employee/${id}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -480,7 +480,7 @@ export const getPartners = async (): Promise<Partner[]> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/partners/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -508,7 +508,7 @@ export const getPartnerById = async (id: string): Promise<Partner> => {
   }
 
   try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/${id}/`, {
+    const response = await fetch(`https://api.ekoiz.uz/api/v1/accounts/partners/${id}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -536,7 +536,7 @@ export const addPartner = async (data: PartnerData): Promise<Partner> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/partners/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -574,7 +574,7 @@ export const deletePartner = async (id: string): Promise<void> => {
   }
 
   try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/${id}/`, {
+    const response = await fetch(`https://api.ekoiz.uz/api/v1/accounts/partners/${id}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -598,7 +598,7 @@ export const getPartnerRequests = async (): Promise<PartnerRequest[]> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/request/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/partners/request/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -626,7 +626,7 @@ export const getMyPartnerRequests = async (): Promise<PartnerRequest[]> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/my/request/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/partners/my/request/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -654,7 +654,7 @@ export const deleteMyPartnerRequest = async (id: number): Promise<void> => {
   }
 
   try {
-    const response = await fetch(`https://api.e-investment.uz/api/v1/accounts/partners/my/request/${id}/`, {
+    const response = await fetch(`https://api.ekoiz.uz/api/v1/accounts/partners/my/request/${id}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -678,7 +678,7 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
   }
 
   try {
-    const response = await fetch('https://api.e-investment.uz/api/v1/accounts/partners/request/', {
+    const response = await fetch('https://api.ekoiz.uz/api/v1/accounts/partners/request/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -701,7 +701,7 @@ export const acceptPartnerRequest = async (id: number): Promise<void> => {
 // PRODUCTS -------------------------------------------------------------------------------------
 
 
-const API_products = 'https://api.e-investment.uz/api/v1/products';
+const API_products = 'https://api.ekoiz.uz/api/v1/products';
 
 export const categoryEndpoints: Record<string, string> = {
   "1": "gadgets",

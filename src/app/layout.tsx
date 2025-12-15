@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: "Ekoiz",
     images: [
       {
-        url: "https://scan-tech.netlify.app/og-image.png", // Open Graph uchun rasm (og:image)
+        url: "https://scan-tech.netlify.app/og-image.png", 
         width: 1200,
         height: 630,
         alt: "Ekoiz platformasi",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     description:
       "Ekoiz orqali QR kodni skanerlab mahsulot haqidagi ma'lumotni tezda oling. Ishonchli. Tezkor. Zamonaviy.",
     images: ["https://scan-tech.netlify.app/og-image.png"],
-    creator: "@einvestment_uz", // agar Twitter akkaunting bo‘lsa shu yerda yoz
+    creator: "@einvestment_uz", 
   },
   icons: {
     icon: "/favicon.ico",

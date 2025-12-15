@@ -39,7 +39,7 @@ export default function ManufacturerAnalyticsPage() {
       setLoading(true)
       setError(null)
 
-      const response = await fetch("https://api.e-investment.uz/api/v1/products/statistic/", {
+      const response = await fetch("https://api.ekoiz.uz/api/v1/products/statistic/", {
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),

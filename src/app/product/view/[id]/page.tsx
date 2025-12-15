@@ -40,7 +40,7 @@
 
 // const fetchProductByToken = async (token: string) => {
 //   try {
-//     const response = await fetch(`https://api.e-investment.uz/api/v1/products/qr/token/${token}/`, {
+//     const response = await fetch(`https://api.ekoiz.uz/api/v1/products/qr/token/${token}/`, {
 //       method: "GET",
 //       headers: { "Content-Type": "application/json" },
 //     });
@@ -56,7 +56,7 @@
 //   try {
 //     console.log("Product ID:", productId, typeof productId);
 
-//     const response = await fetch(`https://api.e-investment.uz/api/v1/products/rating/`, {
+//     const response = await fetch(`https://api.ekoiz.uz/api/v1/products/rating/`, {
 //       method: "POST",
 //       headers: { "Content-Type": "application/json" },
 //       body: JSON.stringify({
@@ -527,7 +527,7 @@ type ProductData = {
 const fetchProductByToken = async (token: string) => {
   try {
     const response = await fetch(
-      `https://api.e-investment.uz/api/v1/products/qr/token/${token}/`,
+      `https://api.ekoiz.uz/api/v1/products/qr/token/${token}/`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -544,7 +544,7 @@ const fetchProductByToken = async (token: string) => {
 const submitRating = async (rating: number, productId: string) => {
   try {
     const response = await fetch(
-      `https://api.e-investment.uz/api/v1/products/rating/`,
+      `https://api.ekoiz.uz/api/v1/products/rating/`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

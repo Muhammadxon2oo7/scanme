@@ -73,7 +73,7 @@
 //     const fetchNotifications = async () => {
 //       try {
 //         setIsLoading(true);
-//         const response = await fetch("https://api.e-investment.uz/api/v1/products/suppler/products/", {
+//         const response = await fetch("https://api.ekoiz.uz/api/v1/products/suppler/products/", {
 //           headers: {
 //             Authorization: `Bearer ${Cookies.get("token")}`,
 //           },
@@ -652,7 +652,7 @@ export default function NotificationsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch("https://api.e-investment.uz/api/v1/products/supplier/", {
+        const res = await fetch("https://api.ekoiz.uz/api/v1/products/supplier/", {
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
         });
         if (!res.ok) throw new Error("Ma'lumotlar yuklanmadi");
@@ -754,7 +754,7 @@ export default function NotificationsPage() {
 //     });
 
 //     const res = await fetch(
-//       `https://api.e-investment.uz/api/v1/products/${selectedProduct.id}/supplier-update/`,
+//       `https://api.ekoiz.uz/api/v1/products/${selectedProduct.id}/supplier-update/`,
 //       {
 //         method: "PATCH",
 //         headers: {
@@ -813,7 +813,7 @@ const handleSave = async () => {
     });
 
     const res = await fetch(
-      `https://api.e-investment.uz/api/v1/products/${selectedProduct.id}/supplier-update/`,
+      `https://api.ekoiz.uz/api/v1/products/${selectedProduct.id}/supplier-update/`,
       {
         method: "PATCH",
         headers: {

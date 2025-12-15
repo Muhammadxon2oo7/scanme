@@ -1,59 +1,64 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/src/components/ui/button"
-import { Menu, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ManufacturerSidebar } from "@/src/components/manufacturer/ManufacturerSidebar.tsx"
+import { useState, useEffect } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ManufacturerSidebar } from "@/src/components/manufacturer/ManufacturerSidebar.tsx";
 
-export default function ManufacturerLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+export default function ManufacturerLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(window.innerWidth < 768);
       if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true) // Desktopda doim ochiq
+        setIsSidebarOpen(true);
       } else {
-        setIsSidebarOpen(false) // Mobilda dastlab yopiq
+        setIsSidebarOpen(false);
       }
-    }
+    };
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  // Prevent body scrolling when sidebar is open
   useEffect(() => {
     if (isSidebarOpen) {
-      document.body.classList.add("overflow-hidden")
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.classList.remove("overflow-hidden")
+      document.body.classList.remove("overflow-hidden");
     }
     return () => {
-      document.body.classList.remove("overflow-hidden") // Cleanup on unmount
-    }
-  }, [isSidebarOpen])
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => {
-      const newState = !prev
-      // Vibration effekti (agar qurilma qo‘llab-quvvatlasa)
+      const newState = !prev;
+
       if (newState && "vibrate" in navigator) {
-        navigator.vibrate(50) // 50ms vibration
+        navigator.vibrate(50);
       }
-      return newState
-    })
-  }
+      return newState;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/90 flex relative overflow-hidden">
-      {/* Sidebar */}
-      <ManufacturerSidebar isMobile={isMobile} setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />
+      <ManufacturerSidebar
+        isMobile={isMobile}
+        setIsSidebarOpen={setIsSidebarOpen}
+        isSidebarOpen={isSidebarOpen}
+      />
 
-      {/* Overlay for mobile when sidebar is open */}
       <AnimatePresence>
         {isMobile && isSidebarOpen && (
           <motion.div
@@ -67,11 +72,13 @@ export default function ManufacturerLayout({ children }: { children: React.React
         )}
       </AnimatePresence>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col relative z-10">
         {isMobile && (
           <motion.div
-            animate={{ rotate: isSidebarOpen ? 90 : 0, scale: isSidebarOpen ? 1.1 : 1 }}
+            animate={{
+              rotate: isSidebarOpen ? 90 : 0,
+              scale: isSidebarOpen ? 1.1 : 1,
+            }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="fixed top-4 right-4 z-50"
           >
@@ -104,5 +111,5 @@ export default function ManufacturerLayout({ children }: { children: React.React
         </main>
       </div>
     </div>
-  )
+  );
 }
